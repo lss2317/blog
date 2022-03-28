@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lss.mapper.OperationLogMapper">
+    <select id="listLogs" resultType="com.lss.entity.OperationLog">
+        SELECT l.id,
+        l.opt_module,
+        l.opt_type,
+        l.opt_url,
+        l.opt_method,
+        l.opt_desc,
+        l.request_param,
+        l.request_method,
+        l.response_data,
+        l.user_id,
+        l.nickname,
+        l.ip_address,
+        l.ip_source,
+        l.create_time
+        FROM blog_operation_log AS l
+        <where>
+            <if test="keywords != null and keywords != ''">
+                opt_module LIKE "%"#{keywords}"%"
+                OR opt_desc LIKE "%"#{keywords}"%"
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT #{currentPage} , #{pageSize}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*)
+        FROM blog_operation_log
+        <where>
+            <if test="keywords != null and keywords != ''">
+                opt_module LIKE "%"#{keywords}"%"
+                OR opt_desc LIKE "%"#{keywords}"%"
+            </if>
+        </where>
+    </select>
+</mapper>

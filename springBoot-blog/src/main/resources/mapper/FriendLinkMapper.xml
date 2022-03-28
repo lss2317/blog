@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lss.mapper.FriendLinkMapper">
+    <select id="listFriendLink" resultType="com.lss.entity.FriendLink">
+        SELECT f.id,
+        f.link_name,
+        f.link_avatar,
+        f.link_address,
+        f.link_intro,
+        f.create_time,
+        f.update_time
+        FROM blog_friend_link AS f
+        <where>
+            <if test="keywords != null and keywords != ''">
+                link_name LIKE "%"#{keywords}"%"
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT #{currentPage},#{pageSize}
+    </select>
+</mapper>

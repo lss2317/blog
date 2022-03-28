@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lss.mapper.ArticleMapper">
+    <resultMap id="article" type="com.lss.entity.Article">
+        <result property="id" column="id"/>
+        <result property="classificationName" column="classification_name"/>
+        <result property="articleTitle" column="article_title"/>
+        <result property="articleCover" column="article_cover"/>
+        <result property="articleContent" column="article_content"/>
+        <result property="type" column="type"/>
+        <result property="originalUrl" column="original_url"/>
+        <result property="isTop" column="is_top"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="originalUrl" column="original_url"/>
+        <!-- 配置一对多的关系 -->
+        <collection property="tagNameList" ofType="com.lss.entity.TagAndArticle">
+            <result property="id" column="id"/>
+            <result property="articleId" column="article_id"/>
+            <result property="tagName" column="tag_name"/>
+        </collection>
+    </resultMap>
+
+    <select id="listArticle" resultMap="article">
+        SELECt m.id,
+        m.classification_name,
+        m.article_title,
+        m.article_content,
+        m.article_cover,
+        m.type,
+        m.original_url,
+        m.is_top,
+        m.is_delete,
+        m.status,
+        m.create_time,
+        m.update_time,
+        tag_name
+        FROM (SELECT * FROM blog_article WHERE is_delete = #{deleteStatus}
+        <if test="articleType != 4 and articleType != null">
+            AND type = #{articleType}
+        </if>
+        <if test="classificationName != null and classificationName != ''">
+            AND classification_name = #{classificationName}
+        </if>
+        <if test="keywords != null and keywords != ''">
+            AND article_title like "%"#{keywords}"%"
+        </if>
+        <if test="status !=null and status != 0">
+            AND status = #{status}
+        </if>
+        <if test="tagName != null and tagName != ''">
+            AND blog_article.id IN (SELECT article_id FROM blog_tag_article WHERE tag_name = #{tagName})
+        </if>
+        limit #{currentPage} , #{pageSize}
+        ) AS m,
+        blog_tag_article AS t
+        WHERE
+        t.article_id = m.id
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="getCount" resultType="int">
+        SELECT count(*)
+        FROM blog_article m
+        WHERE
+        m.is_delete = #{deleteStatus}
+        <if test="tagName != null and tagName != ''">
+            AND m.id IN (SELECT article_id FROM blog_tag_article WHERE tag_name = #{tagName})
+        </if>
+        <if test="articleType != 4 and articleType != null">
+            AND type = #{articleType}
+        </if>
+        <if test="classificationName != null and classificationName != ''">
+            AND m.classification_name = #{classificationName}
+        </if>
+        <if test="keywords != null and keywords != ''">
+            AND m.article_title LIKE "%"#{keywords}"%"
+        </if>
+        <if test="status !=null and status != 0">
+            AND m.status = #{status}
+        </if>
+    </select>
+
+    <resultMap id="articleList" type="com.lss.entity.Article">
+        <result property="id" column="id"/>
+        <result property="classificationName" column="classification_name"/>
+        <result property="articleTitle" column="article_title"/>
+        <result property="articleCover" column="article_cover"/>
+        <result property="articleContent" column="article_content"/>
+        <result property="type" column="type"/>
+        <result property="isTop" column="is_top"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="classId" column="classId"/>
+        <!-- 配置一对多的关系 -->
+        <collection property="tagNameList" ofType="com.lss.entity.TagAndArticle">
+            <result property="id" column="id"/>
+            <result property="articleId" column="article_id"/>
+            <result property="tagName" column="tag_name"/>
+            <result property="tagId" column="tagId"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="articles" resultMap="articleList">
+        SELECt m.id,
+               m.classification_name,
+               m.article_title,
+               m.article_content,
+               m.article_cover,
+               m.type,
+               m.is_top,
+               m.create_time,
+               m.update_time,
+               (SELECT c.id
+                FROM blog_class AS c
+                WHERE c.classification_name = m.classification_name)        AS classId,
+               (SELECT id FROM blog_tag AS g WHERE g.tag_name = t.tag_name) AS tagId,
+               tag_name
+        FROM blog_article AS m,
+             blog_tag_article AS t
+        WHERE m.is_delete = 0
+          AND m.status = 1
+          AND t.article_id = m.id
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="archives" resultType="com.lss.entity.Article">
+        SELECT b.id,
+               b.article_title,
+               b.create_time
+        FROM blog_article AS b
+        WHERE is_delete = 0
+          AND status = 1
+        ORDER BY create_time DESC
+            LIMIT #{current}
+               , #{pageSize}
+    </select>
+
+    <resultMap id="conditionList" type="com.lss.entity.Article">
+        <result property="id" column="id"/>
+        <result property="classificationName" column="classification_name"/>
+        <result property="articleTitle" column="article_title"/>
+        <result property="articleCover" column="article_cover"/>
+        <result property="classId" column="classId"/>
+        <result property="createTime" column="create_time"/>
+        <!-- 配置一对多的关系 -->
+        <collection property="tagNameList" ofType="com.lss.entity.TagAndArticle">
+            <result property="id" column="id"/>
+            <result property="articleId" column="article_id"/>
+            <result property="tagName" column="tag_name"/>
+            <result property="tagId" column="tagId"/>
+        </collection>
+    </resultMap>
+
+    <select id="listByCondition" resultMap="conditionList">
+        SELECT b.id,
+        b.classification_name,
+        b.article_title,
+        b.article_cover,
+        b.create_time,
+        (SELECT c.id
+        FROM blog_class AS c
+        WHERE c.classification_name = b.classification_name) AS classId,
+        tag_name,
+        (SELECT id FROM blog_tag AS g WHERE g.tag_name = t.tag_name) AS tagId
+        FROM blog_article AS b,
+        blog_tag_article AS t
+        where b.is_delete = 0
+        AND b.status = 1
+        AND t.article_id = b.id
+        <if test="classificationName != null and classificationName != ''">
+            AND b.classification_name = #{classificationName}
+        </if>
+        <if test="tagName != null and tagName != ''">
+            AND b.id IN (SELECT article_id FROM blog_tag_article WHERE tag_name = #{tagName})
+        </if>
+        ORDER BY b.create_time DESC
+    </select>
+</mapper>

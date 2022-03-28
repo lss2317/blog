@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lss.mapper.PhotoMapper">
+    <select id="listPhotos" resultType="com.lss.entity.Photo">
+        SELECT p.id,
+        p.photo_name,
+        p.photo_desc,
+        p.photo_src,
+        p.is_delete,
+        p.create_time
+        FROM blog_photo AS p
+        WHERE is_delete = #{isDelete}
+        <if test="albumId != null">
+            AND album_id = #{albumId}
+        </if>
+        ORDER BY create_time DESC
+        LIMIT #{currentPage}, #{pageSize}
+    </select>
+</mapper>

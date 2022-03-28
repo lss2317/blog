@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lss.mapper.MessageMapper">
+    <select id="blogListMessage" resultType="com.lss.entity.Message">
+        SELECT m.id,
+               m.nickname,
+               m.avatar,
+               m.message_content,
+               m.time
+        FROM blog_message AS m
+        WHERE is_review = 0
+    </select>
+
+    <select id="listMessage" resultType="com.lss.entity.Message">
+        SELECT m.id,
+        m.nickname,
+        m.avatar,
+        m.message_content,
+        m.ip_address,
+        m.ip_source,
+        m.is_review,
+        m.create_time
+        FROM blog_message AS m
+        <where>
+            <if test="isReview != null and isReview != -1">
+                is_review = #{isReview}
+            </if>
+            <if test="keywords != null and keywords != ''">
+                AND nickname LIKE "%"#{keywords}"%"
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT #{currentPage},#{pageSize}
+
+    </select>
+</mapper>

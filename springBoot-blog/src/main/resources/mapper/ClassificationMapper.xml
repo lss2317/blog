@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lss.mapper.ClassificationMapper">
+
+    <select id="listClassification" resultType="com.lss.entity.Classification">
+        SELECT c.id,
+               c.classification_name,
+               c.create_time,
+               (SELECT COUNT(*) FROM blog_article a WHERE c.classification_name = a.classification_name) AS articleTotal
+        FROM blog_class AS c limit #{currentPage}, #{pageSize}
+    </select>
+
+    <select id="listClassificationByKeywords" resultType="com.lss.entity.Classification">
+        SELECT c.id,
+               c.classification_name,
+               c.create_time,
+               (SELECT COUNT(*) FROM blog_article a WHERE c.classification_name = a.classification_name) AS articleTotal
+        FROM blog_class AS c
+        WHERE classification_name LIKE "%"#{keywords}"%"
+        limit #{currentPage}
+            , #{pageSize}
+    </select>
+
+    <select id="listClassifications" resultType="com.lss.entity.Classification">
+        SELECT c.id,
+               c.classification_name,
+               c.create_time,
+               (SELECT COUNT(*)
+                FROM blog_article a
+                WHERE c.classification_name = a.classification_name
+                  AND a.is_delete = 0
+                  AND a.status = 1) AS articleTotal
+        FROM blog_class AS c
+        ORDER BY articleTotal DESC
+    </select>
+
+</mapper>

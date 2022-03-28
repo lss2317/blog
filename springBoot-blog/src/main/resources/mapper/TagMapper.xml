@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lss.mapper.TagMapper">
+    <select id="listTag" resultType="com.lss.entity.Tag">
+        SELECT b.id,
+               b.tag_name,
+               b.create_time,
+               (SELECT COUNT(t.article_id)
+                FROM blog_tag_article AS t
+                where b.tag_name = t.tag_name
+                  AND is_delete = 0) AS articleTotal
+        FROM blog_tag AS b limit #{currentPage}, #{pageSize}
+    </select>
+    <select id="listTagByTagName" resultType="com.lss.entity.Tag">
+        SELECT b.id,
+               b.tag_name,
+               b.create_time,
+               (SELECT COUNT(t.article_id)
+                FROM blog_tag_article AS t
+                where b.tag_name = t.tag_name
+                  AND is_delete = 0) AS articleTotal
+        FROM blog_tag AS b
+        WHERE tag_name LIKE "%"#{keywords}"%"
+            limit #{currentPage}
+            , #{pageSize}
+    </select>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lss.mapper.PhotoAlbumMapper">
+    <select id="listAlbum" resultType="com.lss.entity.PhotoAlbum">
+        SELECT a.id,
+        a.album_name,
+        a.album_desc,
+        a.album_cover,
+        a.status,
+        a.create_time
+        FROM blog_album AS a
+        <where>
+            <if test="keywords!= null and keywords!=''">
+                album_name LIKE "%"#{keywords}"%"
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT #{currentPage},#{pageSize}
+    </select>
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lss.mapper.CommentMapper">
+
+    <select id="listComments" resultType="com.lss.entity.Comment">
+        SELECT c.id,
+        u.nickname,
+        u.avatar,
+        c.user_id,
+        c.comment_content,
+        c.create_time
+        FROM blog_comment AS c,
+        blog_user AS u
+        WHERE c.is_review = 0
+        AND parent_id IS NULL
+        AND c.user_id = u.id
+        <if test="type == 1">
+            AND article_id = #{articleId}
+        </if>
+        <if test="type == 2">
+            AND type = 2
+        </if>
+        <if test="type == 3">
+            AND talk_id = #{talkId}
+        </if>
+        ORDER BY c.id DESC
+        LIMIT #{current},#{size}
+    </select>
+
+
+    <select id="listRepliesByCommentId" resultType="com.lss.entity.Comment">
+        SELECT c.id,
+               u.nickname,
+               u.avatar,
+               c.user_id,
+               c.comment_content,
+               c.create_time,
+               c.parent_id,
+               c.reply_user_id,
+               (SELECT r.nickname FROM blog_user AS r WHERE r.id = c.reply_user_id) AS replyNickname
+        FROM blog_comment AS c,
+             blog_user AS u
+        WHERE c.is_review = 0
+          AND c.user_id = u.id
+          AND parent_id = #{commentId}
+        ORDER BY c.id ASC
+            LIMIT #{current}, #{size}
+    </select>
+
+    <select id="listAdminComment" resultType="com.lss.entity.Comment">
+        SELECT c.id,
+        u.avatar,
+        u.nickname,
+        r.nickname AS replyNickname,
+        a.article_title,
+        c.comment_content,
+        c.type,
+        c.create_time,
+        c.is_review
+        FROM
+        blog_comment c
+        LEFT JOIN blog_article a ON c.article_id = a.id
+        LEFT JOIN blog_user u ON c.user_id = u.id
+        LEFT JOIN blog_user r ON c.reply_user_id = r.id
+        <where>
+            <if test="type != null">
+                c.type = #{type}
+            </if>
+            <if test="isReview != null">
+                AND c.is_review = #{isReview}
+            </if>
+            <if test="keywords != null and keywords != ''">
+                AND u.nickname LIKE "%"#{keywords}"%"
+            </if>
+        </where>
+        ORDER BY c.id DESC
+        LIMIT #{currentPage},#{pageSize}
+    </select>
+
+    <select id="listCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+        blog_comment c
+        LEFT JOIN blog_user u ON c.user_id = u.id
+        <where>
+            <if test="type != null">
+                c.type = #{type}
+            </if>
+            <if test="isReview != null">
+                AND c.is_review = #{isReview}
+            </if>
+            <if test="keywords != null and keywords != ''">
+                AND u.nickname LIKE "%"#{keywords}"%"
+            </if>
+        </where>
+    </select>
+</mapper>

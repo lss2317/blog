@@ -127,7 +127,7 @@
               <!-- 回复内容 -->
               <p class="comment-content">
                 <!-- 回复用户名 -->
-                <template v-if="reply.replyId != item.userId">
+                <template v-if="reply.replyId !== item.userId">
                   <span v-if="!reply.replyWebSite" class="ml-1">
                     @{{ reply.replyNickname }}
                   </span>

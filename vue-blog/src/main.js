@@ -9,7 +9,7 @@ import "./assets/css/iconfont.css";
 import "./assets/css/markdown.css";
 import config from "./assets/js/config";
 import Share from "vue-social-share";
-import "vue-social-share/dist/client.css";
+import "./assets/css/vue-social-share/client.css"
 import {vueBaberrage} from "vue-baberrage";
 import axios from "axios";
 import VueAxios from "vue-axios";

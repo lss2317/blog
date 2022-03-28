@@ -309,6 +309,7 @@ export default {
           }
           this.listClassification(this.keywords)
         })
+      }).catch(() => {
       })
     }
   },

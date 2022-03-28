@@ -314,6 +314,7 @@ export default {
           }
           this.listFriendLink()
         })
+      }).catch(() => {
       })
     }
   },

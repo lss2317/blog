@@ -1,7 +1,9 @@
 package com.lss.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lss.annotation.OptLog;
 import com.lss.common.Result;
+import com.lss.constant.OptTypeConst;
 import com.lss.entity.Comment;
 import com.lss.enums.CommentEnum;
 import com.lss.service.CommentService;
@@ -72,5 +74,27 @@ public class CommentController {
     @GetMapping("listAdminComment")
     public Result<JSONObject> listAdminComment(Integer currentPage, Integer pageSize, Integer type, Integer isReview, String keywords) {
         return commentService.listAdminComment(currentPage, pageSize, type, isReview, keywords);
+    }
+
+    /**
+     * 审核评论
+     *
+     * @param jsonObject 接收参数
+     */
+    @PutMapping("checkComments")
+    @OptLog(ApiModule = "评论模块", ApiDesc = "审核评论", optType = OptTypeConst.UPDATE)
+    public Result<?> checkComments(@RequestBody JSONObject jsonObject) {
+        return commentService.checkComments(jsonObject);
+    }
+
+    /**
+     * 删除评论
+     *
+     * @param deleteIdList 删除评论id集合
+     */
+    @DeleteMapping("deleteComments")
+    @OptLog(ApiModule = "评论模块", ApiDesc = "删除评论", optType = OptTypeConst.REMOVE)
+    public Result<?> deleteComments(@RequestBody List<Integer> deleteIdList) {
+        return commentService.deleteComments(deleteIdList);
     }
 }

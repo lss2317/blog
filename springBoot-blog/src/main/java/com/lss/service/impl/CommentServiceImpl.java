@@ -2,21 +2,25 @@ package com.lss.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lss.common.Result;
 import com.lss.constant.RedisPrefixConst;
 import com.lss.entity.Comment;
+import com.lss.entity.User;
 import com.lss.enums.CommentEnum;
 import com.lss.mapper.CommentMapper;
 import com.lss.service.BlogInfoService;
 import com.lss.service.CommentService;
 import com.lss.service.RedisService;
+import com.lss.service.UserService;
 import com.lss.utils.JWTUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +41,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     RedisService redisService;
     @Resource
     HttpServletRequest request;
+    @Resource
+    UserService userService;
 
 
     @Override
@@ -146,5 +152,47 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         Integer count = commentMapper.listCount(type, isReview, keywords.trim());
         json.put("count", count);
         return Result.getCommentResult(json, CommentEnum.LIST_COMMENT_SUCCESS);
+    }
+
+    @Override
+    public Result<?> checkComments(JSONObject json) {
+        //获取根据token获取id
+        String token = request.getHeader("token");
+        Claims claims = JWTUtils.parseToken(token);
+        Object userId = claims.get("id");
+        User user = userService.getById((Serializable) userId);
+        if (user.getRole() != 2) {
+            return Result.getCommentResult(null, CommentEnum.NOT_ABILITY_UPDATE);
+        }
+        //获取审核id集合
+        String isReviewList = json.getString("isReviewList");
+        List<Integer> list = JSONObject.parseObject(isReviewList, List.class);
+        for (Integer id : list) {
+            UpdateWrapper<Comment> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("id", id);
+            updateWrapper.set("is_review", 0);
+            boolean update = this.update(updateWrapper);
+            if (!update) {
+                return Result.getCommentResult(null, CommentEnum.CHECK_COMMENT_ERROR);
+            }
+        }
+        return Result.getCommentResult(null, CommentEnum.CHECK_COMMENT_SUCCESS);
+    }
+
+    @Override
+    public Result<?> deleteComments(List<Integer> deleteIdList) {
+        //获取根据token获取id
+        String token = request.getHeader("token");
+        Claims claims = JWTUtils.parseToken(token);
+        Object userId = claims.get("id");
+        User user = userService.getById((Serializable) userId);
+        if (user.getRole() != 2) {
+            return Result.getCommentResult(null, CommentEnum.NOT_ABILITY_UPDATE);
+        }
+        boolean remove = this.removeBatchByIds(deleteIdList);
+        if (!remove) {
+            return Result.getCommentResult(null, CommentEnum.DELETE_COMMENT_ERROR);
+        }
+        return Result.getCommentResult(null, CommentEnum.DELETE_COMMENT_SUCCESS);
     }
 }

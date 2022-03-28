@@ -154,6 +154,7 @@ export default {
           }
           this.listTalks()
         })
+      }).catch(() => {
       })
     }
     ,

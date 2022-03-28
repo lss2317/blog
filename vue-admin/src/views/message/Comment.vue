@@ -28,6 +28,7 @@
           type="danger"
           icon="delete"
           :disabled="commentIdList.length === 0"
+          @click="deleteComments(null)"
       >
         批量删除
       </el-button>
@@ -162,19 +163,9 @@
           >
             通过
           </el-button>
-          <el-popconfirm
-              style="margin-left:10px"
-              title="确定删除吗？"
-              confirm-button-text="确定"
-              cancel-button-text="取消"
-              @confirm="deleteComments(scope.row.id)"
-          >
-            <template #reference>
-              <el-button type="danger">
+              <el-button type="danger" @click="deleteComments(scope.row.id)">
                 删除
               </el-button>
-            </template>
-          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -254,6 +245,47 @@ export default {
         }
       });
     },
+    deleteComments(id) {
+      ElMessageBox.confirm(
+          '是否删除评论?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'error',
+          }
+      ).then(() => {
+        let deleteIdList = []
+        if (id !== null) {
+          deleteIdList = [id]
+        } else {
+          deleteIdList = this.commentIdList
+        }
+        axios.delete("/api/comment/deleteComments", {
+          data: deleteIdList
+        }).then(res => {
+          if (res.data.code === 200) {
+            ElNotification.success({
+              title: "成功",
+              message: res.data.message
+            })
+          } else if (res.data.code === 500) {
+            ElNotification.warning({
+              title: "错误",
+              message: res.data.message
+            })
+          } else if (res.data.code === 400) {
+            ElNotification.error({
+              title: "失败",
+              message: res.data.message
+            })
+            return false
+          }
+          this.listComments()
+        })
+      }).catch(() => {
+      })
+    },
     searchComments() {
       this.currentPage = 1
       this.listComments()
@@ -275,33 +307,44 @@ export default {
       })
     },
     updateCommentReview(id) {
-      let deleteIdList = []
-      if (id !== null) {
-        deleteIdList = [id]
-      } else {
-        deleteIdList = this.commentIdList
-      }
-      axios.delete("/api/comment/deleteComments", {
-        data: deleteIdList
-      }).then(res => {
-        if (res.data.code === 200) {
-          ElNotification.success({
-            title: "成功",
-            message: res.data.message
-          })
-        } else if (res.data.code === 500) {
-          ElNotification.warning({
-            title: "错误",
-            message: res.data.message
-          })
-        } else if (res.data.code === 400) {
-          ElNotification.error({
-            title: "失败",
-            message: res.data.message
-          })
-          return false
+      ElMessageBox.confirm(
+          '是否通过评论?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success',
+          }
+      ).then(() => {
+        let isReviewList = []
+        if (id !== null) {
+          isReviewList = [id]
+        } else {
+          isReviewList = this.isReviewCommentIdList
         }
-        this.listComments()
+        axios.put("/api/comment/checkComments", {
+          isReviewList: isReviewList
+        }).then(res => {
+          if (res.data.code === 200) {
+            ElNotification.success({
+              title: "成功",
+              message: res.data.message
+            })
+          } else if (res.data.code === 500) {
+            ElNotification.warning({
+              title: "错误",
+              message: res.data.message
+            })
+          } else if (res.data.code === 400) {
+            ElNotification.error({
+              title: "失败",
+              message: res.data.message
+            })
+            return false
+          }
+          this.listComments()
+        })
+      }).catch(() => {
       })
     }
   },

@@ -1,5 +1,5 @@
 <template>
-  <el-card class="main-card" >
+  <el-card class="main-card">
     <!-- 标题 -->
     <div class="title">{{ this.$route.name }}</div>
     <div class="operation-container">
@@ -280,7 +280,8 @@ export default {
               this.listLogs()
             })
           }
-      )
+      ).catch(() => {
+      })
     },
     searchLogs() {
       this.currentPage = 1

@@ -55,109 +55,219 @@
             <span class="separator">|</span>
             <!-- 评论量 -->
             <span>
-              <i class="iconfont iconpinglunzu1" />评论数:
-              <template v-if="count">{{ count }}</template>
-              <template v-else>0</template>
+              <i class="iconfont iconpinglunzu1" />评论数: {{ commentCount }}
             </span>
           </div>
         </div>
       </div>
     </div>
     <!-- 内容 -->
-    <v-card class="blog-container">
-      <article
-        class="article-content markdown-body"
-        v-html="article.articleContent"
-        ref="article"
-      />
-      <!-- 版权声明 -->
-      <div class="aritcle-copyright">
-        <div>
-          <span>文章作者：</span>
-          <a href="http://www.justcopy.top" target="_blank"> 好哥哥</a>
-        </div>
-        <div>
-          <span>文章链接：</span>
-          <a :href="articleHref" target="_blank">{{ articleHref }} </a>
-        </div>
-        <div>
-          <span>版权声明：</span>本博客所有文章除特别声明外，均采用
-          <a
-            href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-            target="_blank"
-          >
-            CC BY-NC-SA 4.0
-          </a>
-          许可协议。转载请注明文章出处。
-        </div>
-      </div>
-      <!-- 转发 -->
-      <div class="article-operation">
-        <div class="tag-container">
-          <router-link
-            v-for="item of article.tagDTOList"
-            :key="item.id"
-            :to="'/tags/' + item.id"
-          >
-            {{ item.tagName }}
-          </router-link>
-        </div>
-        <share style="margin-left:auto" :config="config" />
-      </div>
-      <!-- 点赞打赏等 -->
-      <div class="article-reward">
-        <!-- 点赞按钮 -->
-        <a :class="isLike" @click="like">
-          <v-icon size="14" color="#fff">mdi-thumb-up</v-icon> 点赞
-          <span v-show="article.likeCount > 0">{{ article.likeCount }}</span>
-        </a>
-        <a class="reward-btn">
-          <!-- 打赏按钮 -->
-          <i class="iconfont iconerweima" /> 打赏
-          <!-- 二维码 -->
-          <div class="animated fadeInDown reward-main">
-            <ul class="reward-all">
-              <li class="reward-item">
-                <img
-                  class="reward-img"
-                  :src="require('../../assets/img/avatar.jpg')"
-                />
-                <div class="reward-desc">微信</div>
-              </li>
-              <li class="reward-item">
-                <img
-                  class="reward-img"
-                  :src="require('../../assets/img/avatar.jpg')"
-                />
-                <div class="reward-desc">支付宝</div>
-              </li>
-            </ul>
+    <v-row class="article-container">
+      <v-col md="9" cols="12">
+        <v-card class="article-wrapper">
+          <article
+              id="write"
+              class="article-content markdown-body"
+              v-html="article.articleContent"
+              ref="article"
+          />
+          <!-- 版权声明 -->
+          <div class="aritcle-copyright">
+            <div>
+              <span>文章作者：</span>
+              <router-link to="/">
+                {{ blogInfo.websiteConfig.websiteAuthor }}
+              </router-link>
+            </div>
+            <div>
+              <span>文章链接：</span>
+              <a :href="articleHref" target="_blank">{{ articleHref }} </a>
+            </div>
+            <div>
+              <span>版权声明：</span>本博客所有文章除特别声明外，均采用
+              <a
+                  href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+                  target="_blank"
+              >
+                CC BY-NC-SA 4.0
+              </a>
+              许可协议。转载请注明文章出处。
+            </div>
           </div>
-        </a>
-      </div>
-      <!-- 评论 -->
-      <comment
-        :commentList="commentList"
-        :count="count"
-        @reloadComment="listComment"
-      />
-    </v-card>
+          <!-- 转发 -->
+          <div class="article-operation">
+            <div class="tag-container">
+              <router-link
+                  v-for="item of article.tagDTOList"
+                  :key="item.id"
+                  :to="'/tags/' + item.id"
+              >
+                {{ item.tagName }}
+              </router-link>
+            </div>
+            <share style="margin-left:auto" :config="config" />
+          </div>
+          <!-- 点赞打赏等 -->
+          <div class="article-reward">
+            <!-- 点赞按钮 -->
+            <a :class="isLike" @click="like">
+              <v-icon size="14" color="#fff">mdi-thumb-up</v-icon> 点赞
+              <span v-show="article.likeCount > 0">{{
+                  article.likeCount
+                }}</span>
+            </a>
+            <a class="reward-btn" v-if="blogInfo.websiteConfig.isReward == 1">
+              <!-- 打赏按钮 -->
+              <i class="iconfont iconerweima" /> 打赏
+              <!-- 二维码 -->
+              <div class="animated fadeInDown reward-main">
+                <ul class="reward-all">
+                  <li class="reward-item">
+                    <img
+                        class="reward-img"
+                        :src="blogInfo.websiteConfig.weiXinQRCode"
+                    />
+                    <div class="reward-desc">微信</div>
+                  </li>
+                  <li class="reward-item">
+                    <img
+                        class="reward-img"
+                        :src="blogInfo.websiteConfig.alipayQRCode"
+                    />
+                    <div class="reward-desc">支付宝</div>
+                  </li>
+                </ul>
+              </div>
+            </a>
+          </div>
+          <div class="pagination-post">
+            <!-- 上一篇 -->
+            <div
+                :class="isFull(article.lastArticle.id)"
+                v-if="article.lastArticle.id"
+            >
+              <router-link :to="'/articles/' + article.lastArticle.id">
+                <img
+                    class="post-cover"
+                    :src="article.lastArticle.articleCover"
+                />
+                <div class="post-info">
+                  <div class="label">上一篇</div>
+                  <div class="post-title">
+                    {{ article.lastArticle.articleTitle }}
+                  </div>
+                </div>
+              </router-link>
+            </div>
+            <!-- 下一篇 -->
+            <div
+                :class="isFull(article.nextArticle.id)"
+                v-if="article.nextArticle.id"
+            >
+              <router-link :to="'/articles/' + article.nextArticle.id">
+                <img
+                    class="post-cover"
+                    :src="article.nextArticle.articleCover"
+                />
+                <div class="post-info" style="text-align: right">
+                  <div class="label">下一篇</div>
+                  <div class="post-title">
+                    {{ article.nextArticle.articleTitle }}
+                  </div>
+                </div>
+              </router-link>
+            </div>
+          </div>
+          <!-- 推荐文章 -->
+          <div
+              class="recommend-container"
+              v-if="article.recommendArticleList.length"
+          >
+            <div class="recommend-title">
+              <v-icon size="20" color="#4c4948">mdi-thumb-up</v-icon> 相关推荐
+            </div>
+            <div class="recommend-list">
+              <div
+                  class="recommend-item"
+                  v-for="item of article.recommendArticleList"
+                  :key="item.id"
+              >
+                <router-link :to="'/articles/' + item.id">
+                  <img class="recommend-cover" :src="item.articleCover" />
+                  <div class="recommend-info">
+                    <div class="recommend-date">
+                      <i class="iconfont iconrili" />
+                      {{ item.createTime | date }}
+                    </div>
+                    <div>{{ item.articleTitle }}</div>
+                  </div>
+                </router-link>
+              </div>
+            </div>
+          </div>
+          <!-- 分割线 -->
+          <hr />
+          <!-- 评论 -->
+          <comment :type="commentType" @getCommentCount="getCommentCount" />
+        </v-card>
+      </v-col>
+      <!-- 侧边功能 -->
+      <v-col md="3" cols="12" class="d-md-block d-none">
+        <div style="position: sticky;top: 20px;">
+          <!-- 文章目录 -->
+          <v-card class="right-container">
+            <div class="right-title">
+              <i class="iconfont iconhanbao" style="font-size:16.8px" />
+              <span style="margin-left:10px">目录</span>
+            </div>
+            <div id="toc" />
+          </v-card>
+          <!-- 最新文章 -->
+          <v-card class="right-container" style="margin-top:20px">
+            <div class="right-title">
+              <i class="iconfont icongengxinshijian" style="font-size:16.8px" />
+              <span style="margin-left:10px">最新文章</span>
+            </div>
+            <div class="article-list">
+              <div
+                  class="article-item"
+                  v-for="item of article.newestArticleList"
+                  :key="item.id"
+              >
+                <router-link :to="'/articles/' + item.id" class="content-cover">
+                  <img :src="item.articleCover" />
+                </router-link>
+                <div class="content">
+                  <div class="content-title">
+                    <router-link :to="'/articles/' + item.id">
+                      {{ item.articleTitle }}
+                    </router-link>
+                  </div>
+                  <div class="content-time">{{ item.createTime | date }}</div>
+                </div>
+              </div>
+            </div>
+          </v-card>
+        </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
 import Clipboard from "clipboard";
 import Comment from "../../components/Comment";
+import tocbot from "tocbot";
 export default {
   components: {
     Comment
   },
   created() {
     this.getArticle();
-    this.listComment();
   },
   destroyed() {
     this.clipboard.destroy();
+    tocbot.destroy();
   },
   data: function() {
     return {
@@ -165,12 +275,24 @@ export default {
         sites: ["qzone", "wechat", "weibo", "qq"]
       },
       imgList: [],
-      article: {},
-      commentList: [],
-      count: 0,
+      article: {
+        nextArticle: {
+          id: 0,
+          articleCover: ""
+        },
+        lastArticle: {
+          id: 0,
+          articleCover: ""
+        },
+        recommendArticleList: [],
+        newestArticleList: []
+      },
       wordNum: "",
       readTime: "",
-      articleHref: window.location.href
+      commentType: 1,
+      articleHref: window.location.href,
+      clipboard: null,
+      commentCount: 0
     };
   },
   methods: {
@@ -178,63 +300,72 @@ export default {
       const that = this;
       //查询文章
       this.axios.get("/api" + this.$route.path).then(({ data }) => {
+        document.title = data.data.articleTitle;
         //将markdown转换为Html
-        this.markdownToHtml(data.data.data);
+        this.markdownToHtml(data.data);
         this.$nextTick(() => {
-          //统计文章字数
+          // 统计文章字数
           this.wordNum = this.deleteHTMLTag(this.article.articleContent).length;
-          //计算阅读时间
-          this.readTime = (Math.round(this.wordNum / 400)+1) + "分钟";
-          //添加代码复制功能
+          // 计算阅读时间
+          this.readTime = Math.round(this.wordNum / 400) + "分钟";
+          // 添加代码复制功能
           this.clipboard = new Clipboard(".copy-btn");
           this.clipboard.on("success", () => {
             this.$toast({ type: "success", message: "复制成功" });
           });
-          //添加图片预览功能
+          // 添加文章生成目录功能
+          let nodes = this.$refs.article.children;
+          if (nodes.length) {
+            for (let i = 0; i < nodes.length; i++) {
+              let node = nodes[i];
+              let reg = /^H[1-4]{1}$/;
+              if (reg.exec(node.tagName)) {
+                node.id = i;
+              }
+            }
+          }
+          tocbot.init({
+            tocSelector: "#toc", //要把目录添加元素位置，支持选择器
+            contentSelector: ".article-content", //获取html的元素
+            headingSelector: "h1, h2, h3", //要显示的id的目录
+            hasInnerContainers: true,
+            onClick: function(e) {
+              e.preventDefault();
+            }
+          });
+          // 添加图片预览功能
           const imgList = this.$refs.article.getElementsByTagName("img");
           for (var i = 0; i < imgList.length; i++) {
             this.imgList.push(imgList[i].src);
-            imgList[i].style.cssText = "cursor:zoom-in;";
             imgList[i].addEventListener("click", function(e) {
-              that.previewImg(e.toElement.src);
+              that.previewImg(e.target.currentSrc);
             });
           }
         });
       });
     },
-    listComment() {
-      const path = this.$route.path;
-      const arr = path.split("/");
-      const articleId = arr[arr.length - 1];
-      this.axios
-        .get("/api/comment/comments", {
-          params: { current: 1, articleId: articleId }
-        })
-        .then(({ data }) => {
-          this.commentList = data.data.data.recordList;
-          this.count = data.data.data.count;
-        });
-    },
     like() {
-      //判断登录
+      // 判断登录
       if (!this.$store.state.userId) {
         this.$store.state.loginFlag = true;
         return false;
       }
       //发送请求
-      let param = new URLSearchParams();
-      param.append("articleId", this.article.id);
-      this.axios.post("/api/articles/like", param).then(({ data }) => {
-        if (data.flag) {
-          //判断是否点赞
-          if (this.$store.state.articleLikeSet.indexOf(this.article.id) != -1) {
-            this.$set(this.article, "likeCount", this.article.likeCount - 1);
-          } else {
-            this.$set(this.article, "likeCount", this.article.likeCount + 1);
-          }
-          this.$store.commit("articleLike", this.article.id);
-        }
-      });
+      this.axios
+          .post("/api/articles/" + this.article.id + "/like")
+          .then(({ data }) => {
+            if (data.flag) {
+              //判断是否点赞
+              if (
+                  this.$store.state.articleLikeSet.indexOf(this.article.id) !== -1
+              ) {
+                this.$set(this.article, "likeCount", this.article.likeCount - 1);
+              } else {
+                this.$set(this.article, "likeCount", this.article.likeCount + 1);
+              }
+              this.$store.commit("articleLike", this.article.id);
+            }
+          });
     },
     markdownToHtml(article) {
       const MarkdownIt = require("markdown-it");
@@ -243,9 +374,24 @@ export default {
         html: true,
         linkify: true,
         typographer: true,
+        breaks: true,
         highlight: function(str, lang) {
           // 当前时间加随机数生成唯一的id标识
-          const codeIndex = parseInt(Date.now());
+          var d = new Date().getTime();
+          if (
+              window.performance &&
+              typeof window.performance.now === "function"
+          ) {
+            d += performance.now();
+          }
+          const codeIndex = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+              /[xy]/g,
+              function(c) {
+                var r = (d + Math.random() * 16) % 16 | 0;
+                d = Math.floor(d / 16);
+                return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
+              }
+          );
           // 复制功能主要使用的是 clipboard.js
           let html = `<button class="copy-btn iconfont iconfuzhi" type="button" data-clipboard-action="copy" data-clipboard-target="#copy${codeIndex}"></button>`;
           const linesLength = str.split(/\n/).length - 1;
@@ -255,6 +401,9 @@ export default {
             linesNum = linesNum + "<span></span>";
           }
           linesNum += "</span>";
+          if (lang == null) {
+            lang = "java";
+          }
           if (lang && hljs.getLanguage(lang)) {
             // highlight.js 高亮代码
             const preCode = hljs.highlight(lang, str, true).value;
@@ -264,13 +413,13 @@ export default {
             }
             // 将代码包裹在 textarea 中，由于防止textarea渲染出现问题，这里将 "<" 用 "<" 代替，不影响复制功能
             return `<pre class="hljs"><code>${html}</code>${linesNum}</pre><textarea style="position: absolute;top: -9999px;left: -9999px;z-index: -9999;" id="copy${codeIndex}">${str.replace(
-              /<\/textarea>/g,
-              "</textarea>"
+                /<\/textarea>/g,
+                "</textarea>"
             )}</textarea>`;
           }
         }
       });
-      //将markdown替换为html标签
+      // 将markdown替换为html标签
       article.articleContent = md.render(article.articleContent);
       this.article = article;
     },
@@ -282,24 +431,35 @@ export default {
     },
     deleteHTMLTag(content) {
       return content
-        .replace(/<\/?[^>]*>/g, "")
-        .replace(/[|]*\n/, "")
-        .replace(/&npsp;/gi, "");
+          .replace(/<\/?[^>]*>/g, "")
+          .replace(/[|]*\n/, "")
+          .replace(/&npsp;/gi, "");
+    },
+    getCommentCount(count) {
+      this.commentCount = count;
     }
   },
   computed: {
+    blogInfo() {
+      return this.$store.state.blogInfo;
+    },
     articleCover() {
       return (
-        "background: url(" +
-        this.article.articleCover +
-        ") center center / cover no-repeat"
+          "background: url(" +
+          this.article.articleCover +
+          ") center center / cover no-repeat"
       );
     },
     isLike() {
-      let articleLikeSet = this.$store.state.articleLikeSet;
-      return articleLikeSet.indexOf(this.article.id) != -1
-        ? "like-btn-active"
-        : "like-btn";
+      var articleLikeSet = this.$store.state.articleLikeSet;
+      return articleLikeSet.indexOf(this.article.id) !== -1
+          ? "like-btn-active"
+          : "like-btn";
+    },
+    isFull() {
+      return function(id) {
+        return id ? "post full" : "post";
+      };
     }
   }
 };
@@ -320,11 +480,8 @@ export default {
 }
 .article-info {
   font-size: 14px;
-  line-height: 1.75;
+  line-height: 1.9;
   display: inline-block;
-}
-.article-container:hover {
-  box-shadow: 0 4px 12px 12px rgba(7, 17, 27, 0.15);
 }
 @media (min-width: 760px) {
   .banner {
@@ -335,17 +492,34 @@ export default {
   }
   .article-info-container {
     position: absolute;
-    bottom: 1.9rem;
+    bottom: 6.25rem;
     padding: 0 8%;
     width: 100%;
+    text-align: center;
   }
   .second-line,
   .third-line {
     display: inline;
   }
   .article-title {
-    font-size: 1.875rem;
-    margin-bottom: 0.4rem;
+    font-size: 35px;
+    margin: 20px 0 8px;
+  }
+  .pagination-post {
+    display: flex;
+  }
+  .post {
+    width: 50%;
+  }
+  .recommend-item {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    margin: 3px;
+    width: calc(33.333% - 6px);
+    height: 200px;
+    background: #000;
+    vertical-align: bottom;
   }
 }
 @media (max-width: 759px) {
@@ -374,11 +548,23 @@ export default {
     font-size: 1.5rem;
     margin-bottom: 0.4rem;
   }
-}
-.article-content {
-  word-break: break-word;
-  font-size: 1rem;
-  line-height: 1.8;
+  .post {
+    width: 100%;
+  }
+  .pagination-post {
+    display: block;
+  }
+  .recommend-item {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    margin: 3px;
+    width: calc(100% - 4px);
+    height: 150px;
+    margin: 2px;
+    background: #000;
+    vertical-align: bottom;
+  }
 }
 .article-operation {
   display: flex;
@@ -441,7 +627,7 @@ export default {
   content: "";
 }
 .article-reward {
-  margin: 5rem 0;
+  margin-top: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -530,6 +716,157 @@ export default {
   text-align: center;
   line-height: 36px;
   font-size: 0.875rem;
+}
+.pagination-post {
+  margin-top: 40px;
+  overflow: hidden;
+  width: 100%;
+  background: #000;
+}
+.post {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+}
+.post-info {
+  position: absolute;
+  top: 50%;
+  padding: 20px 40px;
+  width: 100%;
+  transform: translate(0, -50%);
+  line-height: 2;
+  font-size: 14px;
+}
+.post-cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  transition: all 0.6s;
+  object-fit: cover;
+}
+.post a {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  height: 150px;
+}
+.post:hover .post-cover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+.label {
+  font-size: 90%;
+  color: #eee;
+}
+.post-title {
+  font-weight: 500;
+  color: #fff;
+}
+hr {
+  position: relative;
+  margin: 40px auto;
+  border: 2px dashed #d2ebfd;
+  width: calc(100% - 4px);
+}
+.full {
+  width: 100% !important;
+}
+.right-container {
+  padding: 20px 24px;
+  font-size: 14px;
+}
+.right-title {
+  display: flex;
+  align-items: center;
+  line-height: 2;
+  font-size: 16.8px;
+  margin-bottom: 6px;
+}
+.right-title i {
+  font-weight: bold;
+}
+.recommend-container {
+  margin-top: 40px;
+}
+.recommend-title {
+  font-size: 20px;
+  line-height: 2;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.recommend-cover {
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  transition: all 0.6s;
+  object-fit: cover;
+}
+.recommend-info {
+  line-height: 2;
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  padding: 0 20px;
+  width: 100%;
+  transform: translate(0, -50%);
+  text-align: center;
+  font-size: 14px;
+}
+.recommend-date {
+  font-size: 90%;
+}
+.recommend-item:hover .recommend-cover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+.article-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+}
+.article-item:first-child {
+  padding-top: 0;
+}
+.article-item:last-child {
+  padding-bottom: 0;
+}
+.article-item:not(:last-child) {
+  border-bottom: 1px dashed #f5f5f5;
+}
+.article-item img {
+  width: 100%;
+  height: 100%;
+  transition: all 0.6s;
+  object-fit: cover;
+}
+.article-item img:hover {
+  transform: scale(1.1);
+}
+.content {
+  flex: 1;
+  padding-left: 10px;
+  word-break: break-all;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+.content-cover {
+  width: 58.8px;
+  height: 58.8px;
+  overflow: hidden;
+}
+.content-title a {
+  transition: all 0.2s;
+  font-size: 95%;
+}
+.content-title a:hover {
+  color: #2ba1d1;
+}
+.content-time {
+  color: #858585;
+  font-size: 85%;
+  line-height: 2;
 }
 </style>
 

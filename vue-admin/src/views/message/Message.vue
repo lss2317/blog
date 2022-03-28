@@ -255,6 +255,7 @@ export default {
           }
           this.listMessage()
         })
+      }).catch(() => {
       })
     },
     checkMessage() {
@@ -284,6 +285,7 @@ export default {
           }
           this.listMessage()
         })
+      }).catch(() => {
       })
     },
     deleteMessages() {
@@ -297,6 +299,7 @@ export default {
           }
       ).then(() => {
         this.deleteMessage(null)
+      }).catch(() => {
       })
     },
     deleteMessage(id) {

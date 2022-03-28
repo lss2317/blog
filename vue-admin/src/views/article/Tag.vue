@@ -320,6 +320,7 @@ export default {
           }
           this.listTags(this.keywords)
         })
+      }).catch(() => {
       })
     }
   },

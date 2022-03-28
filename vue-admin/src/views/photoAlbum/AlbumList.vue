@@ -229,6 +229,7 @@ export default {
           }
           this.listAlbum()
         })
+      }).catch(() => {
       })
     },
     listAlbum() {

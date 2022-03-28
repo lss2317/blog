@@ -520,6 +520,7 @@ export default {
           this.isDelete = false
           this.listArticle()
         })
+      }).catch(() => {
       })
     },
     changeTop(article) {

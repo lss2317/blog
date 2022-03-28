@@ -226,6 +226,7 @@ export default {
           }
           this.listPages()
         })
+      }).catch(() => {
       })
     }
   },

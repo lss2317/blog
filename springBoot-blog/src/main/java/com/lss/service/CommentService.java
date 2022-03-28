@@ -61,4 +61,18 @@ public interface CommentService extends IService<Comment> {
      * @return json封装数据
      */
     Result<JSONObject> listAdminComment(Integer currentPage, Integer pageSize, Integer type, Integer isReview, String keywords);
+
+    /**
+     * 审核评论
+     *
+     * @param json json接收审核留言List集合
+     */
+    Result<?> checkComments(JSONObject json);
+
+    /**
+     * 删除评论
+     *
+     * @param deleteIdList 删除评论id集合
+     */
+    Result<?> deleteComments(List<Integer> deleteIdList);
 }

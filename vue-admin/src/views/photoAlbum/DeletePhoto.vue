@@ -195,6 +195,7 @@ export default {
           }
           this.listPhotos()
         })
+      }).catch(() => {
       })
     },
     updatePhotoAlbum() {

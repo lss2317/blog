@@ -73,7 +73,7 @@
           <div class="photo-operation">
             <el-dropdown @command="handleCommand">
               <el-icon style="color:#fff">
-                <more-filled />
+                <more-filled/>
               </el-icon>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -383,6 +383,7 @@ export default {
           }
           this.listPhotos()
         })
+      }).catch(() => {
       })
     },
     updatePhotoAlbum() {

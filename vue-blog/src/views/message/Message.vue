@@ -70,7 +70,7 @@ export default {
         avatar: userAvatar,
         nickname: userNickname,
         messageContent: this.messageContent,
-        time: Math.floor(Math.random() * 8 + 3)
+        time: Math.floor(Math.random() * 5 + 3)
       };
       this.barrageList.push(message);
       this.messageContent = "";

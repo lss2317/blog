@@ -169,6 +169,7 @@ export default {
       // });
       //退出登录，向后端发送请求，用户下线
       this.$store.commit("logout");
+      window.localStorage.removeItem("login_request_token")
       localStorage.removeItem("token")
       this.$toast({type: "success", message: "退出登录成功"});
     }

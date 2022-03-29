@@ -114,9 +114,9 @@ public class ArticleController {
     }
 
     /**
-     * 获取单个文章
+     * 后台获取单个文章
      */
-    @GetMapping("/{articleId}")
+    @GetMapping("/admin/{articleId}")
     public Result<?> selectArticle(@PathVariable Integer articleId) {
         Article article = articleService.getById(articleId);
         QueryWrapper<TagAndArticle> queryWrapper = new QueryWrapper<>();
@@ -157,5 +157,17 @@ public class ArticleController {
     @GetMapping("condition")
     public Result<JSONObject> listByCondition(Integer classificationId, Integer tagId) {
         return articleService.listArticleByCondition(classificationId, tagId);
+    }
+
+    /**
+     * 根据id查看文章
+     *
+     * @param articleId 文章id
+     * @return {@link Result<Article>} 文章信息
+     */
+    @GetMapping("/{articleId}")
+    public Result<Article> getArticleById(@PathVariable("articleId") Integer articleId) {
+        Article article = articleService.getArticleById(articleId);
+        return Result.getArticleResult(article, ArticleEnum.SEARCH_ARTICLE_SUCCESS);
     }
 }

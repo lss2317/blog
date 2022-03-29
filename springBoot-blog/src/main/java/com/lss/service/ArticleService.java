@@ -112,4 +112,12 @@ public interface ArticleService extends IService<Article> {
      * @return json格式数据
      */
     Result<JSONObject> listArticleByCondition(Integer classificationId, Integer tagId);
+
+    /**
+     * 根据id查看文章
+     *
+     * @param articleId 文章id
+     * @return {@link Article} 文章信息
+     */
+    Article getArticleById(Integer articleId);
 }

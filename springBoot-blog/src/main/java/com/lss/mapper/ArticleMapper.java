@@ -66,4 +66,20 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @return 数据List集合
      */
     List<Article> listByCondition(String classificationName, String tagName);
+
+    /**
+     * 查看文章的推荐文章
+     *
+     * @param articleId 文章id
+     * @return 文章列表
+     */
+    List<Article> listRecommendArticles(@Param("articleId") Integer articleId);
+
+    /**
+     * 根据id查询文章
+     *
+     * @param articleId 文章id
+     * @return 文章信息
+     */
+    Article getArticleById(@Param("articleId") Integer articleId);
 }

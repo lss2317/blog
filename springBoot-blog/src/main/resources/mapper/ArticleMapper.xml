@@ -179,4 +179,61 @@
         </if>
         ORDER BY b.create_time DESC
     </select>
+
+    <select id="listRecommendArticles" resultType="com.lss.entity.Article">
+        SELECT id,
+               article_title,
+               article_cover,
+               create_time
+        FROM (
+                 SELECT DISTINCT article_id
+                 FROM (SELECT tag_name FROM blog_tag_article WHERE article_id = #{articleId}) t
+                          JOIN blog_tag_article t1 ON t.tag_name = t1.tag_name
+                 WHERE article_id != #{articleId}
+             ) t2
+                 JOIN blog_article a ON t2.article_id = a.id
+        WHERE a.is_delete = 0
+        ORDER BY is_top DESC, id DESC LIMIT 6
+    </select>
+
+    <resultMap id="articleResultMap" type="com.lss.entity.Article">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="article_cover" property="articleCover"/>
+        <result column="article_title" property="articleTitle"/>
+        <result column="article_content" property="articleContent"/>
+        <result column="type" property="type"/>
+        <result column="original_url" property="originalUrl"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="classId" property="classId"/>
+        <result column="classification_name" property="classificationName"/>
+        <collection property="tagDTOList" ofType="com.lss.entity.Tag">
+            <id column="tag_id" property="id"/>
+            <result column="tag_name" property="tagName"/>
+        </collection>
+    </resultMap>
+
+    <select id="getArticleById" resultMap="articleResultMap">
+        SELECT a.id,
+               a.user_id,
+               article_cover,
+               article_title,
+               article_content,
+               a.type,
+               a.original_url,
+               a.create_time,
+               a.update_time,
+               a.id AS classId,
+               a.classification_name,
+               t.id AS tag_id,
+               t.tag_name
+        FROM blog_article a
+                 JOIN blog_class c ON a.classification_name = c.classification_name
+                 JOIN blog_tag_article atg ON a.id = atg.article_id
+                 JOIN blog_tag t ON t.tag_name = atg.tag_name
+        WHERE a.id = #{articleId}
+          AND a.is_delete = 0
+          AND a.status = 1
+    </select>
 </mapper>

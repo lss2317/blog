@@ -9,7 +9,7 @@ const routes = [
         component: () => import('../views/home/Home')
     },
     {
-        path: "/articles/:articleId",
+        path: "/article/:articleId",
         component: () => import('../views/article/Article')
     },
     {

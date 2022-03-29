@@ -1,6 +1,7 @@
 package com.lss.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,14 +11,18 @@ import com.lss.entity.*;
 import com.lss.enums.ArticleEnum;
 import com.lss.mapper.ArticleMapper;
 import com.lss.service.*;
+import com.lss.utils.BeanCopyUtils;
+import com.lss.utils.IpUtils;
 import com.lss.utils.JWTUtils;
 import io.jsonwebtoken.Claims;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author lss
@@ -38,6 +43,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     TagService tagService;
     @Resource
     RedisService redisService;
+    @Resource
+    HttpServletRequest request;
 
     @Override
     public List<Article> listArticle(Integer currentPage, Integer pageSize, Integer articleType,
@@ -104,6 +111,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //添加文章
         article.setCreateTime(new Date());
         article.setUpdateTime(new Date());
+        article.setUserId(user.getId());
         boolean save = this.save(article);
         if (!save) {
             return Result.getArticleResult(null, ArticleEnum.SAVE_ARTICLE_ERROR);
@@ -296,5 +304,80 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             json.put("name", tag.getTagName());
         }
         return Result.getArticleResult(json, ArticleEnum.SEARCH_ARTICLE_SUCCESS);
+    }
+
+    @Override
+    public Article getArticleById(Integer articleId) {
+        // 查询推荐文章
+        CompletableFuture<List<Article>> recommendArticleList = CompletableFuture
+                .supplyAsync(() -> articleMapper.listRecommendArticles(articleId));
+        // 查询最新文章
+        CompletableFuture<List<Article>> newestArticleList = CompletableFuture
+                .supplyAsync(() ->
+                        articleMapper.selectList(new LambdaQueryWrapper<Article>()
+                                .select(Article::getId, Article::getArticleTitle, Article::getArticleCover, Article::getCreateTime)
+                                .eq(Article::getIsDelete, 0)
+                                .eq(Article::getStatus, 1)
+                                .ne(Article::getId, articleId)
+                                .orderByDesc(Article::getId)
+                                .last("limit 5")));
+        // 查询id对应文章
+        Article article = articleMapper.getArticleById(articleId);
+        if (Objects.isNull(article)) {
+            throw new NullPointerException("文章不存在");
+        }
+        // 更新文章浏览量
+        updateArticleViewsCount(articleId);
+        // 查询上一篇下一篇文章
+        Article lastArticle = articleMapper.selectOne(new LambdaQueryWrapper<Article>()
+                .select(Article::getId, Article::getArticleTitle, Article::getArticleCover)
+                .eq(Article::getIsDelete, 0)
+                .eq(Article::getStatus, 1)
+                .lt(Article::getId, articleId)
+                .orderByDesc(Article::getId)
+                .last("limit 1"));
+        Article nextArticle = articleMapper.selectOne(new LambdaQueryWrapper<Article>()
+                .select(Article::getId, Article::getArticleTitle, Article::getArticleCover)
+                .eq(Article::getIsDelete, 0)
+                .eq(Article::getStatus, 1)
+                .gt(Article::getId, articleId)
+                .orderByAsc(Article::getId)
+                .last("limit 1"));
+        article.setLastArticle(BeanCopyUtils.copyObject(lastArticle, Article.class));
+        article.setNextArticle(BeanCopyUtils.copyObject(nextArticle, Article.class));
+        // 封装点赞量和浏览量
+        Double score = redisService.zScore(RedisPrefixConst.ARTICLE_VIEWS_COUNT, articleId);
+        if (Objects.nonNull(score)) {
+            article.setViewsCount(score.intValue());
+        }
+        article.setLikeCount((Integer) redisService.hGet(RedisPrefixConst.ARTICLE_LIKE_COUNT, articleId.toString()));
+        // 封装文章信息
+        try {
+            article.setRecommendArticleList(recommendArticleList.get());
+            article.setNewestArticleList(newestArticleList.get());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return article;
+    }
+
+    /**
+     * 更新文章浏览量
+     *
+     * @param articleId 文章id
+     */
+    @Async
+    public void updateArticleViewsCount(Integer articleId) {
+        // 获取ip
+        String ipAddress = IpUtils.getIpAddress(request);
+        // 访客唯一标识 ，前缀 + ip地址
+        String uuid = RedisPrefixConst.ARTICLE_VISITOR + "_" + ipAddress;
+        Object viewUser = redisService.get(uuid);
+        if (viewUser == null) {
+            // 浏览量+1
+            redisService.zIncr(RedisPrefixConst.ARTICLE_VIEWS_COUNT, articleId, 1D);
+            //一个ip时隔3小时访问才再次增加访问量
+            redisService.set(uuid, ipAddress, 60 * 60 * 3);
+        }
     }
 }

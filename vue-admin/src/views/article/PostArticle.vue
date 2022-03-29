@@ -115,7 +115,7 @@
                   :key="index"
                   style="margin-right: 1.25rem;margin-top: 1rem"
                   size="large"
-                  :class="tagClass(item)"
+                  :class="this.tagClass(item)"
                   @click="addTag(item)"
               >
                 {{ item.tagName }}
@@ -150,7 +150,7 @@
               class="upload-demo"
               drag
               ref="upload"
-              limit="1"
+              :limit=this.limit
               action="/api/files/upload"
               :on-success="uploadCover"
               :before-upload="beforeUpload"
@@ -214,6 +214,7 @@ export default {
       tagName: "",
       classificationList: [],
       tagList: [],
+      limit: 1,
       typeList: [
         {
           type: 1,
@@ -244,7 +245,7 @@ export default {
   },
   created() {
     if (this.$route.params.articleId) {
-      axios.get("/api/article/" + this.$route.params.articleId).then(res => {
+      axios.get("/api/article/admin/" + this.$route.params.articleId).then(res => {
         console.log(res.data.data)
         this.article = res.data.data
       })

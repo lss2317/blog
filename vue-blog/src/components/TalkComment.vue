@@ -478,7 +478,7 @@ export default {
 
 .comment-nickname {
   text-decoration: none;
-  color: #1abc9c !important;
+  color:  #66b1ff !important;
   font-weight: 500;
 }
 

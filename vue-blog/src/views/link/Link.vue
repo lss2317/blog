@@ -46,7 +46,7 @@
         友链信息展示需要，你的信息格式要包含：名称、介绍、链接、头像
       </blockquote>
       <!-- 评论 -->
-      <Comment :commentList="commentList" :count="count"></Comment>
+      <Comment ref="comment" :type="commentType"></Comment>
     </v-card>
   </div>
 </template>
@@ -65,12 +65,14 @@ export default {
     return {
       friendLinkList: [],
       commentList: [],
-      count: 0
+      count: 0,
+      commentType: 2
     };
   },
   methods: {
     listFriendLink() {
       this.axios.get("/api/link/listLink").then(res => {
+        this.$refs.comment.getPostUserId(1)
         this.friendLinkList = res.data;
       });
       this.axios

@@ -84,7 +84,8 @@
       <el-table-column type="selection" width="55"/>
       <el-table-column prop="avatar" label="头像" align="center" width="120">
         <template #default="scope">
-          <img :src="scope.row.avatar" width="40" height="40"/>
+          <el-image :src="scope.row.avatar" :append-to-body='true' :preview-src-list="[scope.row.avatar]"
+                    style="width: 40px;height: 40px"/>
         </template>
       </el-table-column>
       <!-- 评论人昵称 -->
@@ -163,9 +164,9 @@
           >
             通过
           </el-button>
-              <el-button type="danger" @click="deleteComments(scope.row.id)">
-                删除
-              </el-button>
+          <el-button type="danger" @click="deleteComments(scope.row.id)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

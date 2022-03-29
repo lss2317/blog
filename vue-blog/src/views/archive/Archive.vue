@@ -13,7 +13,7 @@
           <span class="time">{{ item.createTime | date }}</span>
           <!-- 文章标题 -->
           <router-link
-              :to="'/articles/' + item.id"
+              :to="'/article/' + item.id"
               style="color:#666;text-decoration: none"
           >
             {{ item.articleTitle }}

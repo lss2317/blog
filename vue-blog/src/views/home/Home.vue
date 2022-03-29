@@ -52,7 +52,7 @@
         >
           <!-- 文章封面图 -->
           <div :class="isRight(index)">
-            <router-link :to="'/articles/' + item.id">
+            <router-link :to="'/article/' + item.id">
               <v-img
                   class="on-hover"
                   width="100%"
@@ -64,7 +64,7 @@
           <!-- 文章信息 -->
           <div class="article-wrapper">
             <div style="line-height:1.4">
-              <router-link :to="'/articles/' + item.id">
+              <router-link :to="'/article/' + item.id">
                 {{ item.articleTitle }}
               </router-link>
             </div>
@@ -324,7 +324,7 @@ export default {
       };
     },
     cover() {
-      var cover = "";
+      let cover = "";
       this.$store.state.blogInfo.pageList.forEach(item => {
         if (item.pageLabel === "home") {
           cover = item.pageCover;

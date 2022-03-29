@@ -22,10 +22,17 @@ public class Article {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
+
     /**
      * 文章分类
      */
     private String classificationName;
+
+    /**
+     * 文章作者
+     */
+    private Integer userId;
+
     /**
      * 文章图片
      */
@@ -95,4 +102,34 @@ public class Article {
      */
     @TableField(exist = false)
     private Integer viewsCount;
+
+    /**
+     * 文章标签
+     */
+    @TableField(exist = false)
+    private List<Tag> tagDTOList;
+
+    /**
+     * 上一篇文章
+     */
+    @TableField(exist = false)
+    private Article lastArticle;
+
+    /**
+     * 下一篇文章
+     */
+    @TableField(exist = false)
+    private Article nextArticle;
+
+    /**
+     * 推荐文章列表
+     */
+    @TableField(exist = false)
+    private List<Article> recommendArticleList;
+
+    /**
+     * 最新文章列表
+     */
+    @TableField(exist = false)
+    private List<Article> newestArticleList;
 }

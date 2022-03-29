@@ -10,7 +10,7 @@
           <!-- 文章 -->
           <v-card class="animated zoomIn article-item-card">
             <div class="article-item-cover">
-              <router-link :to="'/articles/' + item.id">
+              <router-link :to="'/article/' + item.id">
                 <!-- 缩略图 -->
                 <v-img
                     class="on-hover"
@@ -23,7 +23,7 @@
             <div class="article-item-info">
               <!-- 文章标题 -->
               <div>
-                <router-link :to="'/articles/' + item.id">
+                <router-link :to="'/article/' + item.id">
                   {{ item.articleTitle }}
                 </router-link>
               </div>

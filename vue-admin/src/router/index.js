@@ -16,81 +16,129 @@ const routes = [
             {
                 path: '/postArticle',
                 name: '发布文章',
+                meta: {
+                    title: "文章管理",
+                },
                 component: () => import('../views/article/PostArticle')
             },
             {
                 path: '/articleList',
                 name: '文章列表',
+                meta: {
+                    title: "文章管理",
+                },
                 component: () => import('../views/article/ArticleList')
             },
             {
                 path: '/tag',
                 name: '标签管理',
+                meta: {
+                    title: "文章管理",
+                },
                 component: () => import('../views/article/Tag')
             },
             {
                 path: 'classification',
                 name: '分类管理',
+                meta: {
+                    title: "文章管理",
+                },
                 component: () => import('../views/article/Classification')
             },
             {
                 path: 'message',
                 name: "留言管理",
+                meta: {
+                    title: "消息管理",
+                },
                 component: () => import('../views/message/Message')
             },
             {
                 path: 'comment',
                 name: '评论管理',
+                meta: {
+                    title: "消息管理",
+                },
                 component: () => import('../views/message/Comment')
             },
             {
                 path: 'user',
                 name: '用户列表',
+                meta: {
+                    title: "用户管理",
+                },
                 component: () => import('../views/user/User')
             },
             {
                 path: 'online',
                 name: '在线用户',
+                meta: {
+                    title: "用户管理",
+                },
                 component: () => import('../views/user/Online')
             },
             {
                 path: 'operationLog',
                 name: '操作日志',
+                meta: {
+                    title: "日志管理",
+                },
                 component: () => import('../views/log/OperationLog')
             },
             {
                 path: 'friendLink',
                 name: "友链管理",
+                meta: {
+                    title: "系统管理",
+                },
                 component: () => import('../views/system/FriendLink')
             },
             {
                 path: 'postTalk',
                 name: '发布说说',
+                meta: {
+                    title: "说说管理",
+                },
                 component: () => import('../views/talk/PostTalk')
             },
             {
                 path: 'talkList',
                 name: "说说列表",
+                meta: {
+                    title: "说说管理",
+                },
                 component: () => import('../views/talk/TalkList')
             },
             {
                 path: 'albumList',
                 name: "相册列表",
+                meta: {
+                    title: "相册管理",
+                },
                 component: () => import('../views/photoAlbum/AlbumList'),
             },
             {
                 path: '/albumList/:albumId',
                 name: '照片管理',
+                meta: {
+                    title: "相册管理",
+                },
                 component: () => import('../views/photoAlbum/Photo')
             },
             {
                 path: 'deletePhoto',
                 name: "照片回收站",
+                meta: {
+                    title: "相册管理",
+                },
                 component: () => import('../views/photoAlbum/DeletePhoto')
             },
             {
                 path: "website",
                 name: "网站管理",
+                meta: {
+                    title: "系统管理",
+                },
                 component: () => import('../views/system/Website')
             },
             {
@@ -101,11 +149,17 @@ const routes = [
             {
                 path: "page",
                 name: "页面管理",
+                meta: {
+                    title: "系统管理",
+                },
                 component: () => import('../views/system/Page')
             },
             {
                 path: 'about',
                 name: "关于我",
+                meta: {
+                    title: "系统管理",
+                },
                 component: () => import('../views/system/About')
             }
         ]

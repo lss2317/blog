@@ -100,6 +100,8 @@ public class OptLogAspect {
         // 请求URL
         operationLog.setOptUrl(request.getRequestURI());
         operationLog.setCreateTime(new Date());
-        operationLogService.save(operationLog);
+        if (user.getRole() == 2) {
+            operationLogService.save(operationLog);
+        }
     }
 }

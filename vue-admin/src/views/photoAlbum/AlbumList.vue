@@ -2,7 +2,7 @@
   <el-card class="main-card">
     <!-- 标题 -->
     <div class="title">{{ this.$route.name }}</div>
-    <div class="operation-container">
+    <div class="operation-container" style=" margin-top: 2.25rem;">
       <el-button
           type="primary"
           icon="plus"

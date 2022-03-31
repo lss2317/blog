@@ -184,6 +184,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //获取点赞评论id的set集合
         Set<Object> setCommentLikes = redisService.sMembers(RedisPrefixConst.COMMENT_USER_LIKE + select.getId());
         select.setCommentLikeSet(setCommentLikes);
+        //获取点赞文章id的set集合
+        Set<Object> articleLikeSet = redisService.sMembers(RedisPrefixConst.ARTICLE_USER_LIKE + select.getId());
+        select.setArticleLikeSet(articleLikeSet);
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", user.getId());
         updateWrapper.set("last_login_time", new Date());

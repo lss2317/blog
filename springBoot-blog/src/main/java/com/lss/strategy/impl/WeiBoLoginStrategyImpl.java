@@ -87,6 +87,12 @@ public class WeiBoLoginStrategyImpl implements WeiBoLoginStrategy {
         //获取点赞说说列表
         Set<Object> set = redisService.sMembers(RedisPrefixConst.TALK_USER_LIKE + one.getId());
         one.setTalkLikeSet(set);
+        //获取点赞评论id的set集合
+        Set<Object> setCommentLikes = redisService.sMembers(RedisPrefixConst.COMMENT_USER_LIKE + one.getId());
+        one.setCommentLikeSet(setCommentLikes);
+        //获取点赞文章id的set集合
+        Set<Object> articleLikeSet = redisService.sMembers(RedisPrefixConst.ARTICLE_USER_LIKE + one.getId());
+        one.setArticleLikeSet(articleLikeSet);
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set("last_login_time", new Date());
         updateWrapper.eq("weibo_id", LoginUserInfo.get("id"));

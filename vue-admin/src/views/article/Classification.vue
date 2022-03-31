@@ -24,7 +24,7 @@
           v-model="keywords"
           prefix-icon="search"
           placeholder="请输入分类名"
-          style="width:200px;margin-left: 752px"
+          style="width:200px;margin-left: 740px"
           @keyup.enter="searchClassification"
           @clear="listClassification(null)"
       />

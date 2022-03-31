@@ -24,7 +24,7 @@
           v-model="keywords"
           prefix-icon="Search"
           placeholder="请输入标签名"
-          style="width:200px;margin-left: 752px"
+          style="width:200px;margin-left: 740px"
           @keyup.enter="searchTags"
           @clear="listTags(null)"
       />

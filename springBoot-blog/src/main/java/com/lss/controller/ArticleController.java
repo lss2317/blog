@@ -170,4 +170,15 @@ public class ArticleController {
         Article article = articleService.getArticleById(articleId);
         return Result.getArticleResult(article, ArticleEnum.SEARCH_ARTICLE_SUCCESS);
     }
+
+    /**
+     * 点赞文章
+     *
+     * @param articleId 文章id
+     */
+    @PostMapping("/{articleId}/like")
+    public Result<?> saveArticleLike(@PathVariable("articleId") Integer articleId) {
+        articleService.saveArticleLike(articleId);
+        return Result.getArticleResult(null, ArticleEnum.MODIFY_ARTICLE_SUCCESS);
+    }
 }

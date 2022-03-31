@@ -2,14 +2,13 @@ package com.lss.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lss.common.Result;
 import com.lss.constant.RedisPrefixConst;
-import com.lss.entity.Article;
-import com.lss.entity.Page;
-import com.lss.entity.User;
-import com.lss.entity.WebsiteConfig;
+import com.lss.entity.*;
 import com.lss.enums.FriendLinkEnum;
 import com.lss.enums.UserEnum;
 import com.lss.mapper.BlogInfoMapper;
@@ -22,10 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author lss
@@ -48,6 +44,10 @@ public class BlogInfoServiceImpl extends ServiceImpl<BlogInfoMapper, WebsiteConf
     TagService tagService;
     @Resource
     PageService pageService;
+    @Resource
+    MessageService messageService;
+    @Resource
+    UniqueViewService uniqueViewService;
 
 
     @Override
@@ -146,6 +146,69 @@ public class BlogInfoServiceImpl extends ServiceImpl<BlogInfoMapper, WebsiteConf
             redisService.incr(RedisPrefixConst.BLOG_VIEWS_COUNT, 1);
             //一个ip时隔3小时访问才再次增加访问量
             redisService.set(uuid, ipAddress, 60 * 60 * 3);
+            //保存唯一标识
+            redisService.sAdd(RedisPrefixConst.UNIQUE_VISITOR, UUID.randomUUID().toString());
         }
+    }
+
+    @Override
+    public JSONObject getBlogBackInfo() {
+        JSONObject json = new JSONObject();
+        // 查询访问量
+        Object count = redisService.get(RedisPrefixConst.BLOG_VIEWS_COUNT);
+        Integer viewsCount = Integer.parseInt(Optional.ofNullable(count).orElse(0).toString());
+        // 查询留言量
+        Long messageCount = messageService.count();
+        // 查询用户量
+        Long userCount = userService.count();
+        // 查询文章量
+        Long articleCount = articleService.count(new LambdaQueryWrapper<Article>()
+                .eq(Article::getIsDelete, 0));
+        json.put("viewsCount", viewsCount);
+        json.put("messageCount", messageCount);
+        json.put("userCount", userCount);
+        json.put("articleCount", articleCount);
+        List<UniqueView> uniqueViews = uniqueViewService.listUniqueViews();
+        json.put("uniqueViewList", uniqueViews);
+        Result<JSONObject> classifications = classificationService.listClassifications();
+        json.put("classList", classifications.getData().get("data"));
+        // 查询redis访问量前五的文章
+        Map<Object, Double> articleMap = redisService.zReverseRangeWithScore(RedisPrefixConst.ARTICLE_VIEWS_COUNT, 0, 4);
+        if (CollectionUtils.isNotEmpty(articleMap)) {
+            // 查询文章排行
+            List<Article> articleRankList = listArticleRank(articleMap);
+            json.put("articleRankList", articleRankList);
+        }
+        return json;
+    }
+
+    /**
+     * 查询文章排行
+     *
+     * @param articleMap 文章信息
+     * @return {@link List<Article>} 文章排行
+     */
+    private List<Article> listArticleRank(Map<Object, Double> articleMap) {
+        List<Article> list = new ArrayList<>();
+        // 提取文章id
+        List<Integer> articleIdList = new ArrayList<>();
+        articleMap.forEach((key, value) -> articleIdList.add((Integer) key));
+        // 查询文章信息
+        articleIdList.forEach(item -> {
+            Article article = articleService.getOne(new LambdaQueryWrapper<Article>()
+                    .eq(Article::getId, item)
+                    .select(Article::getId, Article::getArticleTitle)
+            );
+            article.setViewsCount(articleMap.get(article.getId()).intValue());
+            list.add(article);
+        });
+        //lambda表达式进行浏览量从大到小排序
+        list.sort(new Comparator<Article>() {
+            @Override
+            public int compare(Article o1, Article o2) {
+                return o2.getViewsCount()-o1.getViewsCount();
+            }
+        });
+        return list;
     }
 }

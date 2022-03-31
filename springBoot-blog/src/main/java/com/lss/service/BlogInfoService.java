@@ -52,4 +52,11 @@ public interface BlogInfoService extends IService<WebsiteConfig> {
      * 添加访问量
      */
     void report();
+
+    /**
+     * 获取后台首页数据
+     *
+     * @return 博客后台信息
+     */
+    JSONObject getBlogBackInfo();
 }

@@ -246,7 +246,6 @@ export default {
   created() {
     if (this.$route.params.articleId) {
       axios.get("/api/article/admin/" + this.$route.params.articleId).then(res => {
-        console.log(res.data.data)
         this.article = res.data.data
       })
     }

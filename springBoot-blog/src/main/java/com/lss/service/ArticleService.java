@@ -120,4 +120,11 @@ public interface ArticleService extends IService<Article> {
      * @return {@link Article} 文章信息
      */
     Article getArticleById(Integer articleId);
+
+    /**
+     * 点赞文章
+     *
+     * @param articleId 文章id
+     */
+    void saveArticleLike(Integer articleId);
 }

@@ -8,12 +8,19 @@
     <el-container>
       <!-- aside部分 -->
       <leftSidebar></leftSidebar>
-      <el-main style="background:#F7F9FB">
+      <el-main>
+        <div class="bread">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item v-if="this.$route.meta.title">{{this.$route.meta.title}}</el-breadcrumb-item>
+            <el-breadcrumb-item v-if="this.$route.name">{{ this.$route.name }}</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
         <!-- main部分 -->
         <div class="fade-transform-box">
           <router-view v-slot="{ Component }">
             <transition name="fade-transform" mode="out-in">
-                <component :is="Component" />
+              <component :is="Component"/>
             </transition>
           </router-view>
         </div>
@@ -33,15 +40,22 @@ export default {
     leftSidebar
   },
   data() {
-    return {}
+    return {
+    }
   },
-  methods: {}
 }
 </script>
 
-<style>
+<style scoped>
 .el-main {
   background-color: #f5f7f9;
+  padding: 0;
+}
+
+.bread {
+  padding-left: 40px;
+  padding-top: 20px;
+  padding-bottom: 5px;
 }
 
 .el-header,
@@ -75,9 +89,7 @@ export default {
   position: relative;
   top: 0;
   bottom: 0;
-  width: 100%;
   overflow: hidden;
+  padding: 12px 20px 20px;
 }
-
-
 </style>

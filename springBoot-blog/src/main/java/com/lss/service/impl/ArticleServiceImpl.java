@@ -361,6 +361,26 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return article;
     }
 
+    @Override
+    public void saveArticleLike(Integer articleId) {
+        String token = request.getHeader("token");
+        Claims claims = JWTUtils.parseToken(token);
+        String id = claims.get("id").toString();
+        // 判断是否点赞
+        String articleLikeKey = RedisPrefixConst.ARTICLE_USER_LIKE + id;
+        if (redisService.sIsMember(articleLikeKey, articleId)) {
+            // 点过赞则删除文章id
+            redisService.sRemove(articleLikeKey, articleId);
+            // 文章点赞量-1
+            redisService.hDecr(RedisPrefixConst.ARTICLE_LIKE_COUNT, articleId.toString(), 1L);
+        } else {
+            // 未点赞则增加文章id
+            redisService.sAdd(articleLikeKey, articleId);
+            // 文章点赞量+1
+            redisService.hIncr(RedisPrefixConst.ARTICLE_LIKE_COUNT, articleId.toString(), 1L);
+        }
+    }
+
     /**
      * 更新文章浏览量
      *
@@ -370,8 +390,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void updateArticleViewsCount(Integer articleId) {
         // 获取ip
         String ipAddress = IpUtils.getIpAddress(request);
-        // 访客唯一标识 ，前缀 + ip地址
-        String uuid = RedisPrefixConst.ARTICLE_VISITOR + "_" + ipAddress;
+        // 访客唯一标识 ，前缀 + 文章id + ip地址
+        String uuid = RedisPrefixConst.ARTICLE_VISITOR + "_" + articleId + "_" + ipAddress;
         Object viewUser = redisService.get(uuid);
         if (viewUser == null) {
             // 浏览量+1

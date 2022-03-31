@@ -79,4 +79,13 @@ public class BlogInfoController {
     public void report() {
         blogInfoService.report();
     }
+
+    /**
+     * 获取后台主页信息
+     * @return json数据
+     */
+    @GetMapping("adminBlogInfo")
+    public JSONObject getBlogBackInfo(){
+        return blogInfoService.getBlogBackInfo();
+    }
 }

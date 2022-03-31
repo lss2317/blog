@@ -30,7 +30,7 @@
               <!-- 说说信息 -->
               <div class="talk-content" v-html="item.content"/>
               <!-- 图片列表 -->
-              <v-row class="talk-images" v-if="item.imgList">
+              <v-row class="talk-images" style="margin-bottom: 10px" v-if="item.imgList">
                 <v-col
                     :md="4"
                     :cols="6"

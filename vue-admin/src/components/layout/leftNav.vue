@@ -83,11 +83,15 @@
             </template>
             <el-menu-item-group>
               <el-menu-item index="/user" @click="goPage('user')">
-                <el-icon><stamp /></el-icon>
+                <el-icon>
+                  <stamp/>
+                </el-icon>
                 <span slot="title">用户列表</span>
               </el-menu-item>
               <el-menu-item index="/online" @click="goPage('online')">
-                <el-icon><place /></el-icon>
+                <el-icon>
+                  <place/>
+                </el-icon>
                 <span slot="title">在线用户</span>
               </el-menu-item>
             </el-menu-item-group>
@@ -125,7 +129,9 @@
                 <span slot="title">发布说说</span>
               </el-menu-item>
               <el-menu-item index="/talkList" @click="goPage('talkList')">
-                <el-icon><success-filled /></el-icon>
+                <el-icon>
+                  <success-filled/>
+                </el-icon>
                 <span slot="title">说说列表</span>
               </el-menu-item>
             </el-menu-item-group>
@@ -157,7 +163,9 @@
             </template>
             <el-menu-item-group>
               <el-menu-item index="/website" @click="goPage('website')">
-                <el-icon><basketball /></el-icon>
+                <el-icon>
+                  <basketball/>
+                </el-icon>
                 <span slot="title">网站管理</span>
               </el-menu-item>
               <el-menu-item index="/page" @click="goPage('page')">
@@ -173,7 +181,9 @@
                 <span slot="title">友链管理</span>
               </el-menu-item>
               <el-menu-item index="/about" @click="goPage('about')">
-                <el-icon><avatar /></el-icon>
+                <el-icon>
+                  <avatar/>
+                </el-icon>
                 <span slot="title">关于我</span>
               </el-menu-item>
             </el-menu-item-group>

@@ -5,9 +5,9 @@
     <!-- 侧边导航栏 -->
     <SideNavBar></SideNavBar>
     <!-- 内容 -->
-    <v-content>
+    <v-main>
       <router-view :key="$route.fullPath"></router-view>
-    </v-content>
+    </v-main>
     <!-- 页脚 -->
     <Footer></Footer>
     <!-- 返回顶部 -->

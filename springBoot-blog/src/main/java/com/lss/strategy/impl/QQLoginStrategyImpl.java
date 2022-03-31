@@ -91,6 +91,12 @@ public class QQLoginStrategyImpl implements QQLoginStrategy {
         //获取点赞说说列表
         Set<Object> set = redisService.sMembers(RedisPrefixConst.TALK_USER_LIKE + qqUser.getId());
         qqUser.setTalkLikeSet(set);
+        //获取点赞评论id的set集合
+        Set<Object> setCommentLikes = redisService.sMembers(RedisPrefixConst.COMMENT_USER_LIKE + qqUser.getId());
+        qqUser.setCommentLikeSet(setCommentLikes);
+        //获取点赞文章id的set集合
+        Set<Object> articleLikeSet = redisService.sMembers(RedisPrefixConst.ARTICLE_USER_LIKE + qqUser.getId());
+        qqUser.setArticleLikeSet(articleLikeSet);
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set("last_login_time", new Date());
         updateWrapper.eq("qq_open_id", openId);

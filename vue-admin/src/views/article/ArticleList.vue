@@ -84,15 +84,13 @@
           @clear="listArticle"
       />
       <el-button
+          icon="search"
           type="primary"
           style="margin-left:1rem"
           @click="searchArticles"
 
       >
-        <el-icon>
-          <Search/>
-        </el-icon>
-        &nbsp;&nbsp;搜索
+        搜索
       </el-button>
     </div>
 
@@ -140,7 +138,7 @@
           <el-tag
               size="large"
               v-for="item of scope.row.tagNameList"
-              :key="item.id"
+              :key="item.tagName"
               style="margin-right:0.2rem;margin-top:0.2rem"
           >
             {{ item.tagName }}

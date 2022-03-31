@@ -5,31 +5,13 @@
         mdi-close
       </v-icon>
       <div class="login-wrapper">
-        <v-text-field
-            v-model="username"
-            label="用户名"
-            placeholder="请输入您的用户名"
-            clearable
-            @keyup.enter="register"
-        />
         <!-- 用户名 -->
         <v-text-field
-            v-model="email"
-            label="邮箱"
+            v-model="username"
+            label="邮箱号"
             placeholder="请输入您的邮箱号"
             clearable
             @keyup.enter="register"
-        />
-        <!-- 密码 -->
-        <v-text-field
-            v-model="password"
-            class="mt-7"
-            label="密码"
-            placeholder="请输入您的密码"
-            @keyup.enter="register"
-            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="show ? 'text' : 'password'"
-            @click:append="show = !show"
         />
         <!-- 验证码 -->
         <div class="mt-7 send-wrapper">
@@ -44,6 +26,17 @@
             {{ codeMsg }}
           </v-btn>
         </div>
+        <!-- 密码 -->
+        <v-text-field
+            v-model="password"
+            class="mt-7"
+            label="密码"
+            placeholder="请输入您的密码"
+            @keyup.enter="register"
+            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="show ? 'text' : 'password'"
+            @click:append="show = !show"
+        />
         <!-- 注册按钮 -->
         <v-btn
             class="mt-7"
@@ -56,7 +49,7 @@
         </v-btn>
         <!-- 登录 -->
         <div class="mt-10 login-tip">
-          已有账号？<span @click="openLogin">登录</span>
+          已有账号？<span @click="openLogin" style="color: #1f6feb">登录</span>
         </div>
       </div>
     </v-card>
@@ -65,13 +58,12 @@
 
 <script>
 export default {
-  data: function () {
+  data: function() {
     return {
       username: "",
-      email: "",
       code: "",
       password: "",
-      flag: false,
+      flag: true,
       codeMsg: "发送",
       time: 60,
       show: false
@@ -84,21 +76,28 @@ export default {
     },
     sendCode() {
       const that = this;
-      //发送邮件
-      that.countDown();
-      this.$toast({type: "success", message: "已经请求发送短信，注意查收"});
-      that.axios
-          .get("/api/user/sendEmailCode", {
-            params: {email: that.email}
-          })
-          .then(({data}) => {
-            if (data.success) {
-              that.$toast({type: "success", message: data.message});
-            } else {
-              that.$toast({type: "error", message: data.message});
-            }
-          });
-
+      // eslint-disable-next-line no-undef
+      let captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function(
+          res
+      ) {
+        if (res.ret === 0) {
+          //发送邮件
+          that.countDown();
+          that.axios
+              .get("/api/users/code", {
+                params: { username: that.username }
+              })
+              .then(({ data }) => {
+                if (data.flag) {
+                  that.$toast({ type: "success", message: "发送成功" });
+                } else {
+                  that.$toast({ type: "error", message: data.message });
+                }
+              });
+        }
+      });
+      // 显示验证码
+      captcha.show();
     },
     countDown() {
       this.flag = true;
@@ -114,39 +113,42 @@ export default {
       }, 1000);
     },
     register() {
-      var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-      if (this.username.length === 0) {
-        this.$toast({type: "error", message: "用户名不能为空"});
-        return false;
-      }
-      if (!reg.test(this.email)) {
-        this.$toast({type: "error", message: "邮箱格式不正确"});
-        return false;
-      }
-      if (this.password.trim().length < 5) {
-        this.$toast({type: "error", message: "密码不能少于5位"});
+      let reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+      if (!reg.test(this.username)) {
+        this.$toast({ type: "error", message: "邮箱格式不正确" });
         return false;
       }
       if (this.code.trim().length !== 6) {
-        this.$toast({type: "error", message: "请输入6位验证码"});
+        this.$toast({ type: "error", message: "请输入6位验证码" });
+        return false;
+      }
+      if (this.password.trim().length < 6) {
+        this.$toast({ type: "error", message: "密码不能少于6位" });
+        return false;
+      }
+      if (this.password.trim().length > 18) {
+        this.$toast({ type: "error", message: "密码不能长于18位" });
         return false;
       }
       const user = {
         username: this.username,
-        email: this.email,
         password: this.password,
         code: this.code
       };
-      this.axios.post("/api/user/registerUser", user).then(({data}) => {
-        if (data.success) {
-          this.$toast({type: "success", message: data.message});
-          this.username = "";
-          this.email = "";
-          this.password = "";
-          this.code = "";
-          this.$store.commit("closeModel");
+      this.axios.post("/api/register", user).then(({ data }) => {
+        if (data.flag) {
+          let param = new URLSearchParams();
+          param.append("username", user.username);
+          param.append("password", user.password);
+          this.axios.post("/api/login", param).then(({ data }) => {
+            this.username = "";
+            this.password = "";
+            this.$store.commit("login", data.data);
+            this.$store.commit("closeModel");
+          });
+          this.$toast({ type: "success", message: "登录成功" });
         } else {
-          this.$toast({type: "error", message: data.message});
+          this.$toast({ type: "error", message: data.message });
         }
       });
     }
@@ -162,15 +164,14 @@ export default {
     },
     isMobile() {
       const clientWidth = document.documentElement.clientWidth;
-      if (clientWidth > 960) {
-        return false;
-      }
-      return true;
+      return clientWidth <= 960;
+
     }
   },
   watch: {
-    username() {
-
+    username(value) {
+      let reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+      this.flag = !reg.test(value);
     }
   }
 };

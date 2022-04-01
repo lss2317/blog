@@ -108,4 +108,15 @@ public class TalkController {
         }
         return Result.getTalkResult(null, TalkEnum.UPDATE_TALK_SUCCESS);
     }
+
+    /**
+     * 前台获取说说，进行轮播展示
+     *
+     * @return 说说数据
+     */
+    @GetMapping("getHomeTalks")
+    public Result<?> blogListTalks() {
+        List<String> homeTalks = talkService.listHomeTalks();
+        return Result.getTalkResult(homeTalks,TalkEnum.SELECT_TALK_SUCCESS);
+    }
 }

@@ -83,8 +83,20 @@ public class UserController {
      * 使用微博登录
      */
     @PostMapping("weibo/login")
-    public Result<?> weiboLogin(@RequestBody JSONObject jsonObject){
+    public Result<?> weiboLogin(@RequestBody JSONObject jsonObject) {
         return weiBoLoginStrategy.weiboLogin(jsonObject);
+    }
+
+    /**
+     * 发送邮箱验证码
+     *
+     * @param username 用户名
+     * @return {@link Result<>}
+     */
+    @GetMapping("/code")
+    public Result<?> sendCode(String username) {
+        userService.sendCode(username);
+        return Result.getUserResult(null, UserEnum.LIST_USER_SUCCESS);
     }
 
     /**

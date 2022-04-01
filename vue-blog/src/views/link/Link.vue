@@ -75,14 +75,6 @@ export default {
         this.$refs.comment.getPostUserId(1)
         this.friendLinkList = res.data;
       });
-      this.axios
-          .get("/api/comments", {
-            params: {current: 1}
-          })
-          .then(({data}) => {
-            this.commentList = data.data.recordList;
-            this.count = data.data.count;
-          });
     }
   },
   computed: {

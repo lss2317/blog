@@ -265,4 +265,8 @@ export default {
 .page-container {
   margin-top: 1.25rem;
 }
+
+.operation-container{
+  margin-top: 2.25rem;
+}
 </style>

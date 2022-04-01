@@ -18,6 +18,13 @@ import java.util.List;
 public interface TalkService extends IService<Talk> {
 
     /**
+     * 获取首页说说列表
+     *
+     * @return {@link List<String>} 说说列表
+     */
+    List<String> listHomeTalks();
+
+    /**
      * 获取说说列表，按照发布时间从晚到早
      *
      * @param currentPage 页码

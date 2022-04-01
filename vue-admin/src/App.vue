@@ -10,3 +10,10 @@ export default {
 }
 
 </script>
+
+<style>
+.el-popover {
+  height: 200px;
+  overflow-y: auto;
+}
+</style>

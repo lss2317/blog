@@ -7,7 +7,7 @@ html, body, #app {
 }
 
 .main-card {
-    min-height: calc(100vh - 126px);
+    min-height: calc(100vh - 133px);
 }
 
 .title {
@@ -27,4 +27,28 @@ html, body, #app {
     float: right;
     margin-top: 1.25rem;
     margin-bottom: 1.25rem;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgba(73, 177, 245, 0.2);
+    border-radius: 2em;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #49b1f5;
+    border-radius: 2em;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+::-moz-selection {
+    color: #fff;
+    background-color: #49b1f5;
 }

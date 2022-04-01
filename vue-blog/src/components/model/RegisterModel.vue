@@ -58,7 +58,7 @@
 
 <script>
 export default {
-  data: function() {
+  data: function () {
     return {
       username: "",
       code: "",
@@ -77,21 +77,21 @@ export default {
     sendCode() {
       const that = this;
       // eslint-disable-next-line no-undef
-      let captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function(
+      let captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function (
           res
       ) {
         if (res.ret === 0) {
           //发送邮件
           that.countDown();
           that.axios
-              .get("/api/users/code", {
-                params: { username: that.username }
+              .get("/api/user/code", {
+                params: {username: that.username}
               })
-              .then(({ data }) => {
-                if (data.flag) {
-                  that.$toast({ type: "success", message: "发送成功" });
+              .then(res => {
+                if (res.data.code === 200) {
+                  that.$toast({type: "success", message: "发送成功,请注意查看"});
                 } else {
-                  that.$toast({ type: "error", message: data.message });
+                  that.$toast({type: "error", message: "发送失败,请稍后再试"});
                 }
               });
         }
@@ -115,19 +115,19 @@ export default {
     register() {
       let reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
       if (!reg.test(this.username)) {
-        this.$toast({ type: "error", message: "邮箱格式不正确" });
+        this.$toast({type: "error", message: "邮箱格式不正确"});
         return false;
       }
       if (this.code.trim().length !== 6) {
-        this.$toast({ type: "error", message: "请输入6位验证码" });
+        this.$toast({type: "error", message: "请输入6位验证码"});
         return false;
       }
       if (this.password.trim().length < 6) {
-        this.$toast({ type: "error", message: "密码不能少于6位" });
+        this.$toast({type: "error", message: "密码不能少于6位"});
         return false;
       }
       if (this.password.trim().length > 18) {
-        this.$toast({ type: "error", message: "密码不能长于18位" });
+        this.$toast({type: "error", message: "密码不能长于18位"});
         return false;
       }
       const user = {
@@ -135,20 +135,20 @@ export default {
         password: this.password,
         code: this.code
       };
-      this.axios.post("/api/register", user).then(({ data }) => {
+      this.axios.post("/api/register", user).then(({data}) => {
         if (data.flag) {
           let param = new URLSearchParams();
           param.append("username", user.username);
           param.append("password", user.password);
-          this.axios.post("/api/login", param).then(({ data }) => {
+          this.axios.post("/api/login", param).then(({data}) => {
             this.username = "";
             this.password = "";
             this.$store.commit("login", data.data);
             this.$store.commit("closeModel");
           });
-          this.$toast({ type: "success", message: "登录成功" });
+          this.$toast({type: "success", message: "登录成功"});
         } else {
-          this.$toast({ type: "error", message: data.message });
+          this.$toast({type: "error", message: data.message});
         }
       });
     }

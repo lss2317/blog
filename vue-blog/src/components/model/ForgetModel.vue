@@ -82,14 +82,14 @@ export default {
           //发送邮件
           that.countDown();
           that.axios
-              .get("/api/users/code", {
+              .get("/api/user/code", {
                 params: {username: that.username}
               })
-              .then(({data}) => {
-                if (data.flag) {
-                  that.$toast({type: "success", message: data.message});
+              .then(res => {
+                if (res.data.code === 200) {
+                  that.$toast({type: "success", message: "发送成功,请注意查看"});
                 } else {
-                  that.$toast({type: "error", message: data.message});
+                  that.$toast({type: "error", message: "发送失败,请稍后再试"});
                 }
               });
         }

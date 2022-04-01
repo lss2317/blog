@@ -1,18 +1,24 @@
 package com.lss.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lss.common.Result;
+import com.lss.constant.MQPrefixConst;
 import com.lss.constant.RedisPrefixConst;
 import com.lss.entity.User;
 import com.lss.enums.UserEnum;
 import com.lss.mapper.UserMapper;
 import com.lss.service.RedisService;
 import com.lss.service.UserService;
+import com.lss.utils.CommonUtils;
 import com.lss.utils.JWTUtils;
 import io.jsonwebtoken.Claims;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,6 +42,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     RedisService redisService;
     @Resource
     HttpServletRequest request;
+    @Resource
+    RabbitTemplate rabbitTemplate;
+
+    @Override
+    public void sendCode(String username) {
+        // 校验账号是否合法
+        if (!CommonUtils.checkEmail(username)) {
+            throw new RuntimeException("请输入正确邮箱");
+        }
+        // 生成六位随机验证码发送
+        String code = CommonUtils.getRandomCode();
+        JSONObject json = new JSONObject();
+        // 发送验证码
+        json.put("email", username);
+        json.put("subject", "验证码");
+        json.put("content", "您的验证码为: " + code + "，有效期15分钟，请不要告诉他人哦！");
+        rabbitTemplate.convertAndSend(MQPrefixConst.EMAIL_EXCHANGE, "*", new Message(JSON.toJSONBytes(json), new MessageProperties()));
+        // 将验证码存入redis，设置过期时间为15分钟
+        redisService.set(RedisPrefixConst.USER_CODE_KEY + username, code, RedisPrefixConst.CODE_EXPIRE_TIME);
+    }
 
     @Override
     public List<User> listUsers(Integer currentPage, Integer pageSize, Integer loginType, String keywords) {

@@ -328,5 +328,7 @@ export default {
 </script>
 
 <style scoped>
-
+.operation-container{
+  margin-top: 2.25rem;
+}
 </style>

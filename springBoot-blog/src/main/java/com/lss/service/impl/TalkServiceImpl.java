@@ -1,6 +1,7 @@
 package com.lss.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +16,7 @@ import com.lss.service.CommentService;
 import com.lss.service.RedisService;
 import com.lss.service.TalkService;
 import com.lss.service.UserService;
+import com.lss.utils.HTMLUtils;
 import com.lss.utils.JWTUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author lss
@@ -44,6 +47,19 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements Ta
     HttpServletRequest request;
     @Resource
     CommentService commentService;
+
+    @Override
+    public List<String> listHomeTalks() {
+        //获取最新10条说说
+        return this.list(new LambdaQueryWrapper<Talk>()
+                .eq(Talk::getStatus, 1)
+                .orderByDesc(Talk::getIsTop)
+                .orderByDesc(Talk::getId)
+                .last("limit 10"))
+                .stream()
+                .map(item -> item.getContent().length() > 200 ? HTMLUtils.deleteTag(item.getContent()) : HTMLUtils.deleteTag(item.getContent()))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public List<Talk> listTalks(Integer currentPage, Integer pageSize, Integer status) {

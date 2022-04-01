@@ -45,6 +45,10 @@
     <!-- 主页文章 -->
     <v-row class="home-container">
       <v-col md="9" cols="12">
+        <!-- 说说轮播 -->
+        <v-card class="animated zoomIn" v-if="talkList.length > 0">
+          <Swiper :list="talkList" />
+        </v-card>
         <v-card
             class="animated zoomIn article-card"
             v-for="(item, index) in articleList"
@@ -222,10 +226,12 @@
 
 <script>
 import EasyTyper from "easy-typer-js";
+import Swiper from "@/components/Swiper";
 
 export default {
   created() {
     this.init()
+    this.listHomeTalks()
     this.timer = setInterval(this.runTime, 1000);
   },
   data() {
@@ -243,6 +249,7 @@ export default {
         sentencePause: true
       },
       articleList: [],
+      talkList: [],
       current: 1
     };
   },
@@ -307,7 +314,12 @@ export default {
             this.current++;
             $state.complete();
           });
-    }
+    },
+    listHomeTalks() {
+      this.axios.get("/api/talk/getHomeTalks").then(res => {
+        this.talkList = res.data.data;
+      })
+    },
   },
   computed: {
     isRight() {
@@ -338,6 +350,9 @@ export default {
     blogInfo() {
       return this.$store.state.blogInfo;
     }
+  },
+  components: {
+    Swiper
   }
 };
 </script>

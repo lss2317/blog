@@ -18,6 +18,13 @@ import java.util.List;
 public interface UserService extends IService<User> {
 
     /**
+     * 发送邮箱验证码
+     *
+     * @param username 邮箱号
+     */
+    void sendCode(String username);
+
+    /**
      * 分页查询用户
      *
      * @param currentPage 页码

@@ -2,10 +2,12 @@ package com.lss.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lss.constant.RedisPrefixConst;
+import com.lss.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.TimeUnit;
@@ -18,6 +20,8 @@ public class FilterInterceptor implements HandlerInterceptor {
 
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    RedisService redisService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -27,6 +31,8 @@ public class FilterInterceptor implements HandlerInterceptor {
             String token = request.getHeader("token");
             String uuid = request.getHeader("uuid_token");
             Object redisToken = redisTemplate.opsForValue().get(RedisPrefixConst.PREFIX_TOKEN + uuid);
+            Object o = redisService.get(RedisPrefixConst.PREFIX_TOKEN + uuid);
+            System.out.println(o);
             if (redisToken == null) {
                 JSONObject json = new JSONObject();
                 json.put("code", 1000);

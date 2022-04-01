@@ -13,7 +13,7 @@
       <div class="operation-wrapper">
         <div class="left-wrapper">
           <!-- 表情 -->
-          <el-popover placement="bottom-start" width="460px" trigger="click">
+          <el-popover placement="bottom-start" width="268px" trigger="click">
             <span
                 class="emoji-item"
                 v-for="(value, key, index) of emojiList"
@@ -185,6 +185,7 @@ export default {
             title: "失败",
             message: res.data.message
           })
+          return false
         }
         this.uploadList = []
         this.talk = {
@@ -203,7 +204,7 @@ export default {
       axios.get("/api/talk/" + this.$route.params.talkId).then(res => {
         this.talk = res.data.data;
         this.$refs.editor.addText(res.data.data.content)
-        if (res.data.data.imgList.length > 0) {
+        if (res.data.data.imgList) {
           res.data.data.imgList.forEach(item => {
             this.uploadList.push({url: item});
           });
@@ -260,7 +261,7 @@ export default {
 
 .emoji {
   user-select: none;
-  margin: 0.25rem;
+  margin: 0.4rem;
   display: inline-block;
   vertical-align: middle;
 }

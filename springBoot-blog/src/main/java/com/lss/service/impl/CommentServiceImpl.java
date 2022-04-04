@@ -227,7 +227,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         // 查询回复用户邮箱号
         Integer userId = 1;
         String id = "";
-        String url = "/links";
+        String url = websiteUrl + "/links";
         switch (Objects.requireNonNull(comment.getType())) {
             case 1:
                 userId = articleService.getById(comment.getArticleId()).getUserId();

@@ -53,12 +53,13 @@
         <if test="tagName != null and tagName != ''">
             AND blog_article.id IN (SELECT article_id FROM blog_tag_article WHERE tag_name = #{tagName})
         </if>
+        ORDER BY create_time DESC
         limit #{currentPage} , #{pageSize}
         ) AS m,
         blog_tag_article AS t
         WHERE
         t.article_id = m.id
-        ORDER BY create_time DESC
+        ORDER BY m.create_time DESC
     </select>
 
     <select id="getCount" resultType="int">

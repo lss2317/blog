@@ -57,7 +57,7 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements Ta
                 .orderByDesc(Talk::getId)
                 .last("limit 10"))
                 .stream()
-                .map(item -> item.getContent().length() > 200 ? HTMLUtils.deleteTag(item.getContent()) : HTMLUtils.deleteTag(item.getContent()))
+                .map(item -> item.getContent().length() > 200 ? HTMLUtils.deleteTag(item.getContent().substring(0, 200)) : HTMLUtils.deleteTag(item.getContent()))
                 .collect(Collectors.toList());
     }
 

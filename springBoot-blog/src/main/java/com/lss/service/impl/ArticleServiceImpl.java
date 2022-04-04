@@ -381,6 +381,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
     }
 
+    @Override
+    public Result<List<Article>> listArticlesBySearch(String keywords) {
+        if (keywords == null || keywords.trim().equals("")) {
+            return Result.getArticleResult(null, ArticleEnum.SEARCH_ARTICLE_SUCCESS);
+        }
+        List<Article> list = this.list(new LambdaQueryWrapper<Article>()
+                .select(Article::getId, Article::getArticleContent, Article::getArticleTitle)
+                .orderByDesc(Article::getCreateTime)
+                .eq(Article::getStatus, 1)
+                .eq(Article::getIsDelete, 0)
+                .like(Article::getArticleTitle, keywords.trim())
+        );
+        return Result.getArticleResult(list, ArticleEnum.SEARCH_ARTICLE_SUCCESS);
+    }
+
     /**
      * 更新文章浏览量
      *

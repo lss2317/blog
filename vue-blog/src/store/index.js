@@ -17,6 +17,7 @@ export default new Vuex.Store({
         avatar: null,
         nickname: null,
         intro: null,
+        email: null,
         webSite: null,
         articleLikeSet: [],
         commentLikeSet: [],
@@ -45,6 +46,8 @@ export default new Vuex.Store({
             state.articleLikeSet = [];
             state.commentLikeSet = [];
             state.talkLikeSet = [];
+            state.email = null;
+            state.loginType = null;
         },
         saveLoginUrl(state, url) {
             state.loginUrl = url;
@@ -56,6 +59,9 @@ export default new Vuex.Store({
         },
         updateAvatar(state, avatar) {
             state.avatar = avatar;
+        },
+        saveEmail(state, email) {
+            state.email = email;
         },
         checkBlogInfo(state, blogInfo) {
             state.blogInfo = blogInfo;

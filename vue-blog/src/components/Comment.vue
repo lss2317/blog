@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="comment-title"><i class="iconfont iconpinglunzu" />评论</div>
+    <div class="comment-title"><i class="iconfont iconpinglunzu"/>评论</div>
     <!-- 评论框 -->
     <div class="comment-input-wrapper">
       <div style="display:flex">
@@ -30,7 +30,7 @@
                 :class="chooseEmoji ? 'emoji-btn-active' : 'emoji-btn'"
                 @click="chooseEmoji = !chooseEmoji"
             >
-              <i class="iconfont iconbiaoqing" />
+              <i class="iconfont iconbiaoqing"/>
             </span>
             <button
                 @click="insertComment"
@@ -41,7 +41,9 @@
             </button>
           </div>
           <!-- 表情框 -->
-          <emoji @addEmoji="addEmoji" :chooseEmoji="chooseEmoji" />
+          <div class="emoji-style">
+            <emoji @addEmoji="addEmoji" :chooseEmoji="chooseEmoji"/>
+          </div>
         </div>
       </div>
     </div>
@@ -58,7 +60,7 @@
       >
         <!-- 头像 -->
         <v-avatar size="40" class="comment-avatar">
-          <img :src="item.avatar" />
+          <img :src="item.avatar"/>
         </v-avatar>
         <div class="comment-meta">
           <!-- 用户名 -->
@@ -96,7 +98,7 @@
           >
             <!-- 头像 -->
             <v-avatar size="36" class="comment-avatar">
-              <img :src="reply.avatar" />
+              <img :src="reply.avatar"/>
             </v-avatar>
             <div class="reply-meta">
               <!-- 用户名 -->
@@ -133,7 +135,7 @@
                   </span>
                   ，
                 </template>
-                <span v-html="reply.commentContent" />
+                <span v-html="reply.commentContent"/>
               </p>
             </div>
           </div>
@@ -172,7 +174,7 @@
             />
           </div>
           <!-- 回复框 -->
-          <Reply :type="type" ref="reply" @reloadReply="reloadReply" />
+          <Reply :type="type" ref="reply" @reloadReply="reloadReply"/>
         </div>
       </div>
       <!-- 加载按钮 -->
@@ -194,6 +196,7 @@ import Reply from "./Reply";
 import Paging from "./Paging";
 import Emoji from "../components/Emoji";
 import EmojiList from "../assets/js/emoji";
+
 export default {
   components: {
     Reply,
@@ -345,7 +348,7 @@ export default {
           this.current = 1;
           this.listComments();
           const isReview = this.$store.state.blogInfo.websiteConfig.isCommentReview;
-          if (isReview) {
+          if (isReview === 1) {
             this.$toast({type: "warnning", message: "评论成功，正在审核中"});
           } else {
             this.$toast({type: "success", message: "评论成功"});
@@ -425,6 +428,7 @@ export default {
   padding: 0 5px;
   margin-left: 6px;
 }
+
 .comment-title {
   display: flex;
   align-items: center;
@@ -433,55 +437,66 @@ export default {
   line-height: 40px;
   margin-bottom: 10px;
 }
+
 .comment-title i {
   font-size: 1.5rem;
   margin-right: 5px;
 }
+
 .comment-input-wrapper {
   border: 1px solid #90939950;
   border-radius: 4px;
   padding: 10px;
   margin: 0 0 10px;
 }
+
 .count {
   padding: 5px;
   line-height: 1.75;
   font-size: 1.25rem;
   font-weight: bold;
 }
+
 .comment-meta {
   margin-left: 0.8rem;
   width: 100%;
   border-bottom: 1px dashed #f5f5f5;
 }
+
 .reply-meta {
   margin-left: 0.8rem;
   width: 100%;
 }
+
 .comment-user {
   font-size: 14px;
   line-height: 1.75;
 }
+
 .comment-user a {
   color: #1abc9c !important;
   font-weight: 500;
   transition: 0.3s all;
 }
+
 .comment-nickname {
   text-decoration: none;
-  color:  #66b1ff !important;
+  color: #66b1ff !important;
   font-weight: 500;
 }
+
 .comment-info {
   line-height: 1.75;
   font-size: 0.75rem;
   color: #b3b3b3;
 }
+
 .reply-btn {
   cursor: pointer;
   float: right;
   color: #ef2f11;
 }
+
 .comment-content {
   font-size: 0.875rem;
   line-height: 1.75;
@@ -490,32 +505,50 @@ export default {
   word-wrap: break-word;
   word-break: break-all;
 }
+
 .comment-avatar {
   transition: all 0.5s;
 }
+
 .comment-avatar:hover {
   transform: rotate(360deg);
 }
+
 .like {
   cursor: pointer;
   font-size: 0.875rem;
 }
+
 .like:hover {
   color: #eb5055;
 }
+
 .like-active {
   cursor: pointer;
   font-size: 0.875rem;
   color: #eb5055;
 }
+
 .load-wrapper {
   margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .load-wrapper button {
   background-color: #49b1f5;
   color: #fff;
+}
+
+.emoji-style {
+  z-index: 1000;
+  position: absolute;
+  box-shadow: 0 8px 16px rgba(50, 50, 93, 0.08), 0 4px 12px rgba(0, 0, 0, 0.07);
+  background: #fff;
+  border-radius: 8px;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 </style>

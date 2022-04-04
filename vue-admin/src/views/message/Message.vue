@@ -125,19 +125,9 @@
           >
             通过
           </el-button>
-          <el-popconfirm
-              style="margin-left:10px"
-              confirm-button-text="确定"
-              cancel-button-text="取消"
-              title="确定删除吗？"
-              @confirm="deleteMessage(scope.row.id)"
-          >
-            <template #reference>
-              <el-button type="danger">
-                删除
-              </el-button>
-            </template>
-          </el-popconfirm>
+          <el-button type="danger" @click="deleteMessage(scope.row.id)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -161,7 +151,7 @@
 <script>
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import axios from "axios";
-import {ElMessageBox, ElNotification, ElPopconfirm} from 'element-plus'
+import {ElMessageBox, ElNotification} from 'element-plus'
 
 export default {
   name: "LeaveAMessage",
@@ -295,14 +285,14 @@ export default {
           {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning',
+            type: 'error',
           }
       ).then(() => {
-        this.deleteMessage(null)
+        this.delete(null)
       }).catch(() => {
       })
     },
-    deleteMessage(id) {
+    delete(id) {
       let deleteIdList = []
       if (id !== null) {
         deleteIdList = [id]
@@ -332,15 +322,26 @@ export default {
         this.listMessage()
       })
     },
+    deleteMessage(id) {
+      ElMessageBox.confirm(
+          '是否删除该留言?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'error',
+          }
+      ).then(() => {
+        this.delete(id)
+      }).catch(() => {
+      })
+    },
   },
   watch: {
     isReview() {
       this.current = 1;
       this.listMessage()
     }
-  },
-  components: {
-    ElPopconfirm
   }
 }
 </script>

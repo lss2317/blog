@@ -8,8 +8,8 @@
         <!-- 用户名 -->
         <v-text-field
             v-model="username"
-            label="用户名"
-            placeholder="请输入您的用户名"
+            label="邮箱号"
+            placeholder="请输入您的邮箱号"
             clearable
             @keyup.enter="login"
         />

@@ -77,7 +77,7 @@ export default {
     sendCode() {
       const that = this;
       // eslint-disable-next-line no-undef
-      var captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function (res) {
+      let captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function (res) {
         if (res.ret === 0) {
           //发送邮件
           that.countDown();
@@ -112,6 +112,7 @@ export default {
     },
     forget() {
       let reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+      let passwordStandard = /^[A-Za-z0-9]+$/;
       if (!reg.test(this.username)) {
         this.$toast({type: "error", message: "邮箱格式不正确"});
         return false;
@@ -128,16 +129,27 @@ export default {
         this.$toast({type: "error", message: "密码不能长于18位"});
         return false;
       }
+      if (!passwordStandard.test(this.password)) {
+        this.$toast({
+          type: "error",
+          message: "密码只能由数字和字母组成"
+        })
+        return false
+      }
       const user = {
         username: this.username,
         password: this.password,
         code: this.code
       };
-      this.axios.put("/api/users/password", user).then(({data}) => {
-        if (data.flag) {
-          this.$toast({type: "success", message: data.message});
+      this.axios.post("/api/user/forgetPassword", user).then(res => {
+        if (res.data.code === 200) {
+          this.username = ""
+          this.password = ""
+          this.code = ""
+          this.$toast({type: "success", message: res.data.message});
+          this.openLogin()
         } else {
-          this.$toast({type: "error", message: data.message});
+          this.$toast({type: "error", message: res.data.message});
         }
       });
     }

@@ -39,7 +39,7 @@
       </div>
     </div>
     <!-- 表格展示 -->
-    <el-table border :data="userList" v-loading="loading" style="margin-top: 1.25rem">
+    <el-table border :data="userList" v-loading="loading" style="margin-top: 1.25rem;display: flex">
       <!-- 表格列 -->
       <el-table-column
           prop="linkAvatar"
@@ -127,7 +127,7 @@
         </template>
       </el-table-column>
       <!-- 列操作 -->
-      <el-table-column label="操作" align="center" width="120px">
+      <el-table-column label="操作" align="center" width="110px">
         <template #default="scope">
           <el-button
               type="primary"

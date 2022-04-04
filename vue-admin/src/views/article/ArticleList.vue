@@ -219,47 +219,15 @@
           >
             编辑
           </el-button>
-          <el-popconfirm
-              title="确定删除吗？"
-              style="margin-left:10px"
-              confirm-button-text="确定"
-              cancel-button-text="取消"
-              v-if="scope.row.isDelete === 0"
-              @confirm="deleteArticle(scope.row)"
-          >
-            <template #reference>
-              <el-button type="danger" slot="reference">
-                删除
-              </el-button>
-            </template>
-          </el-popconfirm>
-          <el-popconfirm
-              title="确定恢复吗？"
-              v-if="scope.row.isDelete === 1"
-              confirm-button-text="确定"
-              cancel-button-text="取消"
-              @confirm="restoreArticle(scope.row)"
-          >
-            <template #reference>
-              <el-button type="success" slot="reference">
-                恢复
-              </el-button>
-            </template>
-          </el-popconfirm>
-          <el-popconfirm
-              style="margin-left:10px"
-              v-if="scope.row.isDelete === 1"
-              confirm-button-text="确定"
-              cancel-button-text="取消"
-              title="确定彻底删除吗？"
-              @confirm="deleteArticle(scope.row)"
-          >
-            <template #reference>
-              <el-button type="danger" slot="reference">
-                删除
-              </el-button>
-            </template>
-          </el-popconfirm>
+          <el-button v-if="scope.row.isDelete === 0" type="danger" @click="deleteArticle(scope.row)">
+            删除
+          </el-button>
+          <el-button v-if="scope.row.isDelete === 1" type="success" @click="restoreArticle(scope.row)">
+            恢复
+          </el-button>
+          <el-button v-if="scope.row.isDelete === 1" type="danger" @click="deleteArticle(scope.row)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -283,11 +251,11 @@
 </template>
 
 <script>
-import {Search, Delete} from '@element-plus/icons-vue'
+import {Delete, Search} from '@element-plus/icons-vue'
 //引入element-plus中文包
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import axios from "axios";
-import {ElMessageBox, ElNotification, ElPopconfirm} from 'element-plus'
+import {ElMessageBox, ElNotification} from 'element-plus'
 
 export default {
   name: "ArticleList",
@@ -347,7 +315,6 @@ export default {
   components: {
     Search,
     Delete,
-    ElPopconfirm
   },
   methods: {
     sizeChange(size) {
@@ -430,57 +397,80 @@ export default {
       })
     },
     deleteArticle(item) {
-      axios.get("/api/article/deleteArticle", {
-        params: {
-          id: item.id,
-          deleteStatus: item.isDelete
-        }
-      }).then(res => {
-        if (res.data.code === 200) {
-          ElNotification.success({
-            title: "成功",
-            message: res.data.message
-          })
-        } else if (res.data.code === 500) {
-          ElNotification.warning({
-            title: "错误",
-            message: res.data.message
-          })
-        } else if (res.data.code === 400) {
-          ElNotification.error({
-            title: "失败",
-            message: res.data.message
-          })
-          return
-        }
-        this.listArticle()
+      ElMessageBox.confirm(
+          '是否删除选中项?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'error',
+          }
+      ).then(() => {
+        axios.get("/api/article/deleteArticle", {
+          params: {
+            id: item.id,
+            deleteStatus: item.isDelete
+          }
+        }).then(res => {
+          if (res.data.code === 200) {
+            ElNotification.success({
+              title: "成功",
+              message: res.data.message
+            })
+          } else if (res.data.code === 500) {
+            ElNotification.warning({
+              title: "错误",
+              message: res.data.message
+            })
+          } else if (res.data.code === 400) {
+            ElNotification.error({
+              title: "失败",
+              message: res.data.message
+            })
+            return
+          }
+          this.listArticle()
+        })
+      }).catch(() => {
       })
     },
     restoreArticle(item) {
-      axios.get("/api/article/restoreArticle", {
-        params: {
-          id: item.id
-        }
-      }).then(res => {
-        if (res.data.code === 200) {
-          ElNotification.success({
-            title: "成功",
-            message: res.data.message
-          })
-        } else if (res.data.code === 500) {
-          ElNotification.warning({
-            title: "错误",
-            message: res.data.message
-          })
-        } else if (res.data.code === 400) {
-          ElNotification.error({
-            title: "失败",
-            message: res.data.message
-          })
-          return
-        }
-        this.listArticle()
+      ElMessageBox.confirm(
+          '是否恢复文章?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success',
+          }
+      ).then(() => {
+        axios.get("/api/article/restoreArticle", {
+          params: {
+            id: item.id
+          }
+        }).then(res => {
+          if (res.data.code === 200) {
+            ElNotification.success({
+              title: "成功",
+              message: res.data.message
+            })
+          } else if (res.data.code === 500) {
+            ElNotification.warning({
+              title: "错误",
+              message: res.data.message
+            })
+          } else if (res.data.code === 400) {
+            ElNotification.error({
+              title: "失败",
+              message: res.data.message
+            })
+            return
+          }
+          this.listArticle()
+        })
       })
+          .catch(() => {
+          })
     },
     deleteArticles() {
       ElMessageBox.confirm(
@@ -489,7 +479,7 @@ export default {
           {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning',
+            type: 'error',
           }
       ).then(() => {
         axios.delete("/api/article/deleteArticles", {

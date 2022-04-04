@@ -181,4 +181,15 @@ public class ArticleController {
         articleService.saveArticleLike(articleId);
         return Result.getArticleResult(null, ArticleEnum.MODIFY_ARTICLE_SUCCESS);
     }
+
+    /**
+     * 搜索文章
+     *
+     * @param keywords 条件
+     * @return {@link Result<Article>} 文章列表
+     */
+    @GetMapping("/search")
+    public Result<List<Article>> listArticlesBySearch(String keywords) {
+        return articleService.listArticlesBySearch(keywords);
+    }
 }

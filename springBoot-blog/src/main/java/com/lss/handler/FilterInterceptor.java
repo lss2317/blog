@@ -13,13 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Filter拦截器
+ *
  * @author lss
  * @create 2022年03月08日 13:32
  */
 public class FilterInterceptor implements HandlerInterceptor {
 
-    @Autowired
-    RedisTemplate<String, Object> redisTemplate;
     @Resource
     RedisService redisService;
 
@@ -30,9 +30,7 @@ public class FilterInterceptor implements HandlerInterceptor {
             //获取token
             String token = request.getHeader("token");
             String uuid = request.getHeader("uuid_token");
-            Object redisToken = redisTemplate.opsForValue().get(RedisPrefixConst.PREFIX_TOKEN + uuid);
-            Object o = redisService.get(RedisPrefixConst.PREFIX_TOKEN + uuid);
-            System.out.println(o);
+            Object redisToken = redisService.get(RedisPrefixConst.PREFIX_TOKEN + uuid);
             if (redisToken == null) {
                 JSONObject json = new JSONObject();
                 json.put("code", 1000);
@@ -42,7 +40,7 @@ public class FilterInterceptor implements HandlerInterceptor {
             String newToken = redisToken.toString().replace("\\\"", "");
             if (newToken.equals(token)) {
                 //重新设置token失效时间
-                redisTemplate.opsForValue().set(RedisPrefixConst.PREFIX_TOKEN + uuid, token, 60 * 60, TimeUnit.SECONDS);
+                redisService.set(RedisPrefixConst.PREFIX_TOKEN + uuid, token, 60 * 60);
                 return true;
             }
             JSONObject json = new JSONObject();

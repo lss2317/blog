@@ -45,7 +45,8 @@
 export default {
   data: function () {
     return {
-      email: this.$store.state.email,
+      email: "",
+      tempEmail: this.$store.state.email,
       code: "",
       flag: true,
       codeMsg: "发送",
@@ -55,6 +56,15 @@ export default {
   },
   methods: {
     sendCode() {
+      console.log(this.email)
+      console.log(this.tempEmail)
+      if (this.email === this.tempEmail) {
+        this.$toast({
+          type: "error",
+          message: "不能和旧邮箱一样"
+        })
+        return false
+      }
       const that = this;
       // eslint-disable-next-line no-undef
       let captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function (
@@ -103,18 +113,19 @@ export default {
         return false;
       }
       const user = {
+        id: this.$store.state.userId,
         email: this.email,
         code: this.code
       };
-      this.axios.post("/api/user/code", user).then(({data}) => {
-        if (data.flag) {
+      this.axios.post("/api/user/changeEmail", user).then(res => {
+        if (res.data.code === 200) {
           this.$store.commit("saveEmail", this.email);
           this.email = "";
           this.code = "";
           this.$store.commit("closeModel");
-          this.$toast({type: "success", message: data.message});
+          this.$toast({type: "success", message: res.data.message});
         } else {
-          this.$toast({type: "error", message: data.message});
+          this.$toast({type: "error", message: res.data.message});
         }
       });
     }

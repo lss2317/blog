@@ -24,7 +24,9 @@
       </div>
     </div>
     <!-- 表情框 -->
-    <emoji @addEmoji="addEmoji" :chooseEmoji="chooseEmoji"></emoji>
+    <div class="emoji-style">
+      <emoji @addEmoji="addEmoji" :chooseEmoji="chooseEmoji"></emoji>
+    </div>
   </div>
 </template>
 
@@ -96,9 +98,13 @@ export default {
       this.commentContent = "";
       this.axios.post("/api/comment/saveComment", comment).then(res => {
         if (res.data.code === 200) {
-          console.log(this.index)
-          this.$emit("reloadReply", this.index);
-          this.$toast({type: "success", message: "回复成功"});
+          const isReview = this.$store.state.blogInfo.websiteConfig.isCommentReview;
+          if (isReview === 1) {
+            this.$toast({type: "warnning", message: "回复成功，正在审核中"});
+          } else {
+            this.$emit("reloadReply", this.index);
+            this.$toast({type: "success", message: "回复成功"});
+          }
         } else {
           this.$toast({type: "error", message: res.data.message});
         }
@@ -117,5 +123,16 @@ export default {
   border-radius: 4px;
   padding: 10px;
   margin: 0 0 10px;
+}
+
+.emoji-style {
+  z-index: 1000;
+  position: absolute;
+  box-shadow: 0 8px 16px rgba(50, 50, 93, 0.08), 0 4px 12px rgba(0, 0, 0, 0.07);
+  background: #fff;
+  border-radius: 8px;
+  padding-left: 6px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 </style>

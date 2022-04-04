@@ -1,5 +1,6 @@
 package com.lss.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lss.common.Result;
 import com.lss.entity.User;
@@ -35,7 +36,7 @@ public interface UserService extends IService<User> {
     List<User> listUsers(Integer currentPage, Integer pageSize, Integer loginType, String keywords);
 
     /**
-     * 登录验证
+     * 后台登录验证
      *
      * @param user 用户实体类
      */
@@ -91,4 +92,25 @@ public interface UserService extends IService<User> {
      * 更换头像
      */
     Result<?> changeAvatar(User user);
+
+    /**
+     * 忘记密码，邮箱验证修改
+     *
+     * @param json 数据接收
+     */
+    Result<?> forgetPassword(JSONObject json);
+
+    /**
+     * 注册用户
+     *
+     * @param json 接收数据
+     */
+    Result<?> register(JSONObject json);
+
+    /**
+     * 更换邮箱
+     *
+     * @param json 接收数据
+     */
+    Result<?> email(JSONObject json);
 }

@@ -42,7 +42,7 @@ export default {
 <style scoped>
 .emoji {
   user-select: none;
-  margin: 0.25rem;
+  margin: 0.4rem;
   display: inline-block;
   vertical-align: middle;
 }
@@ -59,7 +59,8 @@ export default {
 }
 
 .emoji-wrapper {
-  height: 108px;
+  width: 275px;
+  height: 200px;
   overflow: auto;
 }
 </style>

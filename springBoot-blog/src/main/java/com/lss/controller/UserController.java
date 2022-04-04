@@ -171,4 +171,36 @@ public class UserController {
     public Result<?> changeAvatar(@RequestBody User user) {
         return userService.changeAvatar(user);
     }
+
+    /**
+     * 忘记密码
+     *
+     * @param jsonObject 接收参数
+     */
+    @PostMapping("forgetPassword")
+    public Result<?> forgetPassword(@RequestBody JSONObject jsonObject) {
+        return userService.forgetPassword(jsonObject);
+    }
+
+    /**
+     * 注册用户
+     *
+     * @param jsonObject 接收数据
+     * @return 反馈信息
+     */
+    @PostMapping("register")
+    public Result<?> register(@RequestBody JSONObject jsonObject) {
+        return userService.register(jsonObject);
+    }
+
+    /**
+     * 用户更换邮箱
+     *
+     * @param json json接收数据
+     * @return 反馈信息
+     */
+    @PostMapping("changeEmail")
+    public Result<?> email(@RequestBody JSONObject json) {
+        return userService.email(json);
+    }
 }

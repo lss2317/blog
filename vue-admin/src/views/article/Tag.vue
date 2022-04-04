@@ -75,20 +75,9 @@
           <el-button type="primary" size="small" icon="edit" @click="openModel(scope.row)">
             编辑
           </el-button>
-          <el-popconfirm
-              title="确定删除吗？"
-              style="margin-left:1rem"
-              @confirm="deleteTag(scope.row.id)"
-              confirm-button-text="删除"
-              cancel-button-text="取消"
-              :ref="`popover-${scope.$index}`"
-          >
-            <template #reference>
-              <el-button type="danger" size="small" slot="reference" icon="Delete">
-                删除
-              </el-button>
-            </template>
-          </el-popconfirm>
+          <el-button type="danger" size="small" slot="reference" icon="Delete" @click="deleteTag(scope.row.id)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -127,7 +116,7 @@
 //引入element-plus中文包
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import axios from "axios";
-import {ElMessageBox, ElNotification, ElPopconfirm} from 'element-plus'
+import {ElMessageBox, ElNotification} from 'element-plus'
 
 export default {
   name: "Tag",
@@ -262,30 +251,41 @@ export default {
       })
     },
     deleteTag(id) {
-      axios.get("/api/tag/deleteTag", {
-        params: {
-          id: id
-        }
-      }).then(res => {
-        if (res.data.code === 200) {
-          ElNotification.success({
-            title: "成功",
-            message: res.data.message
-          })
-        } else if (res.data.code === 500) {
-          ElNotification.warning({
-            title: "错误",
-            message: res.data.message
-          })
-        } else if (res.data.code === 400) {
-          ElNotification.error({
-            title: "失败",
-            message: res.data.message
-          })
-          return
-        }
-        this.listTags(this.keywords)
+      ElMessageBox.confirm(
+          '是否删除该标签?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'error',
+          }
+      ).then(() => {
+        axios.get("/api/tag/deleteTag", {
+          params: {
+            id: id
+          }
+        }).then(res => {
+          if (res.data.code === 200) {
+            ElNotification.success({
+              title: "成功",
+              message: res.data.message
+            })
+          } else if (res.data.code === 500) {
+            ElNotification.warning({
+              title: "错误",
+              message: res.data.message
+            })
+          } else if (res.data.code === 400) {
+            ElNotification.error({
+              title: "失败",
+              message: res.data.message
+            })
+            return
+          }
+          this.listTags(this.keywords)
+        })
       })
+      .catch(()=>{})
     },
     deleteTags() {
       ElMessageBox.confirm(
@@ -294,7 +294,7 @@ export default {
           {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning',
+            type: 'error',
           }
       ).then(() => {
         axios.delete("/api/tag/deleteTags", {
@@ -326,9 +326,6 @@ export default {
   },
   created() {
     this.listTags(null)
-  },
-  components: {
-    ElPopconfirm
   }
 }
 </script>

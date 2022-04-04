@@ -127,4 +127,12 @@ public interface ArticleService extends IService<Article> {
      * @param articleId 文章id
      */
     void saveArticleLike(Integer articleId);
+
+    /**
+     * 搜索文章
+     *
+     * @param keywords 条件
+     * @return 文章列表
+     */
+    Result<List<Article>> listArticlesBySearch(String keywords);
 }

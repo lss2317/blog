@@ -65,19 +65,9 @@
           <el-button icon="edit" type="primary" size="small" @click="openModel(scope.row)">
             编辑
           </el-button>
-          <el-popconfirm
-              title="确定删除吗？"
-              style="margin-left:1rem"
-              confirm-button-text="删除"
-              cancel-button-text="取消"
-              @confirm="deleteCategory(scope.row.id)"
-          >
-            <template #reference>
-              <el-button icon="delete" size="small" type="danger">
-                删除
-              </el-button>
-            </template>
-          </el-popconfirm>
+          <el-button icon="delete" size="small" type="danger" @click="deleteCategory(scope.row.id)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -115,7 +105,7 @@
 <script>
 //引入element-plus中文包
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
-import {ElMessageBox, ElNotification, ElPopconfirm} from 'element-plus'
+import {ElMessageBox, ElNotification} from 'element-plus'
 import axios from "axios";
 
 export default {
@@ -251,30 +241,42 @@ export default {
       })
     },
     deleteCategory(id) {
-      axios.get("/api/classification/deleteClassification", {
-        params: {
-          id: id
-        }
-      }).then(res => {
-        if (res.data.code === 200) {
-          ElNotification.success({
-            title: "成功",
-            message: res.data.message
-          })
-        } else if (res.data.code === 500) {
-          ElNotification.warning({
-            title: "错误",
-            message: res.data.message
-          })
-        } else if (res.data.code === 400) {
-          ElNotification.error({
-            title: "失败",
-            message: res.data.message
-          })
-          return
-        }
-        this.listClassification(this.keywords)
+      ElMessageBox.confirm(
+          '是否删除该分类?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'error',
+          }
+      ).then(() => {
+        axios.get("/api/classification/deleteClassification", {
+          params: {
+            id: id
+          }
+        }).then(res => {
+          if (res.data.code === 200) {
+            ElNotification.success({
+              title: "成功",
+              message: res.data.message
+            })
+          } else if (res.data.code === 500) {
+            ElNotification.warning({
+              title: "错误",
+              message: res.data.message
+            })
+          } else if (res.data.code === 400) {
+            ElNotification.error({
+              title: "失败",
+              message: res.data.message
+            })
+            return
+          }
+          this.listClassification(this.keywords)
+        })
       })
+          .catch(() => {
+          })
     },
     deleteClassifications() {
       ElMessageBox.confirm(
@@ -283,7 +285,7 @@ export default {
           {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning',
+            type: 'error',
           }
       ).then(() => {
         axios.delete("/api/classification/deleteClassifications", {
@@ -315,9 +317,6 @@ export default {
   },
   created() {
     this.listClassification(null)
-  },
-  components: {
-    ElPopconfirm
   }
 }
 </script>

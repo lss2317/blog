@@ -1,22 +1,27 @@
 package com.lss.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lss.common.Result;
+import com.lss.constant.MQPrefixConst;
 import com.lss.constant.RedisPrefixConst;
 import com.lss.entity.Comment;
 import com.lss.entity.User;
 import com.lss.enums.CommentEnum;
 import com.lss.mapper.CommentMapper;
-import com.lss.service.BlogInfoService;
-import com.lss.service.CommentService;
-import com.lss.service.RedisService;
-import com.lss.service.UserService;
+import com.lss.service.*;
 import com.lss.utils.JWTUtils;
 import io.jsonwebtoken.Claims;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +29,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -43,8 +49,18 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     HttpServletRequest request;
     @Resource
     UserService userService;
+    @Resource
+    RabbitTemplate rabbitTemplate;
+    @Resource
+    TalkService talkService;
+    @Resource
+    ArticleService articleService;
+
+    @Value("${website.url}")
+    String websiteUrl;
 
 
+    @Transactional
     @Override
     public Result<?> saveComment(Comment comment) {
         // 判断是否需要审核
@@ -54,6 +70,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         boolean save = this.save(comment);
         if (!save) {
             return Result.getCommentResult(null, CommentEnum.SAVE_COMMENT_ERROR);
+        }
+        // 判断是否开启邮箱通知,通知用户
+        if (blogInfoService.getWebsiteConfig().getIsEmailNotice() == 1) {
+            notice(comment);
         }
         return Result.getCommentResult(null, CommentEnum.SAVE_COMMENT_SUCCESS);
     }
@@ -154,6 +174,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return Result.getCommentResult(json, CommentEnum.LIST_COMMENT_SUCCESS);
     }
 
+    @Transactional
     @Override
     public Result<?> checkComments(JSONObject json) {
         //获取根据token获取id
@@ -179,6 +200,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return Result.getCommentResult(null, CommentEnum.CHECK_COMMENT_SUCCESS);
     }
 
+    @Transactional
     @Override
     public Result<?> deleteComments(List<Integer> deleteIdList) {
         //获取根据token获取id
@@ -194,5 +216,53 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             return Result.getCommentResult(null, CommentEnum.DELETE_COMMENT_ERROR);
         }
         return Result.getCommentResult(null, CommentEnum.DELETE_COMMENT_SUCCESS);
+    }
+
+    /**
+     * 通知评论用户
+     *
+     * @param comment 评论信息
+     */
+    public void notice(Comment comment) {
+        // 查询回复用户邮箱号
+        Integer userId = 1;
+        String id = "";
+        String url = "/links";
+        switch (Objects.requireNonNull(comment.getType())) {
+            case 1:
+                userId = articleService.getById(comment.getArticleId()).getUserId();
+                id = comment.getArticleId().toString();
+                url = websiteUrl + "/article/" + id;
+                break;
+            case 3:
+                userId = talkService.getById(comment.getTalkId()).getUserId();
+                id = comment.getTalkId().toString();
+                url = websiteUrl + "/talks/" + id;
+                break;
+            default:
+                break;
+        }
+        if (Objects.nonNull(comment.getReplyUserId())) {
+            userId = comment.getReplyUserId();
+        }
+        String email = userService.getById(userId).getEmail();
+        if (StringUtils.isNotBlank(email)) {
+            // 发送消息
+            JSONObject json = new JSONObject();
+            if (comment.getIsReview().equals(0)) {
+                // 评论提醒
+                json.put("email", email);
+                json.put("subject", "评论提醒");
+                // 获取评论路径
+                json.put("content", "您收到了一条新的回复，请前往" + url + "\n页面查看");
+            } else {
+                // 管理员审核提醒
+                String adminEmail = userService.getById(1).getEmail();
+                json.put("email", adminEmail);
+                json.put("subject", "审核提醒");
+                json.put("content", "您收到了一条新的回复，请前往后台管理页面审核");
+            }
+            rabbitTemplate.convertAndSend(MQPrefixConst.EMAIL_EXCHANGE, "*", new Message(JSON.toJSONBytes(json), new MessageProperties()));
+        }
     }
 }

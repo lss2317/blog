@@ -41,7 +41,9 @@
             </button>
           </div>
           <!-- 表情框 -->
-          <emoji @addEmoji="addEmoji" :chooseEmoji="chooseEmoji"/>
+          <div class="emoji-style">
+            <emoji @addEmoji="addEmoji" :chooseEmoji="chooseEmoji"/>
+          </div>
         </div>
       </div>
     </div>
@@ -347,7 +349,7 @@ export default {
           this.current = 1;
           this.listComments();
           const isReview = this.$store.state.blogInfo.websiteConfig.isCommentReview;
-          if (isReview) {
+          if (isReview === 1) {
             this.$toast({type: "warnning", message: "评论成功，正在审核中"});
           } else {
             this.$toast({type: "success", message: "评论成功"});
@@ -430,7 +432,7 @@ export default {
 
 .comment-wrapper:hover {
   box-shadow: 0 5px 10px 8px rgb(7 17 27 / 16%);
-  transform: translateY(-3px);
+  /*transform: translateY(-3px);*/
 }
 
 .comment-title {
@@ -478,7 +480,7 @@ export default {
 
 .comment-nickname {
   text-decoration: none;
-  color:  #66b1ff !important;
+  color: #66b1ff !important;
   font-weight: 500;
 }
 
@@ -536,5 +538,16 @@ export default {
 .load-wrapper button {
   background-color: #49b1f5;
   color: #fff;
+}
+
+.emoji-style {
+  z-index: 1000;
+  position: absolute;
+  box-shadow: 0 8px 16px rgba(50, 50, 93, 0.08), 0 4px 12px rgba(0, 0, 0, 0.07);
+  background: #fff;
+  border-radius: 8px;
+  padding-left: 6px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 </style>

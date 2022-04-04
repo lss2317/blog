@@ -287,6 +287,7 @@ export default {
 .talk-images {
   padding: 0 10px;
   margin-top: 8px;
+  margin-bottom: 10px;
 }
 
 .images-items {

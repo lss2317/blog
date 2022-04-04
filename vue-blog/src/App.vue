@@ -9,7 +9,7 @@
       <router-view :key="$route.fullPath"></router-view>
     </v-main>
     <!-- 页脚 -->
-    <Footer></Footer>
+    <Footer style="z-index: -1"></Footer>
     <!-- 返回顶部 -->
     <BackTop></BackTop>
     <!-- 搜索模态框 -->

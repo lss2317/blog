@@ -2,18 +2,23 @@ package com.lss.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lss.common.Result;
 import com.lss.constant.MQPrefixConst;
 import com.lss.constant.RedisPrefixConst;
 import com.lss.entity.User;
+import com.lss.entity.WebsiteConfig;
 import com.lss.enums.UserEnum;
 import com.lss.mapper.UserMapper;
+import com.lss.service.BlogInfoService;
 import com.lss.service.RedisService;
 import com.lss.service.UserService;
 import com.lss.utils.CommonUtils;
+import com.lss.utils.IpUtils;
 import com.lss.utils.JWTUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.amqp.core.Message;
@@ -44,6 +49,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     HttpServletRequest request;
     @Resource
     RabbitTemplate rabbitTemplate;
+    @Resource
+    BlogInfoService blogInfoService;
 
     @Override
     public void sendCode(String username) {
@@ -214,8 +221,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Set<Object> articleLikeSet = redisService.sMembers(RedisPrefixConst.ARTICLE_USER_LIKE + select.getId());
         select.setArticleLikeSet(articleLikeSet);
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("id", user.getId());
+        updateWrapper.eq("id", select.getId());
         updateWrapper.set("last_login_time", new Date());
+        String ipAddress = IpUtils.getIpAddress(request);
+        updateWrapper.set("ip_address", ipAddress);
+        updateWrapper.set("ip_source", IpUtils.getIpSource(ipAddress));
         this.update(updateWrapper);
         return Result.getUserResult(select, UserEnum.LOGIN_SUCCESS);
     }
@@ -233,5 +243,80 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return Result.getUserResult(null, UserEnum.CHANGE_AVATAR_ERROR);
         }
         return Result.getUserResult(null, UserEnum.CHANGE_AVATAR_SUCCESS);
+    }
+
+
+    @Override
+    public Result<?> forgetPassword(JSONObject json) {
+        //判断验证码是否正确
+        Object code = redisService.get(RedisPrefixConst.USER_CODE_KEY + json.getString("username"));
+        if (code == null || !code.toString().equals(json.getString("code"))) {
+            return Result.getUserResult(null, UserEnum.CODE_NOT_CORRECT);
+        }
+        //查询用户名是否存在
+        User user = this.getOne(new LambdaQueryWrapper<User>()
+                .select(User::getId, User::getLoginType).eq(User::getEmail, json.getString("username"))
+        );
+        if (user == null) {
+            return Result.getUserResult(null, UserEnum.EMAIL_NOT_REGISTER);
+        }
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", user.getId());
+        updateWrapper.set("password", json.getString("password"));
+        this.update(updateWrapper);
+        return Result.getUserResult(null, UserEnum.UPDATE_ROLE_SUCCESS);
+    }
+
+    @Override
+    public Result<?> register(JSONObject json) {
+        //判断验证码是否正确
+        Object code = redisService.get(RedisPrefixConst.USER_CODE_KEY + json.getString("username"));
+        if (code == null || !code.toString().equals(json.getString("code"))) {
+            return Result.getUserResult(null, UserEnum.CODE_NOT_CORRECT);
+        }
+        //查询用户名是否存在
+        User user = this.getOne(new LambdaQueryWrapper<User>()
+                .select(User::getId).eq(User::getUsername, json.getString("username"))
+        );
+        if (user != null) {
+            return Result.getUserResult(null, UserEnum.EMAIL_IS_EXIST);
+        }
+        User saveUser = new User();
+        saveUser.setCreateTime(new Date());
+        WebsiteConfig websiteConfig = blogInfoService.getWebsiteConfig();
+        saveUser.setAvatar(websiteConfig.getUserAvatar());
+        saveUser.setUsername(json.getString("username"));
+        saveUser.setEmail(json.getString("username"));
+        saveUser.setNickname("用户" + IdWorker.getId());
+        saveUser.setLoginType(1);
+        saveUser.setPassword(json.getString("password"));
+        String ipAddress = IpUtils.getIpAddress(request);
+        saveUser.setIpSource(IpUtils.getIpSource(ipAddress));
+        saveUser.setIpAddress(ipAddress);
+        saveUser.setLastLoginTime(new Date());
+        this.save(saveUser);
+        return Result.getUserResult(null, UserEnum.REGISTER_USER_SUCCESS);
+    }
+
+    @Override
+    public Result<?> email(JSONObject json) {
+        //判断验证码是否正确
+        Object code = redisService.get(RedisPrefixConst.USER_CODE_KEY + json.getString("email"));
+        if (code == null || !code.toString().equals(json.getString("code"))) {
+            return Result.getUserResult(null, UserEnum.CODE_NOT_CORRECT);
+        }
+        //查询该邮箱是否已经注册
+        User user = this.getOne(new LambdaQueryWrapper<User>()
+                .select(User::getId).eq(User::getUsername, json.getString("email"))
+        );
+        if (user != null) {
+            return Result.getUserResult(null, UserEnum.EMAIL_IS_EXIST);
+        }
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", json.get("id"));
+        updateWrapper.set("email", json.getString("email"));
+        updateWrapper.set("username", json.getString("email"));
+        this.update(updateWrapper);
+        return Result.getUserResult(null, UserEnum.UPDATE_ROLE_SUCCESS);
     }
 }

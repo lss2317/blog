@@ -86,19 +86,9 @@
           <el-button type="primary" @click="openModel(scope.row)">
             编辑
           </el-button>
-          <el-popconfirm
-              title="确定删除吗？"
-              confirm-button-text="确定"
-              cancel-button-text="取消"
-              style="margin-left:1rem"
-              @confirm="deleteLink(scope.row.id)"
-          >
-            <template #reference>
-              <el-button type="danger" slot="reference">
-                删除
-              </el-button>
-            </template>
-          </el-popconfirm>
+          <el-button type="danger" @click="deleteLink(scope.row.id)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -187,28 +177,40 @@ export default {
       });
     },
     deleteLink(id) {
-      axios.post("/api/link/deleteLink", {
-        id: id
-      }).then(res => {
-        if (res.data.code === 200) {
-          ElNotification.success({
-            title: "成功",
-            message: res.data.message
-          })
-        } else if (res.data.code === 500) {
-          ElNotification.warning({
-            title: "错误",
-            message: res.data.message
-          })
-        } else if (res.data.code === 400) {
-          ElNotification.error({
-            title: "失败",
-            message: res.data.message
-          })
-          return false
-        }
-        this.listFriendLink()
+      ElMessageBox.confirm(
+          '是否删除该友链?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'error',
+          }
+      ).then(() => {
+        axios.post("/api/link/deleteLink", {
+          id: id
+        }).then(res => {
+          if (res.data.code === 200) {
+            ElNotification.success({
+              title: "成功",
+              message: res.data.message
+            })
+          } else if (res.data.code === 500) {
+            ElNotification.warning({
+              title: "错误",
+              message: res.data.message
+            })
+          } else if (res.data.code === 400) {
+            ElNotification.error({
+              title: "失败",
+              message: res.data.message
+            })
+            return false
+          }
+          this.listFriendLink()
+        })
+      }).catch(() => {
       })
+
     },
     openModel(link) {
       if (link != null) {
@@ -284,12 +286,12 @@ export default {
     },
     deleteLinks() {
       ElMessageBox.confirm(
-          '确定要删除选择友链?',
+          '是否删除选中友链?',
           '提示',
           {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning',
+            type: 'error',
           }
       ).then(() => {
         axios.delete("/api/link/deleteLinks", {
@@ -328,7 +330,7 @@ export default {
 </script>
 
 <style scoped>
-.operation-container{
+.operation-container {
   margin-top: 2.25rem;
 }
 </style>

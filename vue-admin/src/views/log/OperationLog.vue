@@ -109,22 +109,12 @@
             </el-icon>
             查看
           </el-button>
-          <el-popconfirm
-              title="确定删除吗？"
-              confirm-button-text="确定"
-              cancel-button-text="取消"
-              style="margin-left:10px"
-              @confirm="deleteLog(scope.row.id)"
-          >
-            <template #reference>
-              <el-button type="text" style="font-size: 13px">
-                <el-icon style="margin-right: 2px">
-                  <delete/>
-                </el-icon>
-                删除
-              </el-button>
-            </template>
-          </el-popconfirm>
+          <el-button @click="deleteLog(scope.row.id)" type="text" style="font-size: 13px">
+            <el-icon style="margin-right: 2px">
+              <delete/>
+            </el-icon>
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -176,7 +166,7 @@
 <script>
 import zhCn from "element-plus/lib/locale/lang/zh-cn";
 import axios from "axios";
-import {ElMessageBox, ElNotification, ElPopconfirm} from 'element-plus'
+import {ElMessageBox, ElNotification} from 'element-plus'
 
 export default {
   name: "OperationLog",
@@ -224,27 +214,38 @@ export default {
       })
     },
     deleteLog(id) {
-      axios.post("/api/log/deleteLog", {
-        id: id
-      }).then(res => {
-        if (res.data.code === 200) {
-          ElNotification.success({
-            title: "成功",
-            message: res.data.message
-          })
-        } else if (res.data.code === 500) {
-          ElNotification.warning({
-            title: "错误",
-            message: res.data.message
-          })
-        } else if (res.data.code === 400) {
-          ElNotification.error({
-            title: "失败",
-            message: res.data.message
-          })
-          return false
-        }
-        this.listLogs()
+      ElMessageBox.confirm(
+          '是否删除该日志?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'error',
+          }
+      ).then(() => {
+        axios.post("/api/log/deleteLog", {
+          id: id
+        }).then(res => {
+          if (res.data.code === 200) {
+            ElNotification.success({
+              title: "成功",
+              message: res.data.message
+            })
+          } else if (res.data.code === 500) {
+            ElNotification.warning({
+              title: "错误",
+              message: res.data.message
+            })
+          } else if (res.data.code === 400) {
+            ElNotification.error({
+              title: "失败",
+              message: res.data.message
+            })
+            return false
+          }
+          this.listLogs()
+        })
+      }).catch(() => {
       })
     },
     deleteLogs() {
@@ -254,7 +255,7 @@ export default {
           {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning',
+            type: 'error',
           }
       ).then(() => {
             axios.delete("/api/log/deleteLogs", {
@@ -312,10 +313,6 @@ export default {
         }
       };
     }
-  }
-  ,
-  components: {
-    ElPopconfirm
   }
 }
 </script>

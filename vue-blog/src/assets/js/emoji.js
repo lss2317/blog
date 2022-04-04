@@ -1,115 +1,240 @@
 export default {
-    "[微笑]": "https://static.talkxj.com/emoji/smile.jpg",
+    "[微笑]": "https://www.staic.lsstop.com/emoji/smile.gif",
 
-    "[笑]": " https://static.talkxj.com/emoji/dx.jpg",
+    "[撇嘴]": "https://www.staic.lsstop.com/emoji/pz.gif",
 
-    "[呲牙]": "https://static.talkxj.com/emoji/cy.jpg",
+    "[色]": "https://www.staic.lsstop.com/emoji/color.gif",
 
-    "[OK]": "https://static.talkxj.com/emoji/ok.jpg",
+    "[发呆]": "https://www.staic.lsstop.com/emoji/daze.gif",
 
-    "[星星眼]": "https://static.talkxj.com/emoji/xxy.jpg",
+    "[得意]": "https://www.staic.lsstop.com/emoji/proud.gif",
 
-    "[哦呼]": "https://static.talkxj.com/emoji/oh.jpg",
+    "[害羞]": "https://www.staic.lsstop.com/emoji/shy.gif",
 
-    "[嫌弃]": "https://static.talkxj.com/emoji/xq.jpg",
+    "[闭嘴]": "https://www.staic.lsstop.com/emoji/bz.gif",
 
-    "[喜欢]": "https://static.talkxj.com/emoji/xh.jpg",
+    "[睡]": "https://www.staic.lsstop.com/emoji/sleep.gif",
 
-    "[酸了]": "https://static.talkxj.com/emoji/sl.jpg",
+    "[大哭]": "https://www.staic.lsstop.com/emoji/cry.gif",
 
-    "[大哭]": "https://static.talkxj.com/emoji/dq.jpg?",
+    "[尴尬]": "https://www.staic.lsstop.com/emoji/gg.gif",
 
-    "[害羞]": "https://static.talkxj.com/emoji/hx.jpg",
+    "[发怒]": "https://www.staic.lsstop.com/emoji/rage.gif",
 
-    "[无语]": "https://static.talkxj.com/emoji/wy.jpg",
+    "[调皮]": "https://www.staic.lsstop.com/emoji/naughty.gif",
 
-    "[疑惑]": "https://static.talkxj.com/emoji/yh.jpg",
+    "[呲牙]": "https://www.staic.lsstop.com/emoji/cy.gif",
 
-    "[调皮]": "https://static.talkxj.com/emoji/tiaopi.jpg",
+    "[惊讶]": "https://www.staic.lsstop.com/emoji/jingya.gif",
 
-    "[笑哭]": "https://static.talkxj.com/emoji/xiaoku.jpg",
+    "[难过]": "https://www.staic.lsstop.com/emoji/sad.gif",
 
-    "[奸笑]": "https://static.talkxj.com/emoji/jianxiao.jpg",
+    "[酷]": "https://www.staic.lsstop.com/emoji/ku.gif",
 
-    "[偷笑]": "https://static.talkxj.com/emoji/touxiao.jpg",
+    "[冷汗]": "https://www.staic.lsstop.com/emoji/lenhan.gif",
 
-    "[大笑]": "https://static.talkxj.com/emoji/daxiao.jpg",
+    "[抓狂]": "https://www.staic.lsstop.com/emoji/crazy.gif",
 
-    "[阴险]": "https://static.talkxj.com/emoji/yinxian.jpg",
+    "[吐]": "https://www.staic.lsstop.com/emoji/tu.gif",
 
-    "[捂脸]": "https://static.talkxj.com/emoji/wulian.jpg",
+    "[偷笑]": "https://www.staic.lsstop.com/emoji/touxiao.gif",
 
-    "[呆]": "https://static.talkxj.com/emoji/dai.jpg",
+    "[可爱]": "https://www.staic.lsstop.com/emoji/keai.gif",
 
-    "[抠鼻]": "https://static.talkxj.com/emoji/koubi.jpg",
+    "[白眼]": "https://www.staic.lsstop.com/emoji/baiyan.gif",
 
-    "[惊喜]": "https://static.talkxj.com/emoji/jingxi.jpg",
+    "[傲慢]": "https://www.staic.lsstop.com/emoji/aoman.gif",
 
-    "[惊讶]": "https://static.talkxj.com/emoji/jingya.jpg",
+    "[饥饿]": "https://www.staic.lsstop.com/emoji/hunger.gif",
 
-    "[捂脸哭]": "https://static.talkxj.com/emoji/wulianku.jpg",
+    "[困]": "https://www.staic.lsstop.com/emoji/kun.gif",
 
-    "[妙啊]": "https://static.talkxj.com/emoji/miaoa.jpg",
+    "[惊恐]": "https://www.staic.lsstop.com/emoji/jingko.gif",
 
-    "[狗头]": "https://static.talkxj.com/emoji/goutou.jpg",
+    "[流汗]": "https://www.staic.lsstop.com/emoji/liuhan.gif",
 
-    "[滑稽]": "https://static.talkxj.com/emoji/huaji.jpg",
+    "[憨笑]": "https://www.staic.lsstop.com/emoji/hanxiao.gif",
 
-    "[吃瓜]": "https://static.talkxj.com/emoji/chigua.jpg",
+    "[悠闲]": "https://www.staic.lsstop.com/emoji/youxian.gif",
 
-    "[打call]": "https://static.talkxj.com/emoji/dacall.jpg",
+    "[奋斗]": "https://www.staic.lsstop.com/emoji/fendou.gif",
 
-    "[点赞]": "https://static.talkxj.com/emoji/dianzan.jpg",
+    "[咒骂]": "https://www.staic.lsstop.com/emoji/zhouma.gif",
 
-    "[鼓掌]": "https://static.talkxj.com/emoji/guzhang.jpg",
+    "[疑问]": "https://www.staic.lsstop.com/emoji/yiwen.gif",
 
-    "[尴尬]": "https://static.talkxj.com/emoji/ganga.jpg",
+    "[嘘]": "https://www.staic.lsstop.com/emoji/xu.gif",
 
-    "[冷]": "https://static.talkxj.com/emoji/leng.jpg",
+    "[晕]": "https://www.staic.lsstop.com/emoji/yun.gif",
 
-    "[灵魂出窍]": "https://static.talkxj.com/emoji/linghunchuqiao.jpg",
+    "[折磨]": "https://www.staic.lsstop.com/emoji/zhemo.gif",
 
-    "[委屈]": "https://static.talkxj.com/emoji/weiqu.jpg",
+    "[衰]": "https://www.staic.lsstop.com/emoji/shuai.gif",
 
-    "[傲娇]": "https://static.talkxj.com/emoji/aojiao.jpg",
+    "[骷髅]": "https://www.staic.lsstop.com/emoji/kulou.gif",
 
-    "[疼]": "https://static.talkxj.com/emoji/teng.jpg",
+    "[敲打]": "https://www.staic.lsstop.com/emoji/qiaoda.gif",
 
-    "[吓]": "https://static.talkxj.com/emoji/xia.jpg?",
+    "[再见]": "https://www.staic.lsstop.com/emoji/zaijian.gif",
 
-    "[生病]": "https://static.talkxj.com/emoji/shengbing.jpg",
+    "[擦汗]": "https://www.staic.lsstop.com/emoji/cahan.gif",
 
-    "[吐]": "https://static.talkxj.com/emoji/tu.jpg",
+    "[抠鼻]": "https://www.staic.lsstop.com/emoji/koubi.gif",
 
-    "[嘘声]": "https://static.talkxj.com/emoji/xusheng.jpg",
+    "[鼓掌]": "https://www.staic.lsstop.com/emoji/guzhang.gif",
 
-    "[捂眼]": "https://static.talkxj.com/emoji/wuyan.jpg",
+    "[糗大了]": "https://www.staic.lsstop.com/emoji/qiudale.gif",
 
-    "[思考]": "https://static.talkxj.com/emoji/sikao.jpg",
+    "[坏笑]": "https://www.staic.lsstop.com/emoji/huaixiao.gif",
 
-    "[再见]": "https://static.talkxj.com/emoji/zaijian.jpg",
+    "[左哼哼]": "https://www.staic.lsstop.com/emoji/zhh.gif",
 
-    "[翻白眼]": "https://static.talkxj.com/emoji/fanbaiyan.jpg",
+    "[右哼哼]": "https://www.staic.lsstop.com/emoji/yhh.gif",
 
-    "[哈欠]": "https://static.talkxj.com/emoji/haqian.jpg",
+    "[哈欠]": "https://www.staic.lsstop.com/emoji/haqian.gif",
 
-    "[奋斗]": "https://static.talkxj.com/emoji/fengdou.jpg",
+    "[鄙视]": "https://www.staic.lsstop.com/emoji/bishi.gif",
 
-    "[墨镜]": "https://static.talkxj.com/emoji/mojing.jpg",
+    "[委屈]": "https://www.staic.lsstop.com/emoji/weiqu.gif",
 
-    "[撇嘴]": "https://static.talkxj.com/emoji/piezui.jpg",
+    "[快哭了]": "https://www.staic.lsstop.com/emoji/kuaikule.gif",
 
-    "[难过]": "https://static.talkxj.com/emoji/nanguo.jpg",
+    "[阴险]": "https://www.staic.lsstop.com/emoji/yinxian.gif",
 
-    "[抓狂]": "https://static.talkxj.com/emoji/zhuakuang.jpg",
+    "[亲亲]": "https://www.staic.lsstop.com/emoji/qinqin.gif",
 
-    "[生气]": "https://static.talkxj.com/emoji/shengqi.jpg",
+    "[吓]": "https://www.staic.lsstop.com/emoji/xia.gif",
 
-    "[爱心]": "https://static.talkxj.com/emoji/aixin.jpg",
+    "[可怜]": "https://www.staic.lsstop.com/emoji/kelian.gif",
 
-    "[胜利]": "https://static.talkxj.com/emoji/shengli.jpg",
+    "[眨眼睛]": "https://www.staic.lsstop.com/emoji/zhayanjing.gif",
 
-    "[保佑]": "https://static.talkxj.com/emoji/baoyou.jpg",
+    "[笑哭]": "https://www.staic.lsstop.com/emoji/xiaoku.gif",
 
-    "[支持]": "https://static.talkxj.com/emoji/zhichi.jpg"
-};
+    "[doge]": "https://www.staic.lsstop.com/emoji/doge.gif",
+
+    "[泪奔]": "https://www.staic.lsstop.com/emoji/leiben.gif",
+
+    "[无奈]": "https://www.staic.lsstop.com/emoji/wunai.gif",
+
+    "[托腮]": "https://www.staic.lsstop.com/emoji/tuosai.gif",
+
+    "[卖萌]": "https://www.staic.lsstop.com/emoji/maimeng.gif",
+
+    "[斜眼笑]": "https://www.staic.lsstop.com/emoji/xyx.gif",
+
+    "[喷血]": "https://www.staic.lsstop.com/emoji/px.gif",
+
+    "[惊喜]": "https://www.staic.lsstop.com/emoji/jx.gif",
+
+    "[骚扰]": "https://www.staic.lsstop.com/emoji/sr.gif",
+
+    "[小纠结]": "https://www.staic.lsstop.com/emoji/xjj.gif",
+
+    "[我最美]": "https://www.staic.lsstop.com/emoji/wzm.gif",
+
+    "[加油抱抱]": "https://www.staic.lsstop.com/emoji/jybb.gif",
+
+    "[脑阔疼]": "https://www.staic.lsstop.com/emoji/nkt.gif",
+
+    "[沧桑]": "https://www.staic.lsstop.com/emoji/cs.gif",
+
+    "[捂脸]": "https://www.staic.lsstop.com/emoji/wl.gif",
+
+    "[辣眼睛]": "https://www.staic.lsstop.com/emoji/lyj.gif",
+
+    "[哦哟]": "https://www.staic.lsstop.com/emoji/oy.gif",
+
+    "[头秃]": "https://www.staic.lsstop.com/emoji/tt.gif",
+
+    "[问号脸]": "https://www.staic.lsstop.com/emoji/whl.gif",
+
+    "[暗中观察]": "https://www.staic.lsstop.com/emoji/azgc.gif",
+
+    "[emm]": "https://www.staic.lsstop.com/emoji/emm.gif",
+
+    "[吃瓜]": "https://www.staic.lsstop.com/emoji/cg.gif",
+
+    "[呵呵哒]": "https://www.staic.lsstop.com/emoji/hhd.gif",
+
+    "[无眼笑]": "https://www.staic.lsstop.com/emoji/wyx.gif",
+
+    "[狂笑]": "https://www.staic.lsstop.com/emoji/kx.gif",
+
+    "[面无表情]": "https://www.staic.lsstop.com/emoji/mwbq.gif",
+
+    "[加油]": "https://www.staic.lsstop.com/emoji/jiayou.gif",
+
+    "[魔鬼笑]": "https://www.staic.lsstop.com/emoji/mgx.gif",
+
+    "[拥抱]": "https://www.staic.lsstop.com/emoji/yb.gif",
+
+    "[爱心]": "https://www.staic.lsstop.com/emoji/ax.gif",
+
+    "[玫瑰]": "https://www.staic.lsstop.com/emoji/mg.gif",
+
+    "[凋谢]": "https://www.staic.lsstop.com/emoji/dx.gif",
+
+    "[幽灵]": "https://www.staic.lsstop.com/emoji/yl.gif",
+
+    "[爆筋]": "https://www.staic.lsstop.com/emoji/bj.gif",
+
+    "[示爱]": "https://www.staic.lsstop.com/emoji/shiai.gif",
+
+    "[心碎]": "https://www.staic.lsstop.com/emoji/xs.gif",
+
+    "[咖啡]": "https://www.staic.lsstop.com/emoji/kf.gif",
+
+    "[羊驼]": "https://www.staic.lsstop.com/emoji/yt.gif",
+
+    "[赞]": "https://www.staic.lsstop.com/emoji/z.gif",
+
+    "[握手]": "https://www.staic.lsstop.com/emoji/ws.gif",
+
+    "[胜利]": "https://www.staic.lsstop.com/emoji/sl.gif",
+
+    "[踩]": "https://www.staic.lsstop.com/emoji/c.gif",
+
+    "[点赞]": "https://www.staic.lsstop.com/emoji/dz.gif",
+
+    "[托脸]": "https://www.staic.lsstop.com/emoji/tl.gif",
+
+    "[拜托]": "https://www.staic.lsstop.com/emoji/bt.gif",
+
+    "[无聊]": "https://www.staic.lsstop.com/emoji/wuliao.gif",
+
+    "[我不看]": "https://www.staic.lsstop.com/emoji/wbk.gif",
+
+    "[飙泪]": "https://www.staic.lsstop.com/emoji/bl.gif",
+
+    "[害怕]": "https://www.staic.lsstop.com/emoji/hp.gif",
+
+    "[我酸了]": "https://www.staic.lsstop.com/emoji/wsl.gif",
+
+    "[月亮]": "https://www.staic.lsstop.com/emoji/yueliang.gif",
+
+    "[太阳]": "https://www.staic.lsstop.com/emoji/ty.gif",
+
+    "[猪头]": "https://www.staic.lsstop.com/emoji/zt.gif",
+
+    "[菜刀]": "https://www.staic.lsstop.com/emoji/cd.gif",
+
+    "[刀]": "https://www.staic.lsstop.com/emoji/d.gif",
+
+    "[啤酒]": "https://www.staic.lsstop.com/emoji/pj.gif",
+
+    "[茶]": "https://www.staic.lsstop.com/emoji/cha.gif",
+
+    "[大便]": "https://www.staic.lsstop.com/emoji/db.gif",
+
+    "[喝彩]": "https://www.staic.lsstop.com/emoji/hc.gif",
+
+    "[足球]": "https://www.staic.lsstop.com/emoji/zq.gif",
+
+    "[篮球]": "https://www.staic.lsstop.com/emoji/lq.gif",
+
+    "[棒棒糖]": "https://www.staic.lsstop.com/emoji/bbt.gif",
+
+    "[西瓜]": "https://www.staic.lsstop.com/emoji/xg.gif",
+
+}

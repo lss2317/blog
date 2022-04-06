@@ -108,8 +108,8 @@ export default {
     if (localStorage.getItem("message")) {
       this.$message.error(localStorage.getItem("message"))
       localStorage.removeItem("message")
-      localStorage.removeItem("token")
-      localStorage.removeItem("uuid_token")
+      localStorage.removeItem("admin_login_token")
+      localStorage.removeItem("admin_uuid_token")
       localStorage.removeItem("userInfo")
     }
   }

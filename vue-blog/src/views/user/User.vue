@@ -38,7 +38,7 @@
               label="简介"
               placeholder="介绍下自己吧"
           />
-          <div v-if="loginType === 1" class="mt-7 binding">
+          <div v-if="loginType !== 0" class="mt-7 binding">
             <v-text-field
                 disabled
                 v-model="email"
@@ -70,7 +70,8 @@ export default {
       userInfo: {
         nickname: this.$store.state.nickname,
         intro: this.$store.state.intro,
-        website: this.$store.state.webSite
+        website: this.$store.state.webSite,
+        loginType: this.$store.state.loginType
       }
     };
   },

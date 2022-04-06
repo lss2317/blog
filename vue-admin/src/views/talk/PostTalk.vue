@@ -36,6 +36,7 @@
           <el-upload
               action="/api/files/upload"
               multiple
+              :before-upload="beforeUpload"
               :on-success="upload"
               :show-file-list="false"
           >
@@ -89,6 +90,7 @@
           list-type="picture-card"
           :file-list="uploadList"
           multiple
+          :before-upload="beforeUpload"
           :on-success="upload"
           :on-remove="handleRemove"
       >
@@ -104,7 +106,9 @@
 import EmojiList from "../../assets/js/emoji";
 import Editor from "../../components/Editor.vue";
 import axios from "axios";
+import config from "../../assets/js/config";
 import {ElNotification} from "element-plus";
+import * as imageConversion from "image-conversion";
 
 export default {
   name: "PostTalk",
@@ -151,6 +155,19 @@ export default {
         if (item.url === file.url) {
           this.uploadList.splice(index, 1);
         }
+      });
+    },
+    beforeUpload(file) {
+      return new Promise(resolve => {
+        if (file.size / 1024 < config.UPLOAD_SIZE) {
+          resolve(file);
+        }
+        // 压缩到200KB,这里的200就是要压缩的大小,可自定义
+        imageConversion
+            .compressAccurately(file, config.UPLOAD_SIZE)
+            .then(res => {
+              resolve(res);
+            });
       });
     },
     saveOrUpdateTalk() {

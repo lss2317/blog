@@ -91,7 +91,9 @@
 
 <script>
 import axios from "axios";
+import config from "../../assets/js/config";
 import {ElMessageBox, ElNotification} from "element-plus";
+import * as imageConversion from "image-conversion";
 
 export default {
   name: "page",
@@ -107,7 +109,6 @@ export default {
         pageCover: ""
       },
       pageList: [],
-      tempCover: "",
     }
   },
   methods: {
@@ -133,20 +134,21 @@ export default {
         this.loading = false
       })
     },
-    beforeLoad() {
-      this.tempCover = this.pageForum.pageCover
+    beforeLoad(file) {
+      return new Promise(resolve => {
+        if (file.size / 1024 < config.UPLOAD_SIZE) {
+          resolve(file);
+        }
+        // 压缩到200KB,这里的200就是要压缩的大小,可自定义
+        imageConversion
+            .compressAccurately(file, config.UPLOAD_SIZE)
+            .then(res => {
+              resolve(res);
+            });
+      });
     },
     uploadCover(response) {
       this.pageForum.pageCover = response
-      if (this.tempCover !== "") {
-        axios.get("/api/files/delete", {
-          params: {
-            key: this.tempCover
-          }
-        }).then(() => {
-          this.tempCover = ""
-        })
-      }
     },
     addOrEditPage() {
       if (this.pageForum.pageName.trim() === "") {

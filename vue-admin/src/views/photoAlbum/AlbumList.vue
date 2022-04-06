@@ -48,7 +48,7 @@
           <div class="album-operation">
             <el-dropdown @command="handleCommand">
               <el-icon style="color:#fff;cursor: pointer;">
-                <more-filled />
+                <more-filled/>
               </el-icon>
               <template #dropdown>
                 <el-dropdown-menu slot="dropdown">
@@ -100,7 +100,7 @@
               :show-file-list="false"
               action="/api/files/upload"
               multiple
-              :before-upload="changeCover"
+              :before-upload="beforeUpload"
               :on-success="uploadCover"
           >
             <el-icon class="el-icon--upload" v-if="photoAlbum.albumCover === ''">
@@ -136,13 +136,14 @@
 <script>
 import axios from "axios";
 import {ElMessageBox, ElNotification} from "element-plus";
+import config from "../../assets/js/config";
+import * as imageConversion from "image-conversion";
 
 export default {
   name: "AlbumList",
   data() {
     return {
       albumTitle: "",
-      tempCover: null,
       keywords: "",
       loading: true,
       isDelete: false,
@@ -186,15 +187,6 @@ export default {
     },
     uploadCover(response) {
       this.photoAlbum.albumCover = response
-      if (this.tempCover !== "") {
-        axios.get("/api/files/delete", {
-          params: {
-            key: this.tempCover
-          }
-        }).then(() => {
-          this.tempCover = ""
-        })
-      }
     },
     open(id) {
       ElMessageBox.confirm(
@@ -246,8 +238,18 @@ export default {
         this.loading = false
       })
     },
-    changeCover() {
-      this.tempCover = this.photoAlbum.albumCover
+    beforeUpload(file) {
+      return new Promise(resolve => {
+        if (file.size / 1024 < config.UPLOAD_SIZE) {
+          resolve(file);
+        }
+        // 压缩到200KB,这里的200就是要压缩的大小,可自定义
+        imageConversion
+            .compressAccurately(file, config.UPLOAD_SIZE)
+            .then(res => {
+              resolve(res);
+            });
+      });
     },
     openModel(item) {
       if (item) {

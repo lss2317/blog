@@ -25,6 +25,7 @@ public enum UserEnum {
     EMAIL_IS_EXIST(405, "该邮箱已经注册"),
     PASSWORD_NOT_STANDARD(405, "密码不规范"),
     CODE_NOT_CORRECT(405, "验证码错误"),
+    LOGIN_TYPE_ERROR(405, "登录类型不是邮箱"),
     EMAIL_NOT_REGISTER(405, "该邮箱还未注册");
 
     private final Integer code;

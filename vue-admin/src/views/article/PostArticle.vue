@@ -16,7 +16,10 @@
       </el-button>
     </div>
     <!-- 文章内容 -->
-    <md-editor v-model="article.articleContent" placeholder="开始编辑..." style="display: flex"/>
+    <md-editor
+        v-model="article.articleContent"
+        placeholder="开始编辑..."
+        style="display: flex"/>
 
     <!-- 添加文章对话框 -->
     <el-dialog v-model="addOrEdit" width="40%" top="3vh" title="发布文章">
@@ -200,6 +203,8 @@ import MdEditor from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
 import axios from "axios";
 import {ElNotification} from "element-plus";
+import * as imageConversion from "image-conversion";
+import config from "../../assets/js/config";
 
 export default {
   name: "PostArticle",
@@ -208,7 +213,6 @@ export default {
   },
   data() {
     return {
-      tempCover: "",
       addOrEdit: false,
       classificationName: "",
       tagName: "",
@@ -311,8 +315,18 @@ export default {
         this.addOrEdit = false
       })
     },
-    beforeUpload() {
-      this.tempCover = this.article.articleCover
+    beforeUpload(file) {
+      return new Promise(resolve => {
+        if (file.size / 1024 < config.UPLOAD_SIZE) {
+          resolve(file);
+        }
+        // 压缩到200KB,这里的200就是要压缩的大小,可自定义
+        imageConversion
+            .compressAccurately(file, config.UPLOAD_SIZE)
+            .then(res => {
+              resolve(res);
+            });
+      });
     },
     listTags() {
       axios.get("/api/tag/search", {
@@ -399,15 +413,6 @@ export default {
     },
     uploadCover(response) {
       this.article.articleCover = response
-      if (this.tempCover !== "") {
-        axios.get("/api/files/delete", {
-          params: {
-            key: this.tempCover
-          }
-        }).then(() => {
-          this.article.articleCover = ""
-        })
-      }
     },
   },
   computed: {

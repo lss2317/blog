@@ -208,10 +208,13 @@ export default {
             this.articleViewData.xAxis[0].data.push(item.articleTitle)
           })
         }
+        document.getElementById('chartLineBox').removeAttribute('_echarts_instance_')
+        document.getElementById('articleViewData').removeAttribute('_echarts_instance_')
+        document.getElementById('articleCountData').removeAttribute('_echarts_instance_')
         // 指定图表的配置项和数据 , setOption()方法使刚指定的配置项和数据显示图表。
-        echarts.init(document.getElementById('chartLineBox')).setOption(this.viewsData); //一周访问量
-        echarts.init(document.getElementById('articleViewData')).setOption(this.articleViewData) //文章浏览量排行
-        echarts.init(document.getElementById('articleCountData')).setOption(this.articleCountData) //文章分类统计
+        echarts.init(document.getElementById('chartLineBox')).setOption(this.viewsData, true); //一周访问量
+        echarts.init(document.getElementById('articleViewData')).setOption(this.articleViewData, true) //文章浏览量排行
+        echarts.init(document.getElementById('articleCountData')).setOption(this.articleCountData, true) //文章分类统计
         this.loading = false
       })
     }

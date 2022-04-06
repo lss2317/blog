@@ -31,8 +31,15 @@ export default {
                 if (res.data.code === 200) {
                   //保存登录状态
                   that.$store.commit("login", res.data.data);
-                  that.$toast({type: "success", message: res.data.message});
                   window.localStorage.setItem("login_request_token", res.data.data.ipAddress)
+                  if (res.data.data.email == null) {
+                    that.$toast({
+                      type: "warnning",
+                      message: "请绑定邮箱以便及时收到回复"
+                    });
+                  } else {
+                    that.$toast({type: "success", message: res.data.message});
+                  }
                 } else {
                   that.$toast({type: "error", message: res.data.message});
                 }
@@ -53,8 +60,15 @@ export default {
             if (res.data.code === 200) {
               //保存登录状态
               that.$store.commit("login", res.data.data);
-              that.$toast({type: "success", message: res.data.message});
               window.localStorage.setItem("login_request_token", res.data.data.ipAddress)
+              if (res.data.data.email == null) {
+                that.$toast({
+                  type: "warnning",
+                  message: "请绑定邮箱以便及时收到回复"
+                });
+              } else {
+                that.$toast({type: "success", message: res.data.message});
+              }
             } else {
               that.$toast({type: "error", message: res.data.message});
             }

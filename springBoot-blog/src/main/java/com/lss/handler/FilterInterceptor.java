@@ -3,14 +3,11 @@ package com.lss.handler;
 import com.alibaba.fastjson.JSONObject;
 import com.lss.constant.RedisPrefixConst;
 import com.lss.service.RedisService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Filter拦截器

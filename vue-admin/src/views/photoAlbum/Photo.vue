@@ -119,6 +119,7 @@
             list-type="picture-card"
             :file-list="uploadList"
             multiple
+            :before-upload="beforeUpload"
             :on-success="upload"
             :on-remove="handleRemove"
         >
@@ -132,6 +133,7 @@
               drag
               action="/api/files/upload"
               multiple
+              :before-upload="beforeUpload"
               :on-success="upload"
               :show-file-list="false"
           >
@@ -224,7 +226,9 @@
 
 <script>
 import axios from "axios";
+import config from "../../assets/js/config";
 import {ElMessageBox, ElNotification} from "element-plus";
+import * as imageConversion from 'image-conversion'
 
 export default {
   name: "Photo",
@@ -282,6 +286,19 @@ export default {
     },
     upload(response) {
       this.uploadList.push({url: response})
+    },
+    beforeUpload(file) {
+      return new Promise(resolve => {
+        if (file.size / 1024 < config.UPLOAD_SIZE) {
+          resolve(file);
+        }
+        // 压缩到200KB,这里的200就是要压缩的大小,可自定义
+        imageConversion
+            .compressAccurately(file, config.UPLOAD_SIZE)
+            .then(res => {
+              resolve(res);
+            });
+      });
     },
     handleRemove(file) {
       axios.get("/api/files/delete", {

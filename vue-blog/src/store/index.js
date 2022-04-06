@@ -19,6 +19,7 @@ export default new Vuex.Store({
         intro: null,
         email: null,
         webSite: null,
+        loginType: null,
         articleLikeSet: [],
         commentLikeSet: [],
         talkLikeSet: [],

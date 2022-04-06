@@ -9,7 +9,7 @@
       <router-view :key="$route.fullPath"></router-view>
     </v-main>
     <!-- 页脚 -->
-    <Footer style="z-index: -1"></Footer>
+    <Footer style="z-index: 1"></Footer>
     <!-- 返回顶部 -->
     <BackTop></BackTop>
     <!-- 搜索模态框 -->
@@ -67,10 +67,9 @@ export default {
       return this.$store.state.blogInfo;
     },
     isMobile() {
-      const flag = navigator.userAgent.match(
+      return navigator.userAgent.match(
           /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
       );
-      return flag;
     }
   }
 };

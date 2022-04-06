@@ -246,23 +246,26 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             userId = comment.getReplyUserId();
         }
         String email = userService.getById(userId).getEmail();
-        if (StringUtils.isNotBlank(email)) {
-            // 发送消息
-            JSONObject json = new JSONObject();
-            if (comment.getIsReview().equals(0)) {
-                // 评论提醒
-                json.put("email", email);
-                json.put("subject", "评论提醒");
-                // 获取评论路径
-                json.put("content", "您收到了一条新的回复，请前往" + url + "\n页面查看");
-            } else {
-                // 管理员审核提醒
-                String adminEmail = userService.getById(1).getEmail();
-                json.put("email", adminEmail);
-                json.put("subject", "审核提醒");
-                json.put("content", "您收到了一条新的回复，请前往后台管理页面审核");
+        //用户有邮箱再发送邮件通知
+        if (email != null) {
+            if (StringUtils.isNotBlank(email)) {
+                // 发送消息
+                JSONObject json = new JSONObject();
+                if (comment.getIsReview().equals(0)) {
+                    // 评论提醒
+                    json.put("email", email);
+                    json.put("subject", "评论提醒");
+                    // 获取评论路径
+                    json.put("content", "您收到了一条新的回复，请前往" + url + "\n页面查看");
+                } else {
+                    // 管理员审核提醒
+                    String adminEmail = userService.getById(1).getEmail();
+                    json.put("email", adminEmail);
+                    json.put("subject", "审核提醒");
+                    json.put("content", "您收到了一条新的回复，请前往后台管理页面审核");
+                }
+                rabbitTemplate.convertAndSend(MQPrefixConst.EMAIL_EXCHANGE, "*", new Message(JSON.toJSONBytes(json), new MessageProperties()));
             }
-            rabbitTemplate.convertAndSend(MQPrefixConst.EMAIL_EXCHANGE, "*", new Message(JSON.toJSONBytes(json), new MessageProperties()));
         }
     }
 }

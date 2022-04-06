@@ -260,6 +260,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (user == null) {
             return Result.getUserResult(null, UserEnum.EMAIL_NOT_REGISTER);
         }
+        if (user.getLoginType() != 1) {
+            return Result.getUserResult(null, UserEnum.LOGIN_TYPE_ERROR);
+        }
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", user.getId());
         updateWrapper.set("password", json.getString("password"));
@@ -307,16 +310,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         //查询该邮箱是否已经注册
         User user = this.getOne(new LambdaQueryWrapper<User>()
-                .select(User::getId).eq(User::getUsername, json.getString("email"))
+                .select(User::getId).eq(User::getEmail, json.getString("email"))
         );
         if (user != null) {
             return Result.getUserResult(null, UserEnum.EMAIL_IS_EXIST);
         }
-        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("id", json.get("id"));
-        updateWrapper.set("email", json.getString("email"));
-        updateWrapper.set("username", json.getString("email"));
-        this.update(updateWrapper);
+            UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("id", json.get("id"));
+            updateWrapper.set("email", json.getString("email"));
+            updateWrapper.set("username", json.getString("email"));
+            this.update(updateWrapper);
         return Result.getUserResult(null, UserEnum.UPDATE_ROLE_SUCCESS);
     }
 }

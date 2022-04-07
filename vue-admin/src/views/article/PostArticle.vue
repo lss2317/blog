@@ -19,6 +19,7 @@
     <md-editor
         v-model="article.articleContent"
         placeholder="开始编辑..."
+        @onUploadImg="onUploadImg"
         style="display: flex"/>
 
     <!-- 添加文章对话框 -->
@@ -255,6 +256,35 @@ export default {
     }
   },
   methods: {
+    async onUploadImg(files, callback) {
+      const res = await Promise.all(
+          Array.from(files).map((file) => {
+            return new Promise((rev, rej) => {
+              const form = new FormData();
+              if (file.size / 1024 < config.UPLOAD_SIZE) {
+                form.append('file', file);
+                axios.post('/api/files/upload', form, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data'
+                  }
+                }).then((res) => rev(res))
+                    .catch((error) => rej(error));
+              } else {
+                imageConversion.compressAccurately(file, config.UPLOAD_SIZE).then(res => {
+                  form.append("file", new window.File([res], file.name, {type: file.type}));
+                  axios.post('/api/files/upload', form, {
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }
+                  }).then((res) => rev(res))
+                      .catch((error) => rej(error));
+                })
+              }
+            });
+          })
+      );
+      callback(res.map(item => item.data));
+    },
     dateTypeFormat(fmt, date) {
       let ret
       const opt = {

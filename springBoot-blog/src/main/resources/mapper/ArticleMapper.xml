@@ -225,9 +225,11 @@
                a.original_url,
                a.create_time,
                a.update_time,
-               a.id AS classId,
+               (SELECT cls.id
+                FROM blog_class AS cls
+                WHERE cls.classification_name = a.classification_name) AS classId,
                a.classification_name,
-               t.id AS tag_id,
+               t.id                                                    AS tag_id,
                t.tag_name
         FROM blog_article a
                  JOIN blog_class c ON a.classification_name = c.classification_name

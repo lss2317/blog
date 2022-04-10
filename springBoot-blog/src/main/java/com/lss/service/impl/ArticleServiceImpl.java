@@ -97,11 +97,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             //修改标签
             List<String> tagNames = article.getTagNames();
             List<TagAndArticle> list = tagAndArticleService.list(new QueryWrapper<TagAndArticle>().eq("article_id", article.getId()));
-            for (int i = 0; i < list.size(); i++) {
-                UpdateWrapper<TagAndArticle> wrapper = new UpdateWrapper<>();
-                wrapper.eq("id", list.get(i).getId());
-                wrapper.set("tag_name", tagNames.get(i));
-                tagAndArticleService.update(wrapper);
+            for (TagAndArticle t : list) {
+                tagAndArticleService.removeById(t.getId());
+            }
+            for (String tagName : tagNames) {
+                TagAndArticle tagAndArticle = new TagAndArticle();
+                tagAndArticle.setArticleId(article.getId());
+                tagAndArticle.setTagName(tagName);
+                tagAndArticleService.save(tagAndArticle);
             }
             if (!update) {
                 return Result.getArticleResult(null, ArticleEnum.MODIFY_ARTICLE_ERROR);

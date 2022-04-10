@@ -92,6 +92,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set("last_login_time", new Date());
         updateWrapper.eq("id", select.getId());
+        String ipAddress = IpUtils.getIpAddress(request);
+        updateWrapper.set("ip_address", ipAddress);
+        updateWrapper.set("ip_source", IpUtils.getIpSource(ipAddress));
         this.update(updateWrapper);
         JSONObject json = new JSONObject();
         String token = JWTUtils.createToken(select.getId() + "", select.getUsername());

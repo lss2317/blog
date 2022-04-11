@@ -36,6 +36,8 @@
 
 **Github地址：** [https://github.com/lss2317/blog](https://github.com/lss2317/blog)
 
+**Gitee地址：** [https://gitee.com/lss2084447140/blog](https://gitee.com/lss2084447140/blog)
+
 ## 目录结构
 
 前端项目位于为vue-blog和vue-admin，blog为前台，admin为后台。

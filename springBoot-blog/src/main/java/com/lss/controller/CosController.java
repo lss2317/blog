@@ -13,6 +13,7 @@ import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
 import com.qcloud.cos.transfer.TransferManager;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,6 +73,31 @@ public class CosController {
             tb.printStackTrace();
             //返回默认图片
             return "上传失败";
+        }
+        return cosConfigProperties.getUrl() + key;
+    }
+
+    /**
+     * 上传音频到COS储存
+     */
+    public String uploadVoice(MultipartFile file) {
+        String key;
+        try {
+            // 获取文件名
+            String fileName = file.getOriginalFilename();
+            // 获取文件后缀
+            String prefix = fileName.substring(fileName.lastIndexOf("."));
+            String uuid = UUID.randomUUID().toString();
+            File tempFile = File.createTempFile(uuid, prefix);
+            file.transferTo(tempFile);
+            // 指定文件上传到 COS 上的路径，即对象键。例如对象键为folder/picture.jpg，则表示将文件 picture.jpg 上传到 folder 路径下
+            key = "voice/" + uuid + prefix;
+            PutObjectRequest putObjectRequest = new PutObjectRequest(cosConfigProperties.getBucketName(), key, tempFile);
+            PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
+        } catch (Throwable tb) {
+            tb.printStackTrace();
+            //返回默认
+            return "发送失败";
         }
         return cosConfigProperties.getUrl() + key;
     }

@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.lss.annotation.OptLog;
 import com.lss.common.Result;
 import com.lss.constant.OptTypeConst;
+import com.lss.entity.ChatRecord;
 import com.lss.entity.WebsiteConfig;
 import com.lss.service.BlogInfoService;
+import com.lss.service.impl.WebSocketServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -22,6 +24,8 @@ public class BlogInfoController {
 
     @Resource
     BlogInfoService blogInfoService;
+    @Resource
+    WebSocketServiceImpl webSocketService;
 
 
     /**
@@ -82,10 +86,21 @@ public class BlogInfoController {
 
     /**
      * 获取后台主页信息
+     *
      * @return json数据
      */
     @GetMapping("adminBlogInfo")
-    public JSONObject getBlogBackInfo(){
+    public JSONObject getBlogBackInfo() {
         return blogInfoService.getBlogBackInfo();
+    }
+
+    /**
+     * 保存语音信息
+     *
+     * @param chatRecord 语音信息
+     */
+    @PostMapping("/voice")
+    public void sendVoice(ChatRecord chatRecord) {
+        webSocketService.sendVoice(chatRecord);
     }
 }

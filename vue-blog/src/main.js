@@ -36,12 +36,17 @@ Vue.filter("date", function (value) {
     return moment(value).format("YYYY-MM-DD");
 });
 
+Vue.filter('hour',function (value){
+    return moment(value).format("HH:mm:ss")
+});
+
 Vue.filter("num", function (value) {
     if (value >= 1000) {
         return (value / 1000).toFixed(1) + "k";
     }
     return value;
 });
+
 
 axios.interceptors.request.use(config => {
         if (localStorage.getItem("login_request_token")) {

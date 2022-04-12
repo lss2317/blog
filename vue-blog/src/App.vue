@@ -22,6 +22,9 @@
     <ForgetModel></ForgetModel>
     <!-- 绑定邮箱模态框 -->
     <EmailModel></EmailModel>
+
+    <!-- 聊天室 -->
+    <ChatRoom v-if="blogInfo.websiteConfig.isChatRoom === 1" style="z-index: 100000"></ChatRoom>
   </v-app>
 </template>
 
@@ -35,6 +38,9 @@ import LoginModel from "./components/model/LoginModel";
 import RegisterModel from "./components/model/RegisterModel";
 import ForgetModel from "./components/model/ForgetModel";
 import EmailModel from "@/components/model/EmailModel";
+import ChatRoom from "@/components/ChatRoom";
+import {L2Dwidget} from 'live2d-widget'
+
 
 export default {
   components: {
@@ -46,14 +52,35 @@ export default {
     LoginModel,
     RegisterModel,
     ForgetModel,
-    EmailModel
+    EmailModel,
+    ChatRoom
   },
   created() {
     this.getBlogInfo();
     this.axios.get("/api/blogInfo/report")
-    if (this.$store.state.userId === null){
+    if (this.$store.state.userId === null) {
       window.localStorage.removeItem("login_request_token")
     }
+    const Live = document.createElement('script');
+    Live.src = "https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js";
+    //Live.src = "../public/live2dw/lib/L2Dwidget.min.js"
+    Live.onload = function () {
+      L2Dwidget.init({
+        model: {
+          jsonPath: 'https://cdn.jsdelivr.net/gh/wangsrGit119/wangsr-image-bucket/L2Dwidget/live2d-widget-model-haruto/assets/haruto.model.json',
+          //jsonPath: "../public/live2dw/live2d-widget-model-haruto/assets/haruto.model.json"
+        },
+        display: {vOffset: 10},  //调整大小,和位置
+        dialog: {
+          enable: true,
+          script: {
+            'tap body': '哎呀！别碰我！',
+            'tap face': '人家是在认真写博客哦--前端妹子',
+          }
+        }
+      });
+    };
+    document.body.appendChild(Live);
   },
   methods: {
     getBlogInfo() {

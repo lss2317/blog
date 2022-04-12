@@ -8,15 +8,17 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "NProgress": "^0.2.0",
     "animate.css": "^3.7.2",
     "axios": "^0.19.2",
     "clipboard": "^2.0.6",
     "core-js": "^3.6.4",
     "easy-typer-js": "^2.1.0",
     "highlight.js": "^10.0.3",
+    "live2d-widget": "^3.1.4",
     "markdown-it": "^11.0.0",
     "moment": "^2.26.0",
+    "NProgress": "^0.2.0",
+    "recorderx": "^2.0.2",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
     "vue": "^2.6.11",

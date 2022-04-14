@@ -57,13 +57,14 @@ public class CosController {
     @PostMapping("upload")
     public String upload(MultipartFile file) {
         String key;
+        File tempFile;
         try {
             // 获取文件名
             String fileName = file.getOriginalFilename();
             // 获取文件后缀
             String prefix = fileName.substring(fileName.lastIndexOf("."));
             String uuid = UUID.randomUUID().toString();
-            File tempFile = File.createTempFile(uuid, prefix);
+            tempFile = File.createTempFile(uuid, prefix);
             file.transferTo(tempFile);
             // 指定文件上传到 COS 上的路径，即对象键。例如对象键为folder/picture.jpg，则表示将文件 picture.jpg 上传到 folder 路径下
             key = uuid + prefix;
@@ -74,6 +75,8 @@ public class CosController {
             //返回默认图片
             return "上传失败";
         }
+        //删除文件
+        tempFile.delete();
         return cosConfigProperties.getUrl() + key;
     }
 
@@ -82,13 +85,14 @@ public class CosController {
      */
     public String uploadVoice(MultipartFile file) {
         String key;
+        File tempFile;
         try {
             // 获取文件名
             String fileName = file.getOriginalFilename();
             // 获取文件后缀
             String prefix = fileName.substring(fileName.lastIndexOf("."));
             String uuid = UUID.randomUUID().toString();
-            File tempFile = File.createTempFile(uuid, prefix);
+            tempFile = File.createTempFile(uuid, prefix);
             file.transferTo(tempFile);
             // 指定文件上传到 COS 上的路径，即对象键。例如对象键为folder/picture.jpg，则表示将文件 picture.jpg 上传到 folder 路径下
             key = "voice/" + uuid + prefix;
@@ -99,6 +103,8 @@ public class CosController {
             //返回默认
             return "发送失败";
         }
+        //删除文件
+        tempFile.delete();
         return cosConfigProperties.getUrl() + key;
     }
 

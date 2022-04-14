@@ -345,7 +345,6 @@ export default {
     },
     // 录音开始
     translationStart() {
-      console.log("start...")
       this.voiceActive = true;
       let that = this;
       that.rc = new Recorderx();
@@ -363,7 +362,6 @@ export default {
     },
     // 录音结束
     translationEnd() {
-      console.log("结束");
       this.voiceActive = false;
       this.rc.pause();
       if (new Date() - this.startVoiceTime < 1000) {

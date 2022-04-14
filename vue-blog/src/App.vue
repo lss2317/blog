@@ -39,7 +39,6 @@ import RegisterModel from "./components/model/RegisterModel";
 import ForgetModel from "./components/model/ForgetModel";
 import EmailModel from "@/components/model/EmailModel";
 import ChatRoom from "@/components/ChatRoom";
-import {L2Dwidget} from 'live2d-widget'
 
 
 export default {
@@ -61,26 +60,6 @@ export default {
     if (this.$store.state.userId === null) {
       window.localStorage.removeItem("login_request_token")
     }
-    const Live = document.createElement('script');
-    Live.src = "https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js";
-    //Live.src = "../public/live2dw/lib/L2Dwidget.min.js"
-    Live.onload = function () {
-      L2Dwidget.init({
-        model: {
-          jsonPath: 'https://cdn.jsdelivr.net/gh/wangsrGit119/wangsr-image-bucket/L2Dwidget/live2d-widget-model-haruto/assets/haruto.model.json',
-          //jsonPath: "../public/live2dw/live2d-widget-model-haruto/assets/haruto.model.json"
-        },
-        display: {vOffset: 10},  //调整大小,和位置
-        dialog: {
-          enable: true,
-          script: {
-            'tap body': '哎呀！别碰我！',
-            'tap face': '人家是在认真写博客哦--前端妹子',
-          }
-        }
-      });
-    };
-    document.body.appendChild(Live);
   },
   methods: {
     getBlogInfo() {
@@ -98,6 +77,6 @@ export default {
           /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
       );
     }
-  }
+  },
 };
 </script>

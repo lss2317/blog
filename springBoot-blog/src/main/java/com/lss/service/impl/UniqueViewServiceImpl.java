@@ -60,8 +60,9 @@ public class UniqueViewServiceImpl extends ServiceImpl<UniqueViewMapper, UniqueV
 
     @Override
     public List<UniqueView> listUniqueViews() {
-        DateTime startTime = DateUtil.beginOfDay(DateUtil.offsetDay(new Date(), -7));
+        //-8会导致24点整时出现查询前八天数据的情况
+        DateTime startTime = DateUtil.beginOfDay(DateUtil.offsetDay(new Date(), -8));
         DateTime endTime = DateUtil.endOfDay(new Date());
-        return uniqueViewMapper.listUniqueViews(startTime,endTime);
+        return uniqueViewMapper.listUniqueViews(startTime, endTime);
     }
 }

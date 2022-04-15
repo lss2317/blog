@@ -112,7 +112,7 @@ public class WebSocketServiceImpl {
         switch (Integer.parseInt(json.getString("type"))) {
             case 3:
                 // 发送消息
-                ChatRecord chatRecord = JSONObject.parseObject( json.getString("data"),ChatRecord.class);
+                ChatRecord chatRecord = JSONObject.parseObject(json.getString("data"), ChatRecord.class);
                 // 过滤html标签
                 chatRecord.setContent(HTMLUtils.deleteTag(chatRecord.getContent()));
                 chatRecord.setCreateTime(new Date());
@@ -150,6 +150,8 @@ public class WebSocketServiceImpl {
         // 保存记录
         chatRecord.setCreateTime(new Date());
         chatRecordMapper.insert(chatRecord);
+        //将MultipartFile置null，因为transferTo(dest)方法文件流只可以接收读取一次，传输完毕则关闭流
+        chatRecord.setFile(null);
         // 发送消息
         JSONObject json = new JSONObject();
         json.put("type", 5);

@@ -136,7 +136,7 @@
                   </span>
                   ，
                 </template>
-                <span v-html="reply.commentContent"/>
+                <span class="comment-content" v-html="reply.commentContent"/>
               </p>
             </div>
           </div>
@@ -498,7 +498,8 @@ export default {
 
 .comment-content {
   font-size: 0.875rem;
-  line-height: 1.75;
+  line-height: 20px;
+  display: flex;
   padding-top: 0.625rem;
   white-space: pre-line;
   word-wrap: break-word;

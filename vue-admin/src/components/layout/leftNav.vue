@@ -88,12 +88,6 @@
                 </el-icon>
                 <span slot="title">用户列表</span>
               </el-menu-item>
-              <el-menu-item index="/online" @click="goPage('online')">
-                <el-icon>
-                  <place/>
-                </el-icon>
-                <span slot="title">在线用户</span>
-              </el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
 

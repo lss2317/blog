@@ -278,7 +278,9 @@ export default {
 
 .talk-content {
   margin-top: 8px;
-  font-size: 14px;
+  line-height: 24px;
+  display: flex;
+  font-size: 15px;
   white-space: pre-line;
   word-wrap: break-word;
   word-break: break-all;

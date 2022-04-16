@@ -395,7 +395,34 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .eq(Article::getStatus, 1)
                 .eq(Article::getIsDelete, 0)
                 .like(Article::getArticleTitle, keywords.trim())
+                .or()
+                .like(Article::getArticleContent, keywords.trim())
         );
+        //高亮处理
+        list.forEach(item -> {
+            String articleContent = item.getArticleContent();
+            // 获取关键词第一次出现的位置
+            int index = articleContent.indexOf(keywords.trim());
+            //文字内容高亮
+            if (index != -1) {
+                // 获取关键词前面的文字
+                int preIndex = index > 25 ? index - 25 : 0;
+                String preText = item.getArticleContent().substring(preIndex, index);
+                // 获取关键词到后面的文字
+                int last = index + keywords.length();
+                int postLength = item.getArticleContent().length() - last;
+                int postIndex = postLength > 175 ? last + 175 : last + postLength;
+                String postText = item.getArticleContent().substring(index, postIndex);
+                // 文章内容高亮
+                articleContent = (preText + postText).replaceAll(keywords, "<span style='color:#f47466'>" + keywords + "</span>");
+                item.setArticleContent(articleContent);
+            }
+            //文字标题高亮
+            String articleTitle = item.getArticleTitle().replaceAll(keywords, "<span style='color:#f47466'>" + keywords + "</span>");
+            item.setArticleTitle(articleTitle);
+        });
+
+
         return Result.getArticleResult(list, ArticleEnum.SEARCH_ARTICLE_SUCCESS);
     }
 

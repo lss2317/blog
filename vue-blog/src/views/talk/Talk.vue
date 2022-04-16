@@ -312,7 +312,10 @@ export default {
 
 .talk-content {
   margin-top: 8px;
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 24px;
+  display: flex;
+  vertical-align: middle;
   white-space: pre-line;
   word-wrap: break-word;
   word-break: break-all;

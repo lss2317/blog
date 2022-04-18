@@ -9,6 +9,14 @@
       />
       <el-button
           type="danger"
+          class="save-btn"
+          @click="saveArticleDraft"
+          v-if="article.id == null || article.status === 3"
+      >
+        保存草稿
+      </el-button>
+      <el-button
+          type="danger"
           @click="openModel"
           style="margin-left:10px"
       >
@@ -206,6 +214,7 @@ import axios from "axios";
 import {ElNotification} from "element-plus";
 import * as imageConversion from "image-conversion";
 import config from "../../assets/js/config";
+import store from '../../store'
 
 export default {
   name: "PostArticle",
@@ -253,6 +262,10 @@ export default {
       axios.get("/api/article/admin/" + this.$route.params.articleId).then(res => {
         this.article = res.data.data
       })
+    } else {
+      if (store.state.draft === true) {
+        this.article = store.state.article
+      }
     }
   },
   methods: {
@@ -341,6 +354,9 @@ export default {
             title: "失败",
             message: res.data.message
           })
+        }
+        if (this.article.id === null) {
+          store.commit("dropDraft")
         }
         this.addOrEdit = false
       })
@@ -444,6 +460,13 @@ export default {
     uploadCover(response) {
       this.article.articleCover = response
     },
+    saveArticleDraft() {
+      store.commit('saveDraft', this.article)
+      ElNotification.success({
+        title: "成功",
+        message: "保存草稿成功"
+      })
+    }
   },
   computed: {
     tagClass() {

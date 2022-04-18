@@ -146,11 +146,6 @@ export default {
       this.uploadList.push({url: response});
     },
     handleRemove(file) {
-      axios.get("/api/files/delete", {
-        params: {
-          key: file.url
-        }
-      })
       this.uploadList.forEach((item, index) => {
         if (item.url === file.url) {
           this.uploadList.splice(index, 1);
@@ -171,7 +166,6 @@ export default {
       });
     },
     saveOrUpdateTalk() {
-      console.log(this.uploadList)
       if (this.talk.content.trim() === "") {
         this.$message.error("说说内容不能为空");
         return false;

@@ -111,10 +111,10 @@ springboot-blog
 
 ## 项目截图
 
-![home.png](https://www.staic.lsstop.com/introduce/home.png)
+![home.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/home.png)
 
-![article.png](https://www.staic.lsstop.com/introduce/article.png)
+![article.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/article.png)
 
-![admin.png](https://www.staic.lsstop.com/introduce/admin.png)
+![admin.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/admin.png)
 
-![talk.png](https://www.staic.lsstop.com/introduce/talk.png)
+![talk.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/talk.png)

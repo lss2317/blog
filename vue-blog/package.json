@@ -14,6 +14,7 @@
     "core-js": "^3.6.4",
     "easy-typer-js": "^2.1.0",
     "highlight.js": "^10.0.3",
+    "jquery": "^3.6.0",
     "live2d-widget": "^3.1.4",
     "markdown-it": "^11.0.0",
     "moment": "^2.26.0",

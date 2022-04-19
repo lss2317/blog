@@ -22,7 +22,8 @@
     <ForgetModel></ForgetModel>
     <!-- 绑定邮箱模态框 -->
     <EmailModel></EmailModel>
-
+    <!--音乐播放器-->
+    <player style="z-index: 100000" v-if="blogInfo.websiteConfig.isMusicPlayer === 1 && !isMobile" ></player>
     <!-- 聊天室 -->
     <ChatRoom v-if="blogInfo.websiteConfig.isChatRoom === 1" style="z-index: 100000"></ChatRoom>
   </v-app>
@@ -39,6 +40,7 @@ import RegisterModel from "./components/model/RegisterModel";
 import ForgetModel from "./components/model/ForgetModel";
 import EmailModel from "@/components/model/EmailModel";
 import ChatRoom from "@/components/ChatRoom";
+import player from "@/components/zw-player";
 
 
 export default {
@@ -52,7 +54,8 @@ export default {
     RegisterModel,
     ForgetModel,
     EmailModel,
-    ChatRoom
+    ChatRoom,
+    player
   },
   created() {
     this.getBlogInfo();

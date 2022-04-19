@@ -461,6 +461,14 @@ export default {
       this.article.articleCover = response
     },
     saveArticleDraft() {
+      if (this.article.articleTitle.trim() === "") {
+        this.$message.error("文章标题不能为空");
+        return false;
+      }
+      if (this.article.articleContent.trim() === "") {
+        this.$message.error("文章内容不能为空");
+        return false;
+      }
       store.commit('saveDraft', this.article)
       ElNotification.success({
         title: "成功",

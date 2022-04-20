@@ -84,7 +84,7 @@ springboot-blog
 - [x] L2Dwidget添加动漫人物
 - [x] 搜索文章支持高亮分词，响应速度快。
 - [x] 在线聊天室，支持撤回、语音输入、统计未读数量等功能。
-- [ ] 添加音乐播放器，支持在线搜索歌曲。
+- [x] 添加音乐播放器，支持在线搜索歌曲。
 
 ## 技术介绍
 
@@ -111,10 +111,10 @@ springboot-blog
 
 ## 项目截图
 
-![home.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/home.png)
+![home.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/blog-home.png)
 
 ![article.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/article.png)
 
-![admin.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/admin.png)
+![admin.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/admin-home.png)
 
 ![talk.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/talk.png)

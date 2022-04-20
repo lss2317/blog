@@ -170,7 +170,7 @@
                   v-for="(item, index) in musicWords"
                   :key="index"
                   class="music_word"
-                  :class="{ word_highlight: wordIndex == index }"
+                  :class="{ word_highlight: wordIndex === index }"
               >
                 {{ item }}
               </li>
@@ -278,7 +278,7 @@ export default {
     this.Player();
   },
   created() {
-    this._getMusicType(3778678);
+    this._getMusicType(3779629);
     this.DisAuthorInfo(); //禁删~感谢配合
   },
   computed: {

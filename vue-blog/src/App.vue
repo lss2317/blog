@@ -40,7 +40,7 @@ import RegisterModel from "./components/model/RegisterModel";
 import ForgetModel from "./components/model/ForgetModel";
 import EmailModel from "@/components/model/EmailModel";
 import ChatRoom from "@/components/ChatRoom";
-import player from "@/components/zw-player";
+import player from "./components/zw-player/player";
 
 
 export default {

@@ -111,7 +111,7 @@ springboot-blog
 
 ## 项目截图
 
-![home.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/blog-home.png)
+![home.png](https://www.staic.lsstop.com//introduce/blog-home.png)
 
 ![article.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/article.png)
 

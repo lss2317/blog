@@ -23,7 +23,7 @@
     <!-- 绑定邮箱模态框 -->
     <EmailModel></EmailModel>
     <!--音乐播放器-->
-    <player style="z-index: 100000" v-if="blogInfo.websiteConfig.isMusicPlayer === 1 && !isMobile" ></player>
+    <player style="z-index: 100000" v-if="blogInfo.websiteConfig.isMusicPlayer === 1 && !isMobile"></player>
     <!-- 聊天室 -->
     <ChatRoom v-if="blogInfo.websiteConfig.isChatRoom === 1" style="z-index: 100000"></ChatRoom>
   </v-app>
@@ -62,6 +62,19 @@ export default {
     this.axios.get("/api/blogInfo/report")
     if (this.$store.state.userId === null) {
       window.localStorage.removeItem("login_request_token")
+    } else {
+      this.axios.post("/api/blogInfo/getLikes").then(res => {
+        console.log(res.data)
+        if (res.data.talkLikeSet !== null) {
+          this.$store.state.talkLikeSet = res.data.talkLikeSet
+        }
+        if (res.data.commentLikeSet !== null) {
+          this.$store.state.commentLikeSet = res.data.commentLikeSet
+        }
+        if (res.data.articleLikeSet !== null) {
+          this.$store.state.articleLikeSet = res.data.articleLikeSet
+        }
+      })
     }
   },
   methods: {

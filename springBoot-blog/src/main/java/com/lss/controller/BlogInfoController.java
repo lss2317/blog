@@ -103,4 +103,12 @@ public class BlogInfoController {
     public void sendVoice(ChatRecord chatRecord) {
         webSocketService.sendVoice(chatRecord);
     }
+
+    /**
+     * 获取登录用户点赞数据
+     */
+    @PostMapping("getLikes")
+    public JSONObject getLikes() {
+        return blogInfoService.getLikes();
+    }
 }

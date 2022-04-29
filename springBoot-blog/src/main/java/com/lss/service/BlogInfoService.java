@@ -59,4 +59,11 @@ public interface BlogInfoService extends IService<WebsiteConfig> {
      * @return 博客后台信息
      */
     JSONObject getBlogBackInfo();
+
+    /**
+     * 获取登录用户的点赞数据
+     *
+     * @return 数据结构
+     */
+    JSONObject getLikes();
 }

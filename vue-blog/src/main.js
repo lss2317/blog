@@ -49,7 +49,7 @@ Vue.filter("num", function (value) {
 
 
 axios.interceptors.request.use(config => {
-        if (localStorage.getItem("login_request_token")) {
+        if (localStorage.getItem("login_request_token") && config.url.indexOf("https://n.xlz122.cn") === -1) {
             config.headers['token'] = localStorage.getItem("login_request_token")
         }
         return config

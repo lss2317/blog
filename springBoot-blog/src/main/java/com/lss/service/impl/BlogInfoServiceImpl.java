@@ -182,6 +182,28 @@ public class BlogInfoServiceImpl extends ServiceImpl<BlogInfoMapper, WebsiteConf
         return json;
     }
 
+    @Override
+    public JSONObject getLikes() {
+        JSONObject json = new JSONObject();
+        try {
+            String token = request.getHeader("token");
+            Claims claims = JWTUtils.parseToken(token);
+            Object id = claims.get("id");
+            //获取点赞说说id的set集合
+            Set<Object> setTalkLikes = redisService.sMembers(RedisPrefixConst.TALK_USER_LIKE + id);
+            json.put("talkLikeSet", setTalkLikes);
+            //获取点赞评论id的set集合
+            Set<Object> setCommentLikes = redisService.sMembers(RedisPrefixConst.COMMENT_USER_LIKE + id);
+            json.put("commentLikeSet", setCommentLikes);
+            //获取点赞文章id的set集合
+            Set<Object> articleLikeSet = redisService.sMembers(RedisPrefixConst.ARTICLE_USER_LIKE + id);
+            json.put("articleLikeSet", articleLikeSet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
     /**
      * 查询文章排行
      *
@@ -206,7 +228,7 @@ public class BlogInfoServiceImpl extends ServiceImpl<BlogInfoMapper, WebsiteConf
         list.sort(new Comparator<Article>() {
             @Override
             public int compare(Article o1, Article o2) {
-                return o2.getViewsCount()-o1.getViewsCount();
+                return o2.getViewsCount() - o1.getViewsCount();
             }
         });
         return list;

@@ -4,6 +4,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +32,8 @@ public class JWTUtils {
      * 生成token
      */
     public static String createToken(String id, String username) {
+        //获取加密后的密钥
+        SecretKey secretKey = generalKey();
         //Jwt头
         Map<String, Object> header = new HashMap<>();
         header.put("typ", "JWT");
@@ -47,13 +52,22 @@ public class JWTUtils {
                 //设定签发时间
                 .setIssuedAt(new Date())
                 //使用HS256算法签名，PRIVATE_KEY为签名密钥
-                .signWith(SignatureAlgorithm.HS256, PRIVATE_KEY)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+    }
+
+    /**
+     * 生成加密后的秘钥 secretKey
+     */
+    private static SecretKey generalKey() {
+        byte[] encodedKey = Base64.getDecoder().decode(JWTUtils.PRIVATE_KEY);
+        return new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
     }
 
     //解析token
     public static Claims parseToken(String token) {
-        return Jwts.parser().setSigningKey(PRIVATE_KEY) //设置签名密钥为yyh
+        SecretKey secretKey = generalKey();
+        return Jwts.parser().setSigningKey(secretKey) //设置签名密钥为yyh
                 .parseClaimsJws(token).getBody();
     }
 

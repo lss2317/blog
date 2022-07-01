@@ -10,6 +10,8 @@ import com.lss.enums.UserEnum;
 import com.lss.service.UserService;
 import com.lss.strategy.QQLoginStrategy;
 import com.lss.strategy.WeiBoLoginStrategy;
+import com.lss.utils.JWTUtils;
+import io.jsonwebtoken.Claims;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -203,4 +205,19 @@ public class UserController {
     public Result<?> email(@RequestBody JSONObject json) {
         return userService.email(json);
     }
+
+    /**
+     * 验证token令牌
+     */
+    @GetMapping("token")
+    public Result<?> token() {
+        try {
+            String token = request.getHeader("token");
+            JWTUtils.parseToken(token);
+        } catch (Exception e) {
+            return new Result<>(500,"请重新登录");
+        }
+        return new Result<>(200, "操作成功");
+    }
+
 }

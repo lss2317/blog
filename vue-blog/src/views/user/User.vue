@@ -76,7 +76,19 @@ export default {
     };
   },
   methods: {
+    verificationToken() {
+      this.axios.get("/api/user/token").then(res => {
+        if (res.data.code === 500) {
+          this.$store.commit("logout");
+          window.localStorage.removeItem("login_request_token")
+          this.$router.go(-1);
+          this.$toast({type: "error", message: "请重新登录"});
+          return false;
+        }
+      })
+    },
     updateUserInfo() {
+      this.verificationToken()
       this.axios.post("/api/user/updateInfo", this.userInfo).then(res => {
         if (res.data.code === 200) {
           this.$store.commit("updateUserInfo", this.userInfo);
@@ -87,6 +99,7 @@ export default {
       });
     },
     uploadAvatar(data) {
+      this.verificationToken()
       axios.put("/api/user/changeAvatar", {
         avatar: data
       }).then(res => {

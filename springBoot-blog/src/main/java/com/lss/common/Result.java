@@ -1,9 +1,7 @@
 package com.lss.common;
 
 import com.lss.enums.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @author lss
@@ -11,8 +9,6 @@ import lombok.NoArgsConstructor;
  * 数据封装类，用于返回数据给前端
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Result<T> {
     /**
      * 状态码
@@ -26,6 +22,14 @@ public class Result<T> {
      * 返回信息
      */
     private String message;
+
+    public Result() {
+    }
+
+    public Result(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
 
     /**
      * 标签管理

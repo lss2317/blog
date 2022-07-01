@@ -199,7 +199,7 @@ public class BlogInfoServiceImpl extends ServiceImpl<BlogInfoMapper, WebsiteConf
             Set<Object> articleLikeSet = redisService.sMembers(RedisPrefixConst.ARTICLE_USER_LIKE + id);
             json.put("articleLikeSet", articleLikeSet);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
         return json;
     }

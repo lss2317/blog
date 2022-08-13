@@ -55,7 +55,7 @@ spring:
 cos:
   #桶的名称
   bucketName: COS桶名称
-  #区域,上海则shanghai
+  #区域,上海则ap-shanghai
   region: 区域
   #APPID
   appId: APPID

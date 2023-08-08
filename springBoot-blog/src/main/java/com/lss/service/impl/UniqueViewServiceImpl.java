@@ -47,6 +47,7 @@ public class UniqueViewServiceImpl extends ServiceImpl<UniqueViewMapper, UniqueV
         }
         view.setCreateTime(LocalDateTimeUtil.offset(LocalDateTime.now(ZoneId.of("Asia/Shanghai")), -1, ChronoUnit.DAYS));
         this.save(view);
+        redisService.set(RedisPrefixConst.BLOG_VIEWS_COUNT,uniqueViewMapper.viewsSum());
     }
 
     /**

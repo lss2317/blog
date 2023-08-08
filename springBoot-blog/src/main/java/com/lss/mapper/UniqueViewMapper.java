@@ -3,6 +3,7 @@ package com.lss.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lss.entity.UniqueView;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
 import java.util.List;
@@ -23,4 +24,7 @@ public interface UniqueViewMapper extends BaseMapper<UniqueView> {
      * @return 用户量
      */
     List<UniqueView> listUniqueViews(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+
+    @Select("SELECT SUM(views_count) FROM blog_unique_view")
+    Integer viewsSum();
 }

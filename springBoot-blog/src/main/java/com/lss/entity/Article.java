@@ -37,30 +37,37 @@ public class Article {
      * 文章图片
      */
     private String articleCover;
+
     /**
      * 文章标题
      */
     private String articleTitle;
+
     /**
      * 文章内容
      */
     private String articleContent;
+
     /**
      * 文章类型 1原创 2转载 3翻译
      */
     private Integer type;
+
     /**
      * 原文链接
      */
     private String originalUrl;
+
     /**
      * 是否置顶 0否 1是
      */
     private Integer isTop;
+
     /**
      * 是否删除 0否 1是
      */
     private Integer isDelete;
+
     /**
      * 状态值 1公开 2私密 3评论可见
      */

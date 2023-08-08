@@ -10,6 +10,7 @@ import lombok.Data;
  */
 @Data
 public class Result<T> {
+
     /**
      * 状态码
      */

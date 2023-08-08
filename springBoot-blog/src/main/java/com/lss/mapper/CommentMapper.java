@@ -1,8 +1,6 @@
 package com.lss.mapper;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lss.common.Result;
 import com.lss.entity.Comment;
 import org.apache.ibatis.annotations.Param;
 

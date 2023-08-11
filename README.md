@@ -2,9 +2,10 @@
 
 <p align=center>
   <a href="https://lsstop.com">
-    <img src="https://blog-1307541812.cos.ap-shanghai.myqcloud.com/b1cd90ef-9bcf-406e-88f5-2beedbd116e0.jpeg" alt="阿圣的个人博客" style="border-radius: 50%">
+    <img src="https://blog-1307541812.cos.ap-shanghai.myqcloud.com/favicon.jpg" alt="阿圣的个人博客" style="border-radius: 50%">
   </a>
 </p>
+
 
 
 <p align=center>

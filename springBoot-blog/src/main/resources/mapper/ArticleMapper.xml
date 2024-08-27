@@ -136,8 +136,7 @@
         WHERE is_delete = 0
           AND status = 1
         ORDER BY create_time DESC
-            LIMIT #{current}
-               , #{pageSize}
+        LIMIT #{current} , #{pageSize}
     </select>
 
     <resultMap id="conditionList" type="com.lss.entity.Article">
@@ -194,7 +193,8 @@
              ) t2
                  JOIN blog_article a ON t2.article_id = a.id
         WHERE a.is_delete = 0
-        ORDER BY is_top DESC, id DESC LIMIT 6
+        ORDER BY is_top DESC, id DESC
+        LIMIT 6
     </select>
 
     <resultMap id="articleResultMap" type="com.lss.entity.Article">

@@ -45,7 +45,7 @@
 
 后端项目位于springboot-blog下。
 
-SQL文件位于根目录下的**blog_lss.sql**，需要MYSQL8以上版本。
+SQL文件位于根目录下的**blog.sql**，需要MYSQL8以上版本。
 
 可直接导入该项目于本地，修改后端配置文件中的数据库等连接信息，项目中使用到的关于腾讯云功能和第三方授权登录等需要自行开通。
 
@@ -61,7 +61,7 @@ springboot-blog
 ├── controller    --  控制器模块
 ├── entity        --  实体类模块
 ├── enums         --  枚举模块,反馈信息给前端
-├── handler       --  处理器模块(Filter拦截器配置)
+├── handler       --  处理器模块(Interceptor拦截器配置)
 ├── mapper        --  框架核心模块
 ├── service       --  服务模块
 ├── strategy      --  策略模块（第三方登录）
@@ -112,7 +112,7 @@ springboot-blog
 
 ## 项目截图
 
-![home.png](https://www.staic.lsstop.com//introduce/blog-home.png)
+![https://blog-1307541812.cos.ap-shanghai.myqcloud.com/blog-home.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/blog-home.png)
 
 ![article.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/article.png)
 

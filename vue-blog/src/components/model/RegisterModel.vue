@@ -77,10 +77,10 @@ export default {
     sendCode() {
       const that = this;
       // eslint-disable-next-line no-undef
-      let captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function (
-          res
-      ) {
-        if (res.ret === 0) {
+      // let captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function (
+      //     res
+      // ) {
+      //   if (res.ret === 0) {
           //发送邮件
           that.countDown();
           that.axios
@@ -94,10 +94,10 @@ export default {
                   that.$toast({type: "error", message: "发送失败,请稍后再试"});
                 }
               });
-        }
-      });
-      // 显示验证码
-      captcha.show();
+      //   }
+      // });
+      // // 显示验证码
+      // captcha.show();
     },
     countDown() {
       this.flag = true;

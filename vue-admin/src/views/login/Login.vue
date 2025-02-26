@@ -67,10 +67,10 @@ export default {
         if (valid) {
           const that = this;
           // eslint-disable-next-line no-undef
-          const captcha = new TencentCaptcha(
-              config.TENCENT_CAPTCHA,
-              function (res) {
-                if (res.ret === 0) {
+          // const captcha = new TencentCaptcha(
+          //     config.TENCENT_CAPTCHA,
+          //     function (res) {
+          //       if (res.ret === 0) {
                   let loading = ElLoading.service({
                     lock: true,
                     text: 'Loading',
@@ -93,11 +93,11 @@ export default {
                       that.$message.error(response.data.message)
                     }
                   })
-                }
-              }
-          );
-          // 显示验证码
-          captcha.show();
+          //       }
+          //     }
+          // );
+          // // 显示验证码
+          // captcha.show();
         } else {
           return false;
         }

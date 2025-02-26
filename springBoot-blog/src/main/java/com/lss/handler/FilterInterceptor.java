@@ -3,11 +3,13 @@ package com.lss.handler;
 import com.alibaba.fastjson.JSONObject;
 import com.lss.constant.RedisPrefixConst;
 import com.lss.service.RedisService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
 /**
  * Filter拦截器
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author lss
  * @create 2022年03月08日 13:32
  */
+@Slf4j
 public class FilterInterceptor implements HandlerInterceptor {
 
     @Resource
@@ -26,9 +29,10 @@ public class FilterInterceptor implements HandlerInterceptor {
         if (style != null && style.equals("admin")) {
             //获取token
             String token = request.getHeader("token");
-            String uuid = request.getHeader("uuid_token");
+            String uuid = request.getHeader("uuidToken".toLowerCase());
             Object redisToken = redisService.get(RedisPrefixConst.PREFIX_TOKEN + uuid);
             if (redisToken == null) {
+                log.warn("redisToken is NULL");
                 JSONObject json = new JSONObject();
                 json.put("code", 1000);
                 response.getWriter().write(JSONObject.toJSONString(json));

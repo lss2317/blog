@@ -1,5 +1,5 @@
 <template>
-  <el-card class="main-card" style="display: flex">
+  <el-card class="main-card">
     <div class="title">{{ this.$route.name }}</div>
     <!-- 文章状态 -->
     <div class="article-status-menu">
@@ -28,70 +28,72 @@
         &nbsp;&nbsp;批量删除
       </el-button>
       <!-- 文章类型 -->
-      <el-select
-          clearable
-          v-model="articleType"
-          placeholder="请选择文章类型"
-          style="margin-right:1rem;margin-left: 136px"
-      >
-        <el-option
-            v-for="item in typeList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+      <div style="margin-left:auto">
+        <el-select
+            clearable
+            v-model="articleType"
+            placeholder="请选择文章类型"
+            style="margin-right:1rem;"
+        >
+          <el-option
+              v-for="item in typeList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          />
+        </el-select>
+        <!-- 分类 -->
+        <el-select
+            clearable
+            v-model="classificationName"
+            filterable
+            placeholder="请选择分类"
+            style="margin-right:1rem"
+            @clear="listArticle"
+            @change="listArticle"
+        >
+          <el-option
+              v-for="item in classificationList"
+              :key="item.id"
+              :label="item.classificationName"
+              :value="item.classificationName"
+          />
+        </el-select>
+        <!-- 标签 -->
+        <el-select
+            clearable
+            v-model="tagName"
+            filterable
+            placeholder="请选择标签"
+            style="margin-right:1rem"
+        >
+          <el-option
+              v-for="item in tagList"
+              :key="item.id"
+              :label="item.tagName"
+              :value="item.tagName"
+          />
+        </el-select>
+        <!-- 文章名 -->
+        <el-input
+            clearable
+            v-model="keywords"
+            prefix-icon="Search"
+            placeholder="请输入文章名"
+            style="width:200px"
+            @keyup.enter="searchArticles"
+            @clear="listArticle"
         />
-      </el-select>
-      <!-- 分类 -->
-      <el-select
-          clearable
-          v-model="classificationName"
-          filterable
-          placeholder="请选择分类"
-          style="margin-right:1rem"
-          @clear="listArticle"
-          @change="listArticle"
-      >
-        <el-option
-            v-for="item in classificationList"
-            :key="item.id"
-            :label="item.classificationName"
-            :value="item.classificationName"
-        />
-      </el-select>
-      <!-- 标签 -->
-      <el-select
-          clearable
-          v-model="tagName"
-          filterable
-          placeholder="请选择标签"
-          style="margin-right:1rem"
-      >
-        <el-option
-            v-for="item in tagList"
-            :key="item.id"
-            :label="item.tagName"
-            :value="item.tagName"
-        />
-      </el-select>
-      <!-- 文章名 -->
-      <el-input
-          clearable
-          v-model="keywords"
-          prefix-icon="Search"
-          placeholder="请输入文章名"
-          style="width:200px"
-          @keyup.enter="searchArticles"
-          @clear="listArticle"
-      />
-      <el-button
-          icon="search"
-          type="primary"
-          style="margin-left:1rem"
-          @click="searchArticles"
+        <el-button
+            icon="search"
+            type="primary"
+            style="margin-left:1rem"
+            @click="searchArticles"
 
-      >
-        搜索
-      </el-button>
+        >
+          搜索
+        </el-button>
+      </div>
     </div>
 
     <!-- 表格展示 -->

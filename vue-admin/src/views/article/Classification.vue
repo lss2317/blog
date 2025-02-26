@@ -1,5 +1,5 @@
 <template>
-  <el-card class="main-card" style="display: flex">
+  <el-card class="main-card">
     <div class="title">{{ this.$route.name }}</div>
     <!-- 表格操作 -->
     <div class="operation-container" style="display: flex">
@@ -19,23 +19,25 @@
       >
         批量删除
       </el-button>
-      <el-input
-          clearable
-          v-model="keywords"
-          prefix-icon="search"
-          placeholder="请输入分类名"
-          style="width:200px;margin-left: 740px"
-          @keyup.enter="searchClassification"
-          @clear="listClassification(null)"
-      />
-      <el-button
-          type="primary"
-          icon="search"
-          style="margin-left:1rem"
-          @click="searchClassification"
-      >
-        搜索
-      </el-button>
+      <div style="margin-left:auto">
+        <el-input
+            clearable
+            v-model="keywords"
+            prefix-icon="search"
+            placeholder="请输入分类名"
+            style="width:200px;"
+            @keyup.enter="searchClassification"
+            @clear="listClassification(null)"
+        />
+        <el-button
+            type="primary"
+            icon="search"
+            style="margin-left:1rem"
+            @click="searchClassification"
+        >
+          搜索
+        </el-button>
+      </div>
     </div>
     <!-- 表格展示 -->
     <el-table

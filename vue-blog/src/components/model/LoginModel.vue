@@ -56,7 +56,6 @@
 </template>
 
 <script>
-import config from "@/assets/js/config";
 
 export default {
   data: function () {
@@ -110,10 +109,10 @@ export default {
         password: this.password
       };
       // eslint-disable-next-line no-undef
-      let captcha = new TencentCaptcha(
-          config.TENCENT_CAPTCHA
-          , function (res) {
-            if (res.ret === 0) {
+      // let captcha = new TencentCaptcha(
+      //     config.TENCENT_CAPTCHA
+      //     , function (res) {
+      //       if (res.ret === 0) {
               that.axios.post("/api/user/login", param).then(res => {
                 if (res.data.code === 200) {
                   that.username = "";
@@ -126,10 +125,10 @@ export default {
                   that.$toast({type: "error", message: res.data.message});
                 }
               });
-            }
-          });
-      // 显示验证码
-      captcha.show();
+      //       }
+      //     });
+      // // 显示验证码
+      // captcha.show();
     },
     qqLogin() {
       //保留当前路径

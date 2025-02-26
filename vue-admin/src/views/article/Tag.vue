@@ -1,5 +1,5 @@
 <template>
-  <el-card class="main-card" style="display: flex">
+  <el-card class="main-card">
     <div class="title">{{ this.$route.name }}</div>
     <!-- 表格操作 -->
     <div class="operation-container" style="display: flex">
@@ -18,24 +18,25 @@
       >
         批量删除
       </el-button>
-
-      <el-input
-          clearable
-          v-model="keywords"
-          prefix-icon="Search"
-          placeholder="请输入标签名"
-          style="width:200px;margin-left: 740px"
-          @keyup.enter="searchTags"
-          @clear="listTags(null)"
-      />
-      <el-button
-          type="primary"
-          style="margin-left:1rem"
-          icon="Search"
-          @click="searchTags"
-      >
-        搜索
-      </el-button>
+      <div style="margin-left:auto">
+        <el-input
+            clearable
+            v-model="keywords"
+            prefix-icon="Search"
+            placeholder="请输入标签名"
+            style="width:200px;"
+            @keyup.enter="searchTags"
+            @clear="listTags(null)"
+        />
+        <el-button
+            type="primary"
+            style="margin-left:1rem"
+            icon="Search"
+            @click="searchTags"
+        >
+          搜索
+        </el-button>
+      </div>
     </div>
     <!-- 表格展示 -->
     <el-table
@@ -285,7 +286,8 @@ export default {
           this.listTags(this.keywords)
         })
       })
-      .catch(()=>{})
+          .catch(() => {
+          })
     },
     deleteTags() {
       ElMessageBox.confirm(

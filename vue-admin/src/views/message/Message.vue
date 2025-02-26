@@ -1,5 +1,5 @@
 <template>
-  <el-card class="main-card" style="display: flex">
+  <el-card class="main-card">
     <div class="title">{{ this.$route.name }}</div>
     <div class="review-menu">
       <span>状态</span>
@@ -41,23 +41,25 @@
         批量通过
       </el-button>
       <!-- 数据筛选 -->
-      <el-input
-          clearable
-          v-model="keywords"
-          prefix-icon="search"
-          placeholder="请输入用户昵称"
-          style="width:200px;margin-left: 715px"
-          @clear="searchMessages"
-          @keyup.enter.native="searchMessages"
-      />
-      <el-button
-          type="primary"
-          icon="search"
-          style="margin-left:1rem"
-          @click="searchMessages"
-      >
-        搜索
-      </el-button>
+      <div style="margin-left:auto">
+        <el-input
+            clearable
+            v-model="keywords"
+            prefix-icon="search"
+            placeholder="请输入用户昵称"
+            style="width:200px"
+            @clear="searchMessages"
+            @keyup.enter.native="searchMessages"
+        />
+        <el-button
+            type="primary"
+            icon="search"
+            style="margin-left:1rem"
+            @click="searchMessages"
+        >
+          搜索
+        </el-button>
+      </div>
     </div>
     <!-- 表格展示 -->
     <el-table

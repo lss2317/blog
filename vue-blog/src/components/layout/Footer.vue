@@ -8,7 +8,7 @@
       </div>
       <div>
         <a href="https://beian.miit.gov.cn/" target="_blank">
-          琼ICP备2022001317号-1
+          琼ICP备2025050954号-1
         </a>
       </div>
       <div style="width:300px;margin:0 auto;">

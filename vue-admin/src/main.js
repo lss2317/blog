@@ -28,7 +28,7 @@ axios.interceptors.request.use(config => {
         config.headers['token'] = localStorage.getItem("admin_login_token")
     }
     if (localStorage.getItem("admin_uuid_token")) {
-        config.headers['uuid_token'] = localStorage.getItem("admin_uuid_token")
+        config.headers['uuidToken'.toLowerCase()] = localStorage.getItem("admin_uuid_token")
     }
     config.headers['style'] = "admin"
     return config

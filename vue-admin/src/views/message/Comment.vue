@@ -1,5 +1,5 @@
 <template>
-  <el-card class="main-card" style="display: flex">
+  <el-card class="main-card">
     <div class="title">{{ this.$route.name }}</div>
     <div class="review-menu">
       <span>状态</span>
@@ -41,36 +41,38 @@
         批量通过
       </el-button>
       <!-- 数据筛选 -->
-      <el-select
-          clearable
-          v-model="type"
-          placeholder="请选择来源"
-          style="margin-right:1rem;margin-left: 520px"
-      >
-        <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+      <div style="margin-left:auto">
+        <el-select
+            clearable
+            v-model="type"
+            placeholder="请选择来源"
+            style="margin-right:1rem;"
+        >
+          <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          />
+        </el-select>
+        <el-input
+            clearable
+            v-model="keywords"
+            prefix-icon="search"
+            placeholder="请输入用户昵称"
+            style="width:200px"
+            @keyup.enter.native="searchComments"
+            @clear="searchComments"
         />
-      </el-select>
-      <el-input
-          clearable
-          v-model="keywords"
-          prefix-icon="search"
-          placeholder="请输入用户昵称"
-          style="width:200px"
-          @keyup.enter.native="searchComments"
-          @clear="searchComments"
-      />
-      <el-button
-          type="primary"
-          icon="search"
-          style="margin-left:1rem"
-          @click="searchComments"
-      >
-        搜索
-      </el-button>
+        <el-button
+            type="primary"
+            icon="search"
+            style="margin-left:1rem"
+            @click="searchComments"
+        >
+          搜索
+        </el-button>
+      </div>
     </div>
     <!-- 表格展示 -->
     <el-table

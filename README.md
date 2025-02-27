@@ -29,9 +29,9 @@
 
 ## 在线地址
 
-**项目链接：** [lsstop.com](https://lsstop.com)
+**项目链接：** [lsstop.cn](https://lsstop.cn)
 
-**后台链接：** [admin.lsstop.com](https://admin.lsstop.com)
+**后台链接：** [admin.lsstop.cn](https://admin.lsstop.cn)
 
 **测试账号**：test@qq.com，密码：123456，可登入后台查看。
 
@@ -103,12 +103,13 @@ springboot-blog
 | VSCode   | Vue开发工具IDE    |
 | Navicat  | MySQL远程连接工具 |
 
-| 开发环境 | 版本   |
-| -------- | ------ |
-| JDK      | 1.8    |
-| MySQL    | 8.0.25 |
-| Redis    | 6.2.5  |
-| RabbitMQ | 3.8.11 |
+| 开发环境 | 版本    |
+| -------- | ------- |
+| JDK      | 1.8     |
+| MySQL    | 8.0.25  |
+| Redis    | 6.2.5   |
+| RabbitMQ | 3.8.11  |
+| node.js  | 16.20.2 |
 
 ## 项目截图
 

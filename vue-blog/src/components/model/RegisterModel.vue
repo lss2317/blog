@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="registerFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius:4px">
-      <v-icon class="float-right" @click="registerFlag = false">
+      <v-icon class="float-right" @click="closeRegisterFlag">
         mdi-close
       </v-icon>
       <div class="login-wrapper">
@@ -37,6 +37,11 @@
             :type="show ? 'text' : 'password'"
             @click:append="show = !show"
         />
+        <!-- 验证码组件-->
+        <AliyunCaptcha
+            v-if="isCaptchaVisible"
+            @success="onBizResultCallback"
+        />
         <!-- 注册按钮 -->
         <v-btn
             class="mt-7"
@@ -57,7 +62,12 @@
 </template>
 
 <script>
+import AliyunCaptcha from "@/components/model/AliyunCaptcha";
+
 export default {
+  components: {
+    AliyunCaptcha
+  },
   data: function () {
     return {
       username: "",
@@ -66,38 +76,56 @@ export default {
       flag: true,
       codeMsg: "发送",
       time: 60,
-      show: false
+      show: false,
+      isCaptchaVisible: false
     };
   },
   methods: {
+    onBizResultCallback() {
+      const user = {
+        username: this.username,
+        password: this.password,
+        code: this.code
+      };
+      this.axios.post("/api/user/register", user).then(res => {
+        if (res.data.code === 200) {
+          let param = {
+            username: user.username,
+            password: user.password
+          }
+          this.axios.post("/api/user/login", param).then(result => {
+            this.username = "";
+            this.password = "";
+            this.code = ""
+            this.$store.commit("login", result.data.data);
+            window.localStorage.setItem("login_request_token", result.data.data.ipAddress)
+            this.$store.commit("closeModel");
+          });
+          this.$toast({type: "success", message: "登录成功"});
+        } else {
+          this.$toast({type: "error", message: res.data.message});
+        }
+      });
+    },
     openLogin() {
       this.$store.state.registerFlag = false;
       this.$store.state.loginFlag = true;
     },
     sendCode() {
       const that = this;
-      // eslint-disable-next-line no-undef
-      // let captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function (
-      //     res
-      // ) {
-      //   if (res.ret === 0) {
-          //发送邮件
-          that.countDown();
-          that.axios
-              .get("/api/user/code", {
-                params: {username: that.username}
-              })
-              .then(res => {
-                if (res.data.code === 200) {
-                  that.$toast({type: "success", message: "发送成功,请注意查看"});
-                } else {
-                  that.$toast({type: "error", message: "发送失败,请稍后再试"});
-                }
-              });
-      //   }
-      // });
-      // // 显示验证码
-      // captcha.show();
+      //发送邮件
+      that.countDown();
+      that.axios
+          .get("/api/user/code", {
+            params: {username: that.username}
+          })
+          .then(res => {
+            if (res.data.code === 200) {
+              that.$toast({type: "success", message: "发送成功,请注意查看"});
+            } else {
+              that.$toast({type: "error", message: "发送失败,请稍后再试"});
+            }
+          });
     },
     countDown() {
       this.flag = true;
@@ -135,30 +163,17 @@ export default {
         this.$toast({type: "error", message: "密码只能由数字和字母组成"})
         return false
       }
-      const user = {
-        username: this.username,
-        password: this.password,
-        code: this.code
-      };
-      this.axios.post("/api/user/register", user).then(res => {
-        if (res.data.code === 200) {
-          let param = {
-            username: user.username,
-            password: user.password
-          }
-          this.axios.post("/api/user/login", param).then(result => {
-            this.username = "";
-            this.password = "";
-            this.code = ""
-            this.$store.commit("login", result.data.data);
-            window.localStorage.setItem("login_request_token", result.data.data.ipAddress)
-            this.$store.commit("closeModel");
-          });
-          this.$toast({type: "success", message: "登录成功"});
-        } else {
-          this.$toast({type: "error", message: res.data.message});
-        }
-      });
+      if (!this.isCaptchaVisible) {
+        this.isCaptchaVisible = true //显示验证码组件
+      } else {
+        this.isCaptchaVisible = false; // 先隐藏验证码组件
+        this.$nextTick(() => {
+          this.isCaptchaVisible = true; // 重新显示验证码组件
+        });
+      }
+    },
+    closeRegisterFlag() {
+      this.$store.commit("closeModel");
     }
   },
   computed: {

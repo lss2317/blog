@@ -8,6 +8,7 @@ import com.lss.constant.OptTypeConst;
 import com.lss.entity.User;
 import com.lss.enums.UserEnum;
 import com.lss.service.UserService;
+import com.lss.service.VerificationCodeService;
 import com.lss.strategy.QQLoginStrategy;
 import com.lss.strategy.WeiBoLoginStrategy;
 import com.lss.utils.JWTUtils;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户控制器
@@ -35,6 +37,8 @@ public class UserController {
     HttpServletRequest request;
     @Resource
     WeiBoLoginStrategy weiBoLoginStrategy;
+    @Resource
+    VerificationCodeService codeService;
 
     /**
      * 后台登录登录验证
@@ -217,6 +221,14 @@ public class UserController {
             return new Result<>(500, "请重新登录");
         }
         return new Result<>(200, "操作成功");
+    }
+
+    /**
+     *  检查滑块验证码
+     */
+    @PostMapping("CheckVerificationCode")
+    public String CheckVerificationCode(@RequestBody String captchaVerifyParam){
+        return codeService.CheckVerificationCode(captchaVerifyParam);
     }
 
 }

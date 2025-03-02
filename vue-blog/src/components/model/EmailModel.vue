@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="emailFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius:4px">
-      <v-icon class="float-right" @click="emailFlag = false">
+      <v-icon class="float-right" @click="closeEmailFlag">
         mdi-close
       </v-icon>
       <div class="login-wrapper">
@@ -66,28 +66,19 @@ export default {
         return false
       }
       const that = this;
-      // eslint-disable-next-line no-undef
-      // let captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function (
-      //     res
-      // ) {
-      //   if (res.ret === 0) {
-          //发送邮件
-          that.countDown();
-          that.axios
-              .get("/api/user/code", {
-                params: {username: that.email}
-              })
-              .then(res => {
-                if (res.data.code === 200) {
-                  that.$toast({type: "success", message: "发送成功,请注意查看"});
-                } else {
-                  that.$toast({type: "error", message: "邮件发送失败,请稍后再尝试"});
-                }
-              });
-      //   }
-      // });
-      // // 显示验证码
-      // captcha.show();
+      //发送邮件
+      that.countDown();
+      that.axios
+          .get("/api/user/code", {
+            params: {username: that.email}
+          })
+          .then(res => {
+            if (res.data.code === 200) {
+              that.$toast({type: "success", message: "发送成功,请注意查看"});
+            } else {
+              that.$toast({type: "error", message: "邮件发送失败,请稍后再尝试"});
+            }
+          });
     },
     countDown() {
       this.flag = true;
@@ -128,6 +119,9 @@ export default {
           this.$toast({type: "error", message: res.data.message});
         }
       });
+    },
+    closeEmailFlag() {
+      this.$store.commit("closeModel");
     }
   },
   computed: {

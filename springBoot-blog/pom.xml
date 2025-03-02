@@ -100,6 +100,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
+        <!-- 阿里巴巴验证码-->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alibabacloud-captcha20230305</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

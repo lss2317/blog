@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="loginFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius:4px">
-      <v-icon class="float-right" @click="loginFlag = false">
+      <v-icon class="float-right" @click="closeLoginFlag">
         mdi-close
       </v-icon>
       <div class="login-wrapper">
@@ -23,6 +23,11 @@
             :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show ? 'text' : 'password'"
             @click:append="show = !show"
+        />
+        <!-- 验证码组件-->
+        <AliyunCaptcha
+            v-if="isCaptchaVisible"
+            @success="onBizResultCallback"
         />
         <!-- 按钮 -->
         <v-btn
@@ -56,13 +61,18 @@
 </template>
 
 <script>
+import AliyunCaptcha from './AliyunCaptcha.vue';
 
 export default {
+  components: {
+    AliyunCaptcha
+  },
   data: function () {
     return {
       username: "",
       password: "",
-      show: false
+      show: false,
+      isCaptchaVisible: false
     };
   },
   computed: {
@@ -77,10 +87,28 @@ export default {
     isMobile() {
       const clientWidth = document.documentElement.clientWidth;
       return clientWidth <= 960;
-
     }
   },
   methods: {
+    onBizResultCallback() {
+      const that = this;
+      let param = {
+        username: this.username,
+        password: this.password
+      };
+      that.axios.post("/api/user/login", param).then(res => {
+        if (res.data.code === 200) {
+          that.username = "";
+          that.password = "";
+          that.$store.commit("login", res.data.data);
+          that.$store.commit("closeModel");
+          that.$toast({type: "success", message: res.data.message});
+          window.localStorage.setItem("login_request_token", res.data.data.ipAddress)
+        } else {
+          that.$toast({type: "error", message: res.data.message});
+        }
+      });
+    },
     openRegister() {
       this.$store.state.loginFlag = false;
       this.$store.state.registerFlag = true;
@@ -103,32 +131,14 @@ export default {
         this.$toast({type: "error", message: "密码不能为空"});
         return false;
       }
-      const that = this;
-      let param = {
-        username: this.username,
-        password: this.password
-      };
-      // eslint-disable-next-line no-undef
-      // let captcha = new TencentCaptcha(
-      //     config.TENCENT_CAPTCHA
-      //     , function (res) {
-      //       if (res.ret === 0) {
-              that.axios.post("/api/user/login", param).then(res => {
-                if (res.data.code === 200) {
-                  that.username = "";
-                  that.password = "";
-                  that.$store.commit("login", res.data.data);
-                  that.$store.commit("closeModel");
-                  that.$toast({type: "success", message: res.data.message});
-                  window.localStorage.setItem("login_request_token", res.data.data.ipAddress)
-                } else {
-                  that.$toast({type: "error", message: res.data.message});
-                }
-              });
-      //       }
-      //     });
-      // // 显示验证码
-      // captcha.show();
+      if (!this.isCaptchaVisible) {
+        this.isCaptchaVisible = true //显示验证码组件
+      } else {
+        this.isCaptchaVisible = false; // 先隐藏验证码组件
+        this.$nextTick(() => {
+          this.isCaptchaVisible = true; // 重新显示验证码组件
+        });
+      }
     },
     qqLogin() {
       //保留当前路径
@@ -163,6 +173,9 @@ export default {
           this.config.WEIBO_REDIRECT_URI,
           "_self"
       );
+    },
+    closeLoginFlag() {
+      this.$store.commit("closeModel");
     }
   }
 };

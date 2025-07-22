@@ -117,6 +117,7 @@
             v-model="content"
             @keydown.enter="saveMessage($event)"
             placeholder="请输入内容"
+            style="line-height: normal;font-family: inherit;"
         />
         <!-- 语音输入 -->
         <button

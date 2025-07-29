@@ -73,5 +73,23 @@ cos:
 #第三方配置信息
 qq:
   app-id: QQ APPID
-  check-token-url: https://lsstop.qq.com/oauth2.0/me?access_token={access_token}
-  user-info-url: https://graph.qq.com/user/get_user_info?openid={openid}&access_token={access_token}&oauth_consumer_key={oauth_consumer_key}
+  check-token-url: xxx
+  user-info-url: xxx
+
+
+weibo:
+  app-id: appId
+  app-secret: xxx
+  grant-type: authorization_code
+  redirect-url: xxx
+  access-token-url: xxx
+  user-info-url: xxx
+
+# 网站前台域名（邮件通知用）
+website:
+  url: 域名
+
+#阿里巴巴验证码
+aliyun:
+  accessKeyId: xxx
+  accessKeySecret: xxx

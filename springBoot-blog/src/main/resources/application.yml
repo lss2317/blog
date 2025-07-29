@@ -1,0 +1,77 @@
+# 配置端口
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 1800
+
+mybatis-plus:
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:/mapper/*.xml
+spring:
+  datasource:
+    url: jdbc:mysql://ip地址:3306/数据库名称?useUnicode=true&characterEnCoding=UTF-8&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: MySQL账号
+    password: MySQL密码
+  #Redis配置
+  redis:
+    port: 6379
+    host: 你的ip
+    password: Redis密码
+  # mq配置
+  rabbitmq:
+    host: 你的ip地址
+    port: 5672
+    username: rabbitmq账号
+    password: rabbitmq密码
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3 #最大重试次数
+          initial-interval: 3000 #重试间隔时间（单位毫秒）
+  #上传文件大小
+  servlet:
+    multipart:
+      max-file-size: 100MB
+  # 邮箱配置
+  mail:
+    host: smtp.qq.com
+    default-encoding: UTF-8
+    username: 邮箱用户名
+    password: 邮箱授权码
+    #    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true  # 如果使用 465 端口，不需要启用 STARTTLS
+          ssl:
+            enable: true  # 启用 SSL
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+
+#腾讯云COS
+cos:
+  #桶的名称
+  bucketName: COS桶名称
+  #区域,上海则ap-shanghai
+  region: 区域
+  #APPID
+  appId: APPID
+  #1 初始化用户身份信息(secretId, secretKey), SecretId 是用于标识 API 调用者的身份
+  secretId: COS的secretId
+  #SecretKey是用于加密签名字符串和服务器端验证签名字符串的密钥
+  secretKey: COS的secretKey
+  #访问路径前缀
+  url: COS的访问路径前缀
+
+#第三方配置信息
+qq:
+  app-id: QQ APPID
+  check-token-url: https://lsstop.qq.com/oauth2.0/me?access_token={access_token}
+  user-info-url: https://graph.qq.com/user/get_user_info?openid={openid}&access_token={access_token}&oauth_consumer_key={oauth_consumer_key}

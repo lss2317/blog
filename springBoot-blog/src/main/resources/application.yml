@@ -9,6 +9,8 @@ mybatis-plus:
   configuration:
     #开启驼峰命名
     map-underscore-to-camel-case: true
+    #SQL日志打印到控制台
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath*:/mapper/*.xml
 spring:
   datasource:

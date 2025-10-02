@@ -112,6 +112,8 @@ export default {
           window.localStorage.setItem("admin_login_token", response.data.data.token)
           window.localStorage.setItem("admin_uuid_token", response.data.data.uuid)
           store.commit("changeAvatar", response.data.data.user)
+          //清除历史标签
+          store.commit("resetTab");
           loading.close()
           that.$router.push("/")
         } else if (response.data.code === 500) {

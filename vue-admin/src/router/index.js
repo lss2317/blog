@@ -5,7 +5,7 @@ import Main from "../views/main/Main";
 const routes = [
     {
         path: '/',
-        name: 'Home',
+        name: '首页',
         component: Home,
         redirect: 'main',
         children: [

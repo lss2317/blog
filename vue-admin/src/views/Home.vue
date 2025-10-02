@@ -1,22 +1,16 @@
 <template>
-
   <el-container>
-    <!-- header部分 -->
-    <el-header>
-      <topHeader></topHeader>
-    </el-header>
-    <el-container>
-      <!-- aside部分 -->
+    <!-- 侧边栏 -->
+    <el-aside width="auto">
       <leftSidebar></leftSidebar>
-      <el-main>
-        <div class="bread">
-          <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item v-if="this.$route.meta.title">{{this.$route.meta.title}}</el-breadcrumb-item>
-            <el-breadcrumb-item v-if="this.$route.name">{{ this.$route.name }}</el-breadcrumb-item>
-          </el-breadcrumb>
-        </div>
-        <!-- main部分 -->
+    </el-aside>
+    <el-container :class="'main-container ' + isHide">
+      <!-- 头部导航栏 -->
+      <el-header height="84px" style="padding:0">
+        <topHeader :key="$route.fullPath"></topHeader>
+      </el-header>
+      <!-- main部分 -->
+      <el-main style="background:#F7F9FB">
         <div class="fade-transform-box">
           <router-view v-slot="{ Component }">
             <transition name="fade-transform" mode="out-in">
@@ -27,6 +21,7 @@
       </el-main>
     </el-container>
   </el-container>
+
 </template>
 
 <script>
@@ -40,34 +35,25 @@ export default {
     leftSidebar
   },
   data() {
-    return {
-    }
+    return {}
   },
+  computed: {
+    isHide() {
+      return this.$store.state.collapse ? "hideSideBar" : "";
+    }
+  }
 }
 </script>
 
 <style scoped>
-.el-main {
-  background-color: #f5f7f9;
-  padding: 0;
+.main-container {
+  transition: margin-left 0.45s;
+  margin-left: 210px;
+  min-height: 100vh;
 }
 
-.bread {
-  padding-left: 40px;
-  padding-top: 20px;
-  padding-bottom: 5px;
-}
-
-.el-header,
-.el-footer {
-  background-color: white;
-  box-sizing: border-box;
-  border-bottom: 1px solid #f5f1f1;
-}
-
-.el-container {
-  height: 100%;
-  overflow: hidden;
+.hideSideBar {
+  margin-left: 64px;
 }
 
 .fade-transform-enter-active,
@@ -89,7 +75,7 @@ export default {
   position: relative;
   top: 0;
   bottom: 0;
+  width: 100%;
   overflow: hidden;
-  padding: 12px 20px 20px;
 }
 </style>

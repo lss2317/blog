@@ -113,10 +113,10 @@ springboot-blog
 
 ## 项目截图
 
-![https://blog-1307541812.cos.ap-shanghai.myqcloud.com/blog-home.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/blog-home.png)
+![blog-home](https://typora-1307541812.cos.ap-nanjing.myqcloud.com/blog-home.png)
 
-![article.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/article.png)
+![article](https://typora-1307541812.cos.ap-nanjing.myqcloud.com/article.png)
 
-![admin.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/admin-home.png)
+![admin-home](https://typora-1307541812.cos.ap-nanjing.myqcloud.com/admin-home.png)
 
-![talk.png](https://blog-1307541812.cos.ap-shanghai.myqcloud.com/talk.png)
+![talk](https://typora-1307541812.cos.ap-nanjing.myqcloud.com/talk.png)

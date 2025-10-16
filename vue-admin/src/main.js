@@ -37,7 +37,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
     if (response.data.code === 1000) {
         localStorage.setItem("message", "长时间未操作,请重新登录")
-        window.location.href = '/login'
+        router.push("/login")
     }
     return response
 })

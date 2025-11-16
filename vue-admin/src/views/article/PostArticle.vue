@@ -258,8 +258,8 @@ export default {
     }
   },
   created() {
-    if (this.$route.params.articleId) {
-      axios.get("/api/article/admin/" + this.$route.params.articleId).then(res => {
+    if (this.$route.query.articleId) {
+      axios.get("/api/article/admin/" + this.$route.query.articleId).then(res => {
         this.article = res.data.data
       })
     } else {

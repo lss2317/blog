@@ -393,7 +393,7 @@ export default {
     },
     editArticle(article) {
       this.$router.push({
-        name: "发布文章", params: {
+        name: "发布文章", query: {
           articleId: article.id
         }
       })

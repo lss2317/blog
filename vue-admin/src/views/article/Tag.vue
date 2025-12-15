@@ -73,10 +73,10 @@
       <!-- 列操作 -->
       <el-table-column label="操作" align="center" width="200">
         <template #default="scope">
-          <el-button type="primary" size="small" icon="edit" @click="openModel(scope.row)">
+          <el-button type="primary" size="default" @click="openModel(scope.row)">
             编辑
           </el-button>
-          <el-button type="danger" size="small" slot="reference" icon="Delete" @click="deleteTag(scope.row.id)">
+          <el-button type="danger" size="default" slot="reference" @click="deleteTag(scope.row.id)">
             删除
           </el-button>
         </template>

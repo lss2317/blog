@@ -2,7 +2,7 @@
   <el-card class="main-card">
     <div class="title">{{ this.$route.name }}</div>
     <!-- 表格操作 -->
-    <div class="operation-container" style="display: flex">
+    <div class="operation-container">
       <el-button
           type="primary"
           icon="plus"
@@ -64,10 +64,10 @@
       <!-- 列操作 -->
       <el-table-column label="操作" align="center" width="200">
         <template #default="scope">
-          <el-button icon="edit" type="primary" size="small" @click="openModel(scope.row)">
+          <el-button type="primary" size="default" @click="openModel(scope.row)">
             编辑
           </el-button>
-          <el-button icon="delete" size="small" type="danger" @click="deleteCategory(scope.row.id)">
+          <el-button size="default" type="danger" @click="deleteCategory(scope.row.id)">
             删除
           </el-button>
         </template>

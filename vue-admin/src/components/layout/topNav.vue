@@ -324,4 +324,8 @@ export default {
   font-weight: 700;
   color: var(--el-text-color-placeholder);
 }
+
+.headerLogo {
+  cursor: pointer;
+}
 </style>

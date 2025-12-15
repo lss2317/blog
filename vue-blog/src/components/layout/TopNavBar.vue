@@ -327,6 +327,19 @@ ul {
   background: #4ab1f4;
 }
 
+.menus-submenu li:first-child a:hover {
+  border-radius: 10px 10px 0 0; /* 顶部圆角 */
+}
+
+.menus-submenu li:last-child a:hover {
+  border-radius: 0 0 10px 10px; /* 底部圆角 */
+}
+
+.menus-submenu li:not(:first-child):not(:last-child) a:hover {
+  border-radius: 0; /* 中间项不要圆角 */
+}
+
+
 @keyframes submenu {
   0% {
     opacity: 0;

@@ -6,6 +6,10 @@ html, body, #app {
     padding: 0;
 }
 
+html{
+    scroll-behavior: smooth;
+}
+
 .main-card {
     min-height: calc(100vh - 133px);
 }
@@ -18,9 +22,19 @@ html, body, #app {
     color: #202a34;
 }
 
+.title::before {
+    content: '';
+    width: 24px;
+    height: 16px;
+    border-left: 3px solid #0081ff;
+    margin-right: 20px;
+}
+
 .operation-container {
-    margin-top: 1.5rem;
     display: flex;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    margin-top: 2.25rem;
 }
 
 .pagination-container {

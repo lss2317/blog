@@ -12,6 +12,8 @@ import javax.annotation.Resource;
 import java.util.concurrent.CompletableFuture;
 
 /**
+ * 阿里云滑块验证码
+ *
  * @author lss
  * @date 2025/03/01
  */

@@ -1,7 +1,6 @@
 package com.lss.config;
 
 import com.lss.handler.FilterInterceptor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -15,13 +14,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Bean
-    public FilterInterceptor getInterceptor() {
-        return new FilterInterceptor();
-    }
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(getInterceptor()).addPathPatterns("/**").excludePathPatterns("/**/login", "/files/**","/live/**","/**/CheckVerificationCode");
+        registry.addInterceptor(new FilterInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/**/login", "/files/**", "/live/**", "/**/CheckVerificationCode");
     }
 }

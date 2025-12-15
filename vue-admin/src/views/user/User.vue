@@ -39,7 +39,7 @@
       </div>
     </div>
     <!-- 表格展示 -->
-    <el-table border :data="userList" v-loading="loading" style="margin-top: 1.25rem;display: flex">
+    <el-table border :data="userList" v-loading="loading" style="margin-top: 1.25rem;">
       <!-- 表格列 -->
       <el-table-column
           prop="linkAvatar"

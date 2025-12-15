@@ -34,7 +34,7 @@
     </div>
     <!-- 权限列表 -->
     <el-table
-        style="margin-top: 1.25rem;display: flex"
+        style="margin-top: 1.25rem;"
         @selection-change="selectionChange"
         v-loading="loading"
         :data="logList"

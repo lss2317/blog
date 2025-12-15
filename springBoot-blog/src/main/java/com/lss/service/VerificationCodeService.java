@@ -1,7 +1,7 @@
 package com.lss.service;
 
 /**
- * 验证码
+ * 阿里云滑块验证码
  *
  * @author lss
  * @date 2025/03/01
